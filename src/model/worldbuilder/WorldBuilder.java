@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-
+import model.random.RandomGenerator;
 import model.world.WorldImpl;
 
 /**
  * Builder class used to build the world from the input text file.
- *
  */
 public class WorldBuilder {
 
@@ -25,6 +24,7 @@ public class WorldBuilder {
   private final List<Integer> weaponRoomIds;
   private final List<Integer> weaponDamageValues;
   private final List<String> weaponNames;
+  private RandomGenerator random;
 
   /**
    * Construct a WorldBuilder object used to initialize the values
@@ -172,6 +172,21 @@ public class WorldBuilder {
   }
 
   /**
+   * A public method used to set the random number generator in the world.
+   *
+   * @param rand represents the random class
+   * @return Reference of the WorldBuilder Class
+   * @throws IllegalArgumentException if the random class is null
+   */
+  public WorldBuilder setRandomGenerator(RandomGenerator rand) throws IllegalArgumentException {
+    if (rand == null) {
+      throw new IllegalArgumentException("ERROR: Random number generator cannot be null");
+    }
+    this.random = rand;
+    return this;
+  }
+
+  /**
    * A method used to create an instance of WorldInterface based on the variables of WorldBuilder.
    *
    * @return New instance of WorldImpl
@@ -180,7 +195,7 @@ public class WorldBuilder {
     return new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName);
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random);
   }
 
 }
