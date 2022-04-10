@@ -66,26 +66,26 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
             movePetPopup.setVisible(true);
             break;
           case KeyEvent.VK_L:
-            // listener.lookAround();
+            listener.lookAround();
             break;
           default:
         }
       }
     };
-    // this.pickWeaponPopup.addClickListener(listener);
-    // this.movePetPopup.addClickListener(listener);
-    // this.attackTargetPopup.addClickListener(listener);
-    // this.addKeyListener(keyAdapter);
+     this.pickWeaponPopup.addClickListener(listener);
+     this.movePetPopup.addClickListener(listener);
+     this.attackTargetPopup.addClickListener(listener);
+     this.addKeyListener(keyAdapter);
   }
 
   @Override
   public void makeVisible() {
-    // this.setVisible(true);
+     this.setVisible(true);
   }
 
   @Override
   public void close() {
-    // this.setVisible(false);
+     this.setVisible(false);
   }
 
   private class PickWeaponPopup extends JDialog {
@@ -100,7 +100,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
       pick.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-          // listener.pickWeapon(weaponName);
+          listener.pickWeapon(weaponName);
           pickWeaponPopup.setVisible(false);
         }
       });
@@ -119,7 +119,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
       move.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-          // listener.movePet(roomName);
+          listener.movePet(roomName);
           movePetPopup.setVisible(false);
         }
       });
@@ -138,7 +138,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
       attack.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-          // listener.attackTarget(weaponName);
+          listener.attackTarget(weaponName);
           attackTargetPopup.setVisible(false);
         }
       });

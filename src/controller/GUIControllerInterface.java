@@ -10,5 +10,15 @@ public interface GUIControllerInterface {
 
   void newGame();
 
-  // other commands
+  String getPlayerDescription();
+
+  String movePlayer(String roomName);
+
+  String pickWeapon(String weaponName);
+
+  String lookAround();
+
+  String attackTarget(String weaponName);
+
+  String movePet(String roomName);
 }
