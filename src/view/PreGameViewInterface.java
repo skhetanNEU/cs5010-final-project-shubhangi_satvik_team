@@ -1,10 +1,10 @@
 package view;
 
-import java.awt.event.ActionListener;
+import controller.FeatureInterface;
 
 public interface PreGameViewInterface {
 
-  void setCommandButtonListener(ActionListener actionEvent);
+  void addFeatures(FeatureInterface features);
 
   void makeVisible();
 

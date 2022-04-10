@@ -1,12 +1,10 @@
 package view;
 
-import controller.GUIControllerInterface;
+import controller.FeatureInterface;
 
 public interface GameViewInterface {
 
-  void addClickListener(GUIControllerInterface listener);
-
-  void setKeyBoardListeners(GUIControllerInterface controller);
+  void addFeatures(FeatureInterface features);
 
   void makeVisible();
 

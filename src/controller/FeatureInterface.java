@@ -1,7 +1,6 @@
 package controller;
 
-public interface GUIControllerInterface {
-
+public interface FeatureInterface {
   void playGame();
 
   void handleRoomClick(int row, int col);

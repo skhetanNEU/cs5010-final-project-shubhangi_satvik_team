@@ -1,6 +1,6 @@
 package view;
 
-import java.awt.event.ActionListener;
+import controller.FeatureInterface;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
@@ -12,8 +12,8 @@ public class PreGameViewImpl extends JFrame implements PreGameViewInterface {
   }
 
   @Override
-  public void setCommandButtonListener(ActionListener actionEvent) {
-    // buttonName.addActionListener(actionEvent);
+  public void addFeatures(FeatureInterface features) {
+    // buttonName.addActionListener(l-> features.methodName());
   }
 
   @Override

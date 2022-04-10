@@ -1,9 +1,8 @@
 package view;
 
-import controller.GUIControllerInterface;
+import controller.FeatureInterface;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JButton;
@@ -19,7 +18,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
   private final AttackTargetPopup attackTargetPopup;
   private final ReadOnlyWorldInterface model;
 
-  public GameViewImpl(ReadOnlyWorldInterface model, GUIControllerInterface listener) {
+  public GameViewImpl(ReadOnlyWorldInterface model, FeatureInterface listener) {
     if (model == null) {
       throw new IllegalArgumentException("Model cannot be null");
     }
@@ -36,56 +35,50 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
   }
 
   @Override
-  public void addClickListener(GUIControllerInterface listener) {
-    MouseAdapter clickAdapter = new MouseAdapter() {
-      @Override
-      public void mouseClicked(MouseEvent event) {
-        super.mouseClicked(event);
-        int row = event.getY();
-        int column = event.getX();
-        listener.handleRoomClick(row, column);
-      }
-    };
-    // gameBoard.addMouseListener(clickAdapter);
-  }
+  public void addFeatures(FeatureInterface features) {
 
-  @Override
-  public void setKeyBoardListeners(GUIControllerInterface listener) {
-    KeyListener keyAdapter = new KeyAdapter() {
-      @Override
-      public void keyReleased(KeyEvent e) {
-        super.keyReleased(e);
-        switch (e.getKeyCode()) {
-          case KeyEvent.VK_P:
-            pickWeaponPopup.setVisible(true);
-            break;
-          case KeyEvent.VK_A:
-            attackTargetPopup.setVisible(true);
-            break;
-          case KeyEvent.VK_M:
-            movePetPopup.setVisible(true);
-            break;
-          case KeyEvent.VK_L:
-            listener.lookAround();
-            break;
-          default:
-        }
-      }
-    };
-     this.pickWeaponPopup.addClickListener(listener);
-     this.movePetPopup.addClickListener(listener);
-     this.attackTargetPopup.addClickListener(listener);
-     this.addKeyListener(keyAdapter);
+    this.addKeyListener(
+          new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+              switch (e.getKeyCode()) {
+                case KeyEvent.VK_P -> pickWeaponPopup.setVisible(true);
+                case KeyEvent.VK_A -> attackTargetPopup.setVisible(true);
+                case KeyEvent.VK_M -> movePetPopup.setVisible(true);
+                case KeyEvent.VK_L -> features.lookAround();
+                default -> {
+                }
+              }
+            }
+          }
+    );
+
+    //    gameBoard.addMouseListener(
+    //            new MouseAdapter() {
+    //              @Override
+    //              public void mouseClicked(MouseEvent event) {
+    //                super.mouseClicked(event);
+    //                int row = event.getY();
+    //                int column = event.getX();
+    //                features.handleRoomClick(row, column);
+    //              }
+    //            }
+    //    );
+
+    this.pickWeaponPopup.addClickListener(features);
+    this.movePetPopup.addClickListener(features);
+    this.attackTargetPopup.addClickListener(features);
+
   }
 
   @Override
   public void makeVisible() {
-     this.setVisible(true);
+    this.setVisible(true);
   }
 
   @Override
   public void close() {
-     this.setVisible(false);
+    this.setVisible(false);
   }
 
   private class PickWeaponPopup extends JDialog {
@@ -96,7 +89,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
       super(frame);
     }
 
-    void addClickListener(GUIControllerInterface listener) {
+    void addClickListener(FeatureInterface listener) {
       pick.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -115,7 +108,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
       super(frame);
     }
 
-    void addClickListener(GUIControllerInterface listener) {
+    void addClickListener(FeatureInterface listener) {
       move.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -134,7 +127,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
       super(frame);
     }
 
-    void addClickListener(GUIControllerInterface listener) {
+    void addClickListener(FeatureInterface listener) {
       attack.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {

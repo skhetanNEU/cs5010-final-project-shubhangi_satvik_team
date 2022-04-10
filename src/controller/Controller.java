@@ -1,9 +1,14 @@
 package controller;
 
+import controller.commands.AttackTarget;
+import controller.commands.CommandsInterface;
+import controller.commands.GetPlayerDescription;
+import controller.commands.LookAround;
+import controller.commands.MovePet;
+import controller.commands.MovePlayer;
+import controller.commands.PickWeapon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import commands.*;
 import model.random.RandomClass;
 import model.random.RandomGenerator;
 import model.world.WorldImpl;
@@ -12,23 +17,23 @@ import view.GameViewImpl;
 import view.GameViewInterface;
 import view.PreGameViewInterface;
 
-public class GUIControllerImpl implements GUIControllerInterface, ActionListener {
+public class Controller implements FeatureInterface, ActionListener {
 
   private WorldInterface model;
   private GameViewInterface gameView;
   private final PreGameViewInterface preGameView;
 
-  public GUIControllerImpl(PreGameViewInterface preGameView) {
+  public Controller(PreGameViewInterface preGameView) {
     if (preGameView == null) {
       throw new IllegalArgumentException("Cannot be null");
     }
     this.preGameView = preGameView;
-    this.preGameView.setCommandButtonListener(this);
+    this.preGameView.addFeatures(this);
     this.preGameView.makeVisible();
   }
 
-  public GUIControllerImpl(WorldInterface model, GameViewInterface gameView,
-                           PreGameViewInterface preGameView) {
+  public Controller(WorldInterface model, GameViewInterface gameView,
+                    PreGameViewInterface preGameView) {
     if (model == null || gameView == null || preGameView == null) {
       throw new IllegalArgumentException("Cannot be null");
     }
@@ -52,8 +57,7 @@ public class GUIControllerImpl implements GUIControllerInterface, ActionListener
   public void playGame() {
     preGameView.close();
     gameView.makeVisible();
-    gameView.addClickListener(this);
-    gameView.setKeyBoardListeners(this);
+    gameView.addFeatures(this);
   }
 
   @Override
@@ -79,7 +83,7 @@ public class GUIControllerImpl implements GUIControllerInterface, ActionListener
 
   @Override
   public String movePlayer(String roomName) {
-    if(roomName == null || "".equals(roomName)){
+    if (roomName == null || "".equals(roomName)) {
       throw new IllegalArgumentException("Room name is invalid");
     }
     CommandsInterface movePlayer = new MovePlayer(roomName);
@@ -89,7 +93,7 @@ public class GUIControllerImpl implements GUIControllerInterface, ActionListener
 
   @Override
   public String pickWeapon(String weaponName) {
-    if(weaponName == null || "".equals(weaponName)){
+    if (weaponName == null || "".equals(weaponName)) {
       throw new IllegalArgumentException("Weapon name is invalid");
     }
     CommandsInterface pickWeapon = new PickWeapon(weaponName);
@@ -106,7 +110,7 @@ public class GUIControllerImpl implements GUIControllerInterface, ActionListener
 
   @Override
   public String attackTarget(String weaponName) {
-    if(weaponName == null || "".equals(weaponName)){
+    if (weaponName == null || "".equals(weaponName)) {
       throw new IllegalArgumentException("Weapon name is invalid");
     }
     CommandsInterface attackTarget = new AttackTarget(weaponName);
@@ -116,7 +120,7 @@ public class GUIControllerImpl implements GUIControllerInterface, ActionListener
 
   @Override
   public String movePet(String roomName) {
-    if(roomName == null || "".equals(roomName)){
+    if (roomName == null || "".equals(roomName)) {
       throw new IllegalArgumentException("Room name is invalid");
     }
     CommandsInterface movePet = new MovePet(roomName);
