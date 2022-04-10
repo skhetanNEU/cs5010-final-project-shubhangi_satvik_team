@@ -15,6 +15,9 @@ public class PickWeapon extends AbstractCommands {
 
   @Override
   public void execute(WorldInterface model) {
+    if(model == null){
+      throw new IllegalArgumentException("Model is invalid");
+    }
     try {
       model.pickWeapon(this.weaponName);
       commandResult.append("Player has picked the weapon");
@@ -22,6 +25,5 @@ public class PickWeapon extends AbstractCommands {
     } catch (IllegalArgumentException exception) {
       commandResult.append(exception.getMessage());
     }
-    //TODO : Check in all commands if there should be any catch for any other exception
   }
 }

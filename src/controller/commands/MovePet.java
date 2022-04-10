@@ -15,6 +15,9 @@ public class MovePet extends AbstractCommands {
 
   @Override
   public void execute(WorldInterface model) {
+    if(model == null){
+      throw new IllegalArgumentException("Model is invalid");
+    }
     try {
       model.movePet(this.roomName);
       commandResult.append("Pet has moved to room ").append(this.roomName);

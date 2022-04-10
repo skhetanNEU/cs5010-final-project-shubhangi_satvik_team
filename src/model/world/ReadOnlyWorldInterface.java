@@ -66,10 +66,9 @@ public interface ReadOnlyWorldInterface {
    * Retrieves the details of the player which includes the name, list of available weapons
    * and the current location of the player.
    *
-   * @param playerName represents the name of the player whose details are needed
    * @return details of the player
    */
-  String getPlayerInformation(String playerName);
+  String getPlayerInformation();
 
   /**
    * Gets the details of the target player.

@@ -4,11 +4,11 @@ import model.world.WorldInterface;
 
 public class LookAround extends AbstractCommands {
 
-  public LookAround() {
-  }
-
   @Override
   public void execute(WorldInterface model) {
+    if(model == null){
+      throw new IllegalArgumentException("Model is invalid");
+    }
     try {
       commandResult.append(model.lookAroundSpace());
       isCommandSuccessful = true;

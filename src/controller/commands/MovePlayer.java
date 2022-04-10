@@ -15,6 +15,9 @@ public class MovePlayer extends AbstractCommands {
 
   @Override
   public void execute(WorldInterface model) {
+    if(model == null){
+      throw new IllegalArgumentException("Model is invalid");
+    }
     try {
       model.movePlayer(this.roomName);
       commandResult.append("Player has moved to room ").append(this.roomName);

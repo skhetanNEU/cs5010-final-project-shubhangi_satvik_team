@@ -507,17 +507,12 @@ public class WorldImpl implements WorldInterface {
   }
 
   @Override
-  public String getPlayerInformation(String playerName) {
-    if ("".equals(playerName) || playerName == null) {
-      throw new IllegalArgumentException("ERROR: Player name cannot be null/empty");
+  public String getPlayerInformation() {
+    if (currentTurn == null) {
+      throw new IllegalArgumentException(
+              "ERROR: Cannot play turn. Game must have atleast 1 player.");
     }
-    for (PlayerInterface player : this.players) {
-      if (player.getPlayerName().equalsIgnoreCase(playerName)) {
-        return player.toString();
-      }
-    }
-    throw new IllegalArgumentException(String.format(
-            "ERROR: Player with name '%s' does not exist.", playerName));
+    return currentTurn.toString();
   }
 
   @Override

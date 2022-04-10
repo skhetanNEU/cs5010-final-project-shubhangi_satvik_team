@@ -15,6 +15,9 @@ public class AttackTarget extends AbstractCommands {
 
   @Override
   public void execute(WorldInterface model) {
+    if(model == null){
+      throw new IllegalArgumentException("Model is invalid");
+    }
     try {
       model.attackTargetPlayer(this.weaponName);
       commandResult.append("Attack on target successful");
