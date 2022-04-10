@@ -43,7 +43,8 @@ public class RoomImpl implements RoomInterface {
     validateRoomCoordinates(roomCoordinates);
     this.roomId = roomId;
     this.roomName = roomName;
-    this.roomCoordinates = roomCoordinates;
+    this.roomCoordinates = new ArrayList<>();
+    this.roomCoordinates.addAll(roomCoordinates);
     this.roomNeighbours = new ArrayList<>();
     this.weaponsInSpace = new ArrayList<>();
     this.playersInSpace = new ArrayList<>();

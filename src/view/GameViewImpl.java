@@ -100,7 +100,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
       pick.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-          listener.pickWeapon(weaponName);
+          listener.pickWeapon("");
           pickWeaponPopup.setVisible(false);
         }
       });
@@ -119,7 +119,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
       move.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-          listener.movePet(roomName);
+          listener.movePet("");
           movePetPopup.setVisible(false);
         }
       });
@@ -138,7 +138,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
       attack.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-          listener.attackTarget(weaponName);
+          listener.attackTarget("");
           attackTargetPopup.setVisible(false);
         }
       });
