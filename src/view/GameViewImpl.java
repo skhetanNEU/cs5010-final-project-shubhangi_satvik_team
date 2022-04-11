@@ -1,14 +1,18 @@
 package view;
 
 import controller.FeatureInterface;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -18,6 +22,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
@@ -35,6 +40,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
   private final GameBoard gameBoard;
   private final GameMessages messages;
 
+  private final AddPlayersPopup addPlayerPopup;
   private final PickWeaponPopup pickWeaponPopup;
   private final MovePetPopup movePetPopup;
   private final AttackTargetPopup attackTargetPopup;
@@ -81,39 +87,15 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
 
     pack();
 
+    this.addPlayerPopup = new AddPlayersPopup(this);
     this.pickWeaponPopup = new PickWeaponPopup(this);
     this.movePetPopup = new MovePetPopup(this);
     this.attackTargetPopup = new AttackTargetPopup(this);
     this.model = model;
 
-  }
+    this.setEnabled(false);
+    this.addPlayerPopup.setVisible(true);
 
-  /**
-   * Creates a menu bar for the game.
-   */
-  private void setMenuBar() {
-    JMenuBar menuBar = new JMenuBar();
-    JMenu startMenu = new JMenu("Start");
-    currentConfiguration = new JMenuItem("With current configuration");
-    newConfiguration = new JMenuItem("Select new configuration");
-    quitGame = new JMenuItem("Quit");
-    startMenu.add(currentConfiguration);
-    startMenu.add(newConfiguration);
-    startMenu.add(quitGame);
-    menuBar.add(startMenu);
-    setJMenuBar(menuBar);
-  }
-
-  private File chooseFile() {
-    File file = null;
-    JFileChooser fc = new JFileChooser();
-    fc.removeChoosableFileFilter(fc.getAcceptAllFileFilter());
-    fc.setFileFilter(new FileNameExtensionFilter("*.txt", "txt"));
-    int i = fc.showOpenDialog(this);
-    if (i == JFileChooser.APPROVE_OPTION) {
-      file = fc.getSelectedFile();
-    }
-    return file;
   }
 
   @Override
@@ -159,6 +141,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     this.pickWeaponPopup.addClickListener(features);
     this.movePetPopup.addClickListener(features);
     this.attackTargetPopup.addClickListener(features);
+    this.addPlayerPopup.addClickListener(features);
 
   }
 
@@ -175,6 +158,141 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
   @Override
   public void close() {
     this.setVisible(false);
+  }
+
+  /**
+   * Creates a menu bar for the game.
+   */
+  private void setMenuBar() {
+    JMenuBar menuBar = new JMenuBar();
+    JMenu startMenu = new JMenu("Start");
+    currentConfiguration = new JMenuItem("With current configuration");
+    newConfiguration = new JMenuItem("Select new configuration");
+    quitGame = new JMenuItem("Quit");
+    startMenu.add(currentConfiguration);
+    startMenu.add(newConfiguration);
+    startMenu.add(quitGame);
+    menuBar.add(startMenu);
+    setJMenuBar(menuBar);
+  }
+
+  private File chooseFile() {
+    File file = null;
+    JFileChooser fc = new JFileChooser();
+    fc.removeChoosableFileFilter(fc.getAcceptAllFileFilter());
+    fc.setFileFilter(new FileNameExtensionFilter("*.txt", "txt"));
+    int i = fc.showOpenDialog(this);
+    if (i == JFileChooser.APPROVE_OPTION) {
+      file = fc.getSelectedFile();
+    }
+    return file;
+  }
+
+  private class AddPlayersPopup extends JDialog {
+
+    JLabel playerTypeLabel;
+    ButtonGroup  playerTypeBtnGrp;
+    JRadioButton radioBtnHuman;
+    JRadioButton radioBtnComputer;
+
+    JLabel playerNameLabel;
+    JTextField playerNameField;
+
+    JLabel playerStartRoomLabel;
+    JTextField playerStartRoomField;
+
+    JLabel playerWeaponLimitLabel;
+    JTextField playerWeaponLimitField;
+
+    JButton startGameBtn;
+    JButton addPlayerBtn;
+
+    public AddPlayersPopup(GameViewImpl frame) {
+      super(frame, "Add Players");
+
+      this.setMinimumSize(new Dimension(500,200));
+      this.setResizable(false);
+      this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+      this.setLocationRelativeTo(this);
+
+      JPanel form = new JPanel(new GridLayout(6,2));
+      form.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+
+      playerTypeLabel = new JLabel("Select player type");
+      playerTypeBtnGrp = new ButtonGroup();
+      radioBtnHuman  = new JRadioButton("Human");
+      radioBtnHuman.setActionCommand("0");
+      radioBtnComputer = new JRadioButton("Computer");
+      radioBtnComputer.setActionCommand("1");
+      playerTypeBtnGrp.add(radioBtnHuman);
+      playerTypeBtnGrp.add(radioBtnComputer);
+
+      playerNameLabel= new JLabel("Enter player name");
+      playerNameField = new JTextField();
+
+      playerStartRoomLabel = new JLabel("Enter starting room name");
+      playerStartRoomField = new JTextField();
+
+      playerWeaponLimitLabel = new JLabel("Enter limit on weapons");
+      playerWeaponLimitField = new JTextField();
+
+      startGameBtn = new JButton("Play Game");
+      addPlayerBtn = new JButton("Add Another Player");
+
+      form.add(playerNameLabel);
+      form.add(playerNameField);
+
+      form.add(playerStartRoomLabel);
+      form.add(playerStartRoomField);
+
+      form.add(playerWeaponLimitLabel);
+      form.add(playerWeaponLimitField);
+
+      form.add(playerTypeLabel);
+      form.add(new JLabel());
+      form.add(radioBtnHuman);
+      form.add(radioBtnComputer);
+
+      form.add(startGameBtn);
+      form.add(addPlayerBtn);
+
+      add(form);
+
+      pack();
+    }
+
+    void clearForm(){
+      playerTypeBtnGrp.clearSelection();
+      playerNameField.setText(null);
+      playerStartRoomField.setText(null);
+      playerWeaponLimitField.setText(null);
+    }
+
+    void addPlayer(FeatureInterface listener){
+//      listener.addPlayer(playerNameField.getText(),
+//        playerStartRoomField.getText(),
+//        playerWeaponLimitField.getText(),
+//        Objects.equals(playerTypeBtnGrp.getSelection().getActionCommand(), "1"));
+    }
+
+    void addClickListener(FeatureInterface listener) {
+      addPlayerBtn.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          addPlayer(listener);
+          clearForm();
+        }
+      });
+
+      startGameBtn.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          addPlayer(listener);
+          getParent().setEnabled(true);
+          addPlayerPopup.setVisible(false);
+        }
+      });
+    }
   }
 
   // TODO: Show helper text for the pick weapon command
