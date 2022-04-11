@@ -2,6 +2,7 @@ package model.world;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +29,6 @@ import model.worldbuilder.WorldBuilder;
 /**
  * WorldImpl represents the entire world of Kill Doctor Lucky.
  * It consists of world name, world coordinates, list of rooms and target player data.
- *
  */
 public class WorldImpl implements WorldInterface {
 
@@ -39,7 +39,6 @@ public class WorldImpl implements WorldInterface {
   private TargetPlayerInterface targetPlayer;
   private final List<PlayerInterface> players;
   private PlayerInterface currentTurn;
-  private PlayerInterface winner;
   private int dfsStartRoom;
   private final Stack<Integer> dfsStack;
   private final Set<Integer> dfsVisited;
@@ -98,7 +97,6 @@ public class WorldImpl implements WorldInterface {
     this.rooms = new ArrayList<>();
     this.players = new ArrayList<>();
     this.currentTurn = null;
-    this.winner = null;
     this.random = random;
 
     initializeRooms(roomCoordinates, roomNames, worldCoordinates);
@@ -468,34 +466,60 @@ public class WorldImpl implements WorldInterface {
   }
 
   @Override
-  public void displayWorld() {
-    int w = 1500;
-    int h = 1200;
-    BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+  public BufferedImage displayWorld(boolean isLookAround) {
+
+    int zoomFactor = 25;
+
+    BufferedImage bi = new BufferedImage((worldCoordinates.get(1) + 1) * zoomFactor,
+            (worldCoordinates.get(0) + 1) * zoomFactor, BufferedImage.TYPE_INT_RGB);
+
     Graphics g = bi.getGraphics();
+    g.setFont(g.getFont().deriveFont(10f));
     g.setColor(Color.WHITE);
     g.fillRect(0, 0, bi.getWidth(), bi.getHeight());
+
     for (RoomInterface room : this.rooms) {
+
       List<Integer> roomCoordinates = room.getRoomCoordinates();
-      int r1 = (roomCoordinates.get(0) * 24) - 12 + 50;
-      int r2 = (roomCoordinates.get(2) * 24) + 12 + 50;
-      int c1 = (roomCoordinates.get(1) * 24) - 12 + 50;
-      int c2 = (roomCoordinates.get(3) * 24) + 12 + 50;
+      int r1 = (roomCoordinates.get(0) * zoomFactor) - zoomFactor / 2;
+      int r2 = (roomCoordinates.get(2) * zoomFactor) + zoomFactor / 2;
+      int c1 = (roomCoordinates.get(1) * zoomFactor) - zoomFactor / 2 + 30;
+      int c2 = (roomCoordinates.get(3) * zoomFactor) + zoomFactor / 2 + 30;
+
       g.setColor(Color.BLACK);
-      g.drawRect(c1, r1, c2 - c1, r2 - r1);
-      g.drawString(room.getRoomName(), c1 + 15, r1 + 15);
+      g.drawRect(c1, r1, c2 - c1 + 1, r2 - r1 + 1);
+      g.drawString(room.getRoomName(), c1 + 5, r1 + 15);
+
+      // Show current player to world
+      if (currentTurn != null && room.getRoomName().equalsIgnoreCase("Ross's Home")) {
+        try {
+          BufferedImage originalImage = ImageIO.read(new File("res/images/CurrentPlayer.png"));
+          Image resultingImage = originalImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+          g.drawImage(resultingImage, c2 - 20, r2 - 20, null);
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+
+      // Show target player to world
+      if (room.getRoomName().equalsIgnoreCase(targetPlayer.getTargetPlayerRoom().getRoomName())) {
+        try {
+          BufferedImage originalImage = ImageIO.read(new File("res/images/TargetPlayer.png"));
+          Image resultingImage = originalImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+          g.drawImage(resultingImage, c2 - 20, r2 - 20, null);
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+
+      if (isLookAround) {
+        // TODO
+      }
+
     }
-    String currentDirectory = System.getProperty("user.dir");
-    String fileSeparator = System.getProperty("file.separator");
-    String filePath = currentDirectory + fileSeparator + "res" + fileSeparator
-            + "worldLayout.png";
-    File outfile = new File(filePath);
-    try {
-      ImageIO.write(bi, "png", outfile);
-    } catch (IOException e) {
-      throw new IllegalArgumentException("ERROR: Unable to save world view in png.");
-    }
+    return bi;
   }
+
 
   // TODO: Return copy of room object
   @Override
@@ -612,7 +636,8 @@ public class WorldImpl implements WorldInterface {
     moveTargetPlayer();
     movePetAfterTurnDfs();
     currentTurn = getNextTurnPlayer();
-    return new StringBuilder().append("Player has picked the weapon ").append(weaponName).toString();
+    return new StringBuilder().append("Player has picked the weapon ")
+            .append(weaponName).toString();
   }
 
   @Override
@@ -670,10 +695,6 @@ public class WorldImpl implements WorldInterface {
     WeaponInterface w = currentTurn.removeWeaponFromPlayer(weaponName);
     if (isAttackSuccessful) {
       targetPlayer.reduceTargetPlayerHealth(w.getWeaponValue());
-    }
-
-    if (isGameOver()) {
-      this.winner = currentTurn;
     }
 
     moveTargetPlayer();

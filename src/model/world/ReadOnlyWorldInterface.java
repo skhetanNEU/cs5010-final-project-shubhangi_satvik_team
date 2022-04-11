@@ -1,5 +1,7 @@
 package model.world;
 
+import java.awt.image.BufferedImage;
+
 /**
  * An interface class for representing the World for Kill Doctor Lucky.
  *
@@ -9,7 +11,7 @@ public interface ReadOnlyWorldInterface {
   /**
    * Saves the graphical representation of the world.
    */
-  void displayWorld();
+  BufferedImage displayWorld(boolean isLookAround);
 
   /**
    * Returns the name of the world.

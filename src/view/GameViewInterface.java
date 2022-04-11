@@ -6,7 +6,7 @@ public interface GameViewInterface {
 
   void addFeatures(FeatureInterface features);
 
-  void refresh();
+  void refresh(boolean isLookAround);
 
   void makeVisible();
 
