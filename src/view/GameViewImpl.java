@@ -110,7 +110,6 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     fc.removeChoosableFileFilter(fc.getAcceptAllFileFilter());
     fc.setFileFilter(new FileNameExtensionFilter("*.txt", "txt"));
     int i = fc.showOpenDialog(this);
-    System.out.println(i);
     if (i == JFileChooser.APPROVE_OPTION) {
       file = fc.getSelectedFile();
     }
@@ -121,7 +120,12 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
   public void addFeatures(FeatureInterface features) {
 
     currentConfiguration.addActionListener(l -> features.playGame(null));
-    newConfiguration.addActionListener(l -> features.playGame(chooseFile()));
+    newConfiguration.addActionListener(l -> {
+      File chosen = chooseFile();
+      if (chosen != null) {
+        features.playGame(chosen);
+      }
+    });
     quitGame.addActionListener(l -> features.quitGame());
 
     this.addKeyListener(
