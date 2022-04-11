@@ -33,6 +33,8 @@ public interface WorldInterface extends ReadOnlyWorldInterface {
    */
   String movePlayer(String roomName);
 
+  String movePlayer(int x, int y);
+
   /**
    * Picks the weapon for the current player.
    *

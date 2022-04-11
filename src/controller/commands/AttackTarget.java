@@ -4,7 +4,7 @@ import model.world.WorldInterface;
 
 public class AttackTarget extends AbstractCommands {
 
-  String weaponName;
+  private final String weaponName;
 
   public AttackTarget(String weaponName) {
     if (weaponName == null || "".equals(weaponName)) {

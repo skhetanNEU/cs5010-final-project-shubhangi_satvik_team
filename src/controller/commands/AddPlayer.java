@@ -3,10 +3,11 @@ package controller.commands;
 import model.world.WorldInterface;
 
 public class AddPlayer extends AbstractCommands {
-  private String playerName;
-  private String roomName;
-  private int maxNumberOfWeapons;
-  private boolean isComputerPlayer;
+
+  private final String playerName;
+  private final String roomName;
+  private final int maxNumberOfWeapons;
+  private final boolean isComputerPlayer;
 
   public AddPlayer(String playerName, String roomName, int maxNumberOfWeapons,
                    boolean isComputerPlayer) {
@@ -26,7 +27,6 @@ public class AddPlayer extends AbstractCommands {
     this.maxNumberOfWeapons = maxNumberOfWeapons;
     this.isComputerPlayer = isComputerPlayer;
   }
-
 
   @Override
   public void execute(WorldInterface model) {

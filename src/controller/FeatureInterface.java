@@ -7,11 +7,9 @@ public interface FeatureInterface {
 
   void playGame(File file);
 
-  void handleRoomClick(int row, int col);
-
   void getPlayerDescription();
 
-  void movePlayer(String roomName);
+  void movePlayer(int row, int col);
 
   void pickWeapon(String weaponName);
 

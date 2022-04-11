@@ -425,6 +425,26 @@ public class WorldImpl implements WorldInterface {
     return neighbourRoomPlayerCount > 0;
   }
 
+
+  private String getRoomCellClicked(int c, int r) {
+
+    int zoomFactor = 25;
+
+    for (RoomInterface room : this.rooms) {
+
+      List<Integer> roomCoordinates = room.getRoomCoordinates();
+      int r1 = (roomCoordinates.get(0) * zoomFactor) - zoomFactor / 2;
+      int r2 = (roomCoordinates.get(2) * zoomFactor) + zoomFactor / 2;
+      int c1 = (roomCoordinates.get(1) * zoomFactor) - zoomFactor / 2 + 30;
+      int c2 = (roomCoordinates.get(3) * zoomFactor) + zoomFactor / 2 + 30;
+
+      if (r < r2 && r > r1 && c < c2 && c > c1) {
+        return room.getRoomName();
+      }
+    }
+    return null;
+  }
+
   @Override
   public String getWorldName() {
     return this.worldName;
@@ -467,7 +487,7 @@ public class WorldImpl implements WorldInterface {
   @Override
   public BufferedImage displayWorld(boolean isLookAround) {
 
-    int zoomFactor = 25;
+    int zoomFactor = 24;
 
     BufferedImage bi = new BufferedImage((worldCoordinates.get(1) + 1) * zoomFactor,
             (worldCoordinates.get(0) + 1) * zoomFactor, BufferedImage.TYPE_INT_RGB);
@@ -486,7 +506,7 @@ public class WorldImpl implements WorldInterface {
       int c2 = (roomCoordinates.get(3) * zoomFactor) + zoomFactor / 2 + 30;
 
       g.setColor(Color.BLACK);
-      g.drawRect(c1, r1, c2 - c1 + 1, r2 - r1 + 1);
+      g.drawRect(c1, r1, c2 - c1, r2 - r1);
       g.drawString(room.getRoomName(), c1 + 5, r1 + 15);
 
       // Show current player to world
@@ -510,7 +530,10 @@ public class WorldImpl implements WorldInterface {
         try {
           BufferedImage player = ImageIO.read(new File("res/images/TargetPlayer.png"));
           Image resultingPlayer = player.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-          g.drawImage(resultingPlayer, ((int) (0.5 * (c1 + c2 + 1))) - 10, ((int) (0.5 * (r1 + r2 + 1))) - 10, null);
+          g.drawImage(resultingPlayer,
+                  ((int) (0.5 * (c1 + c2 + 1))) - 10,
+                  ((int) (0.5 * (r1 + r2 + 1))) - 10,
+                  null);
         } catch (IOException e) {
           e.printStackTrace();
         }
@@ -524,8 +547,6 @@ public class WorldImpl implements WorldInterface {
     return bi;
   }
 
-
-  // TODO: Return copy of room object
   @Override
   public String getRoomInformation(String roomName) {
     if ("".equals(roomName) || roomName == null) {
@@ -579,7 +600,6 @@ public class WorldImpl implements WorldInterface {
     }
   }
 
-  // TODO: Return list of copy room objects
   @Override
   public String lookAroundSpace() {
     checkIfPlayersExistToPlayGame();
@@ -624,6 +644,26 @@ public class WorldImpl implements WorldInterface {
     movePetAfterTurnDfs();
     currentTurn = getNextTurnPlayer();
     return new StringBuilder().append("Player has moved to room ").append(roomName).toString();
+  }
+
+  @Override
+  public String movePlayer(int x, int y) {
+    String roomName = this.getRoomCellClicked(x, y);
+    if (roomName != null) {
+      RoomInterface destinationRoom = getRoomByRoomName(roomName);
+      RoomInterface currentPlayerRoom = getRoomByRoomName(getCurrentPlayerRoomName());
+      currentPlayerRoom.checkIfRoomNeighbour(roomName, false);
+      currentPlayerRoom.removePlayerFromRoom(currentTurn);
+      currentTurn.setPlayerRoom(destinationRoom);
+      destinationRoom.addPlayerToRoom(currentTurn);
+      moveTargetPlayer();
+      movePetAfterTurnDfs();
+      currentTurn = getNextTurnPlayer();
+      return new StringBuilder().append("Player has moved to room ").append(roomName).toString();
+    }
+    return new StringBuilder().append("Player cannot be moved to room ")
+            .append(roomName).append(". Invalid room.")
+            .toString();
   }
 
   @Override

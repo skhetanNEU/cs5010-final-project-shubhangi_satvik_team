@@ -76,11 +76,6 @@ public class Controller implements FeatureInterface {
     }
   }
 
-  // TODO: Update movePlayer method and remove this
-  @Override
-  public void handleRoomClick(int row, int col) {
-  }
-
   // TODO: Set result in view
   @Override
   public void getPlayerDescription() {
@@ -91,13 +86,12 @@ public class Controller implements FeatureInterface {
   }
 
   // TODO: Set result in view
-  // TODO: Input parameters should take in row and column value - model determines the room
   @Override
-  public void movePlayer(String roomName) {
-    if (roomName == null || "".equals(roomName)) {
-      throw new IllegalArgumentException("Room name is invalid");
+  public void movePlayer(int row, int col) {
+    if (row < 0 || col < 0) {
+      throw new IllegalArgumentException("Inavlid coordinates.");
     }
-    CommandsInterface movePlayer = new MovePlayer(roomName);
+    CommandsInterface movePlayer = new MovePlayer(row, col);
     movePlayer.execute(model);
     String result = movePlayer.getCommandResult();
     gameView.refresh(false);

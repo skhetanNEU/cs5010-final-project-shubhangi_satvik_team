@@ -4,13 +4,15 @@ import model.world.WorldInterface;
 
 public class MovePlayer extends AbstractCommands {
 
-  private String roomName;
+  private final int row;
+  private final int col;
 
-  public MovePlayer(String roomName) {
-    if (roomName == null || "".equals(roomName)) {
-      throw new IllegalArgumentException("Room name is invalid");
+  public MovePlayer(int row, int col) {
+    if (row < 0 || col < 0) {
+      throw new IllegalArgumentException("Invalid coordinates");
     }
-    this.roomName = roomName;
+    this.row = row;
+    this.col = col;
   }
 
   @Override
@@ -19,8 +21,8 @@ public class MovePlayer extends AbstractCommands {
       throw new IllegalArgumentException("Model is invalid");
     }
     try {
-      model.movePlayer(this.roomName);
-      commandResult.append("Player has moved to room ").append(this.roomName);
+      model.movePlayer(row, col);
+      commandResult.append("Player has moved to room.");
       isCommandSuccessful = true;
     } catch (IllegalArgumentException exception) {
       commandResult.append(exception.getMessage());

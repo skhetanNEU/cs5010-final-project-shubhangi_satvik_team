@@ -4,7 +4,7 @@ import model.world.WorldInterface;
 
 public class MovePet extends AbstractCommands {
 
-  private String roomName;
+  private final String roomName;
 
   public MovePet(String roomName) {
     if (roomName == null || "".equals(roomName)) {

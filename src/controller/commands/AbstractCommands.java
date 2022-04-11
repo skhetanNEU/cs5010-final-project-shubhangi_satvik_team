@@ -2,7 +2,6 @@ package controller.commands;
 
 public abstract class AbstractCommands implements CommandsInterface {
 
-  // TODO: isCommandSuccessful and isCommandSuccessful() not required
   protected StringBuilder commandResult;
   protected boolean isCommandSuccessful;
 
