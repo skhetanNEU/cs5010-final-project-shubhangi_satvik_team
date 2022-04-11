@@ -19,7 +19,6 @@ public class PlayerImpl implements PlayerInterface {
 
   private final int playerId;
   private final String playerName;
-  private final boolean hasLimitOnWeapons;
   private final int weaponLimit;
   private final PlayerType playerType;
   private RoomInterface currentRoom;
@@ -31,27 +30,25 @@ public class PlayerImpl implements PlayerInterface {
    *
    * @param playerId          represents the id of the player
    * @param playerName        represents the name of the player
-   * @param hasLimitOnWeapons represents if the player has a max limit on number of weapons
    * @param weaponLimit       represents the max limit on number of weapons a player can pick
    * @param isComputer        represents if the player is a computer player or not
    * @param currentRoom       represents the current room in which the player is
    * @throws IllegalArgumentException if parameters are not valid
    */
-  public PlayerImpl(int playerId, String playerName, boolean hasLimitOnWeapons, int weaponLimit,
+  public PlayerImpl(int playerId, String playerName, int weaponLimit,
                     boolean isComputer, RoomInterface currentRoom) {
     if (playerId < 0) {
       throw new IllegalArgumentException("ERROR: Player id cannot be negative");
     } else if (playerName == null || "".equals(playerName)) {
       throw new IllegalArgumentException("ERROR: Player name cannot be empty");
-    } else if (weaponLimit < 0) {
+    } else if (weaponLimit < 0 && weaponLimit != -1) {
       throw new IllegalArgumentException("ERROR: Player weapon limit cannot be negative");
     } else if (currentRoom == null) {
       throw new IllegalArgumentException("ERROR: Player current room cannot be null");
     }
     this.playerId = playerId;
     this.playerName = playerName;
-    this.hasLimitOnWeapons = hasLimitOnWeapons;
-    this.weaponLimit = hasLimitOnWeapons ? weaponLimit : 0;
+    this.weaponLimit = weaponLimit;
     this.playerType = isComputer ? PlayerType.COMPUTER : PlayerType.HUMAN;
     this.currentRoom = currentRoom;
     this.playerWeapons = new ArrayList<>();
@@ -85,7 +82,7 @@ public class PlayerImpl implements PlayerInterface {
   public void addWeaponToPlayer(WeaponInterface weapon) {
     if (weapon == null) {
       throw new IllegalArgumentException("ERROR: Unable to pick weapon. Weapon cannot be null.");
-    } else if (hasLimitOnWeapons && playerWeapons != null && playerWeapons.size() == weaponLimit) {
+    } else if (weaponLimit != -1 && playerWeapons != null && playerWeapons.size() == weaponLimit) {
       throw new IllegalArgumentException("ERROR: Unable to pick weapon. Max weapon limit reached.");
     } else if (playerWeapons != null && !playerWeapons.contains(weapon)) {
       playerWeapons.add(weapon);

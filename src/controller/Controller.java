@@ -84,11 +84,11 @@ public class Controller implements FeatureInterface {
   // TODO: Set result in view
   // TODO: Repaint the view
   @Override
-  public String getPlayerDescription() {
+  public void getPlayerDescription() {
     CommandsInterface getPlayerDescription = new GetPlayerDescription();
     getPlayerDescription.execute(model);
+    String result = getPlayerDescription.getCommandResult();
     // gameView.refresh()
-    return getPlayerDescription.getCommandResult();
   }
 
   // TODO: Change return type to void
@@ -96,66 +96,66 @@ public class Controller implements FeatureInterface {
   // TODO: Repaint the view
   // TODO: Input parameters should take in row and column value - model determines the room
   @Override
-  public String movePlayer(String roomName) {
+  public void movePlayer(String roomName) {
     if (roomName == null || "".equals(roomName)) {
       throw new IllegalArgumentException("Room name is invalid");
     }
     CommandsInterface movePlayer = new MovePlayer(roomName);
     movePlayer.execute(model);
+    String result = movePlayer.getCommandResult();
     // gameView.refresh()
-    return movePlayer.getCommandResult();
   }
 
   // TODO: Change return type to void
   // TODO: Set result in view
   // TODO: Repaint the view
   @Override
-  public String pickWeapon(String weaponName) {
+  public void pickWeapon(String weaponName) {
     if (weaponName == null || "".equals(weaponName)) {
       throw new IllegalArgumentException("Weapon name is invalid");
     }
     CommandsInterface pickWeapon = new PickWeapon(weaponName);
     pickWeapon.execute(model);
+    String result = pickWeapon.getCommandResult();
     // gameView.refresh()
-    return pickWeapon.getCommandResult();
   }
 
   // TODO: Change return type to void
   // TODO: Set result in view
   // TODO: Repaint the view
   @Override
-  public String lookAround() {
+  public void lookAround() {
     CommandsInterface lookAround = new LookAround();
     lookAround.execute(model);
+    String result = lookAround.getCommandResult();
     // gameView.refresh()
-    return lookAround.getCommandResult();
   }
 
   // TODO: Change return type to void
   // TODO: Set result in view
   // TODO: Repaint the view
   @Override
-  public String attackTarget(String weaponName) {
+  public void attackTarget(String weaponName) {
     if (weaponName == null || "".equals(weaponName)) {
       throw new IllegalArgumentException("Weapon name is invalid");
     }
     CommandsInterface attackTarget = new AttackTarget(weaponName);
     attackTarget.execute(model);
+    String result = attackTarget.getCommandResult();
     // gameView.refresh()
-    return attackTarget.getCommandResult();
   }
 
   // TODO: Change return type to void
   // TODO: Set result in view
   // TODO: Repaint the view
   @Override
-  public String movePet(String roomName) {
+  public void movePet(String roomName) {
     if (roomName == null || "".equals(roomName)) {
       throw new IllegalArgumentException("Room name is invalid");
     }
     CommandsInterface movePet = new MovePet(roomName);
     movePet.execute(model);
+    String result = movePet.getCommandResult();
     // gameView.refresh()
-    return movePet.getCommandResult();
   }
 }

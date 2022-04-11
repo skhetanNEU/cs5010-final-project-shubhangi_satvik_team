@@ -527,11 +527,11 @@ public class WorldImpl implements WorldInterface {
   }
 
   @Override
-  public void addPlayerToGame(String playerName, boolean hasLimitOnWeapons, int weaponLimit,
+  public void addPlayerToGame(String playerName, int weaponLimit,
                               boolean isComputerPlayer, String startingRoomName) {
     if (playerName == null || "".equals(playerName)) {
       throw new IllegalArgumentException("ERROR: Player name cannot be empty or null.");
-    } else if (hasLimitOnWeapons && weaponLimit < 0) {
+    } else if (weaponLimit < 0 && weaponLimit != -1) {
       throw new IllegalArgumentException("ERROR: Player weapon limit cannot be negative.");
     } else if (startingRoomName == null || "".equals(startingRoomName)) {
       throw new IllegalArgumentException("ERROR: Player start room name cannot be empty or null.");
@@ -541,7 +541,7 @@ public class WorldImpl implements WorldInterface {
     } else {
       int newPlayerId = this.players.size();
       RoomInterface startRoom = getRoomByRoomName(startingRoomName);
-      PlayerInterface newPlayer = new PlayerImpl(newPlayerId, playerName, hasLimitOnWeapons,
+      PlayerInterface newPlayer = new PlayerImpl(newPlayerId, playerName,
               weaponLimit, isComputerPlayer, startRoom);
       this.players.add(newPlayer);
       startRoom.addPlayerToRoom(newPlayer);
@@ -575,7 +575,7 @@ public class WorldImpl implements WorldInterface {
   }
 
   @Override
-  public void movePlayer(String roomName) {
+  public String movePlayer(String roomName) {
     checkIfPlayersExistToPlayGame();
     if (roomName == null || "".equals(roomName)) {
       throw new IllegalArgumentException(
@@ -595,10 +595,11 @@ public class WorldImpl implements WorldInterface {
     moveTargetPlayer();
     movePetAfterTurnDfs();
     currentTurn = getNextTurnPlayer();
+    return new StringBuilder().append("Player has moved to room ").append(roomName).toString();
   }
 
   @Override
-  public void pickWeapon(String weaponName) {
+  public String pickWeapon(String weaponName) {
     checkIfPlayersExistToPlayGame();
     if (weaponName == null || "".equals(weaponName)) {
       throw new IllegalArgumentException(
@@ -611,10 +612,11 @@ public class WorldImpl implements WorldInterface {
     moveTargetPlayer();
     movePetAfterTurnDfs();
     currentTurn = getNextTurnPlayer();
+    return new StringBuilder().append("Player has picked the weapon ").append(weaponName).toString();
   }
 
   @Override
-  public void movePet(String roomName) {
+  public String movePet(String roomName) {
     checkIfPlayersExistToPlayGame();
     if (roomName == null || "".equals(roomName)) {
       throw new IllegalArgumentException(
@@ -632,10 +634,11 @@ public class WorldImpl implements WorldInterface {
     moveTargetPlayer();
     movePetAfterTurnDfs();
     currentTurn = getNextTurnPlayer();
+    return new StringBuilder().append("Player has moved the pet").toString();
   }
 
   @Override
-  public boolean attackTargetPlayer(String weaponName) {
+  public String attackTargetPlayer(String weaponName) {
     checkIfPlayersExistToPlayGame();
     if (weaponName == null || "".equals(weaponName)) {
       throw new IllegalArgumentException(
@@ -676,21 +679,23 @@ public class WorldImpl implements WorldInterface {
     moveTargetPlayer();
     movePetAfterTurnDfs();
     currentTurn = getNextTurnPlayer();
-    return isAttackSuccessful;
+    return isAttackSuccessful ? "Attack on target was successful" : "Attack on target was not "
+            + "successful";
   }
 
   @Override
-  public void takeTurnForComputerPlayer() {
+  public String takeTurnForComputerPlayer() {
     checkIfPlayersExistToPlayGame();
     int actionNumber = random.getRandom();
     RoomInterface currentPlayerRoom = getRoomByRoomName(currentTurn.getPlayerRoomName());
+    StringBuilder result = new StringBuilder();
 
     if (currentPlayerRoom.isTargetPlayerInRoom()
             && !isCurrentPlayerSeenByPlayersInVisibleRooms()) {
       String maxDamageWeaponChosen = currentTurn.getPlayerMaxDamageWeapon();
-      attackTargetPlayer(maxDamageWeaponChosen);
+      result.append(attackTargetPlayer(maxDamageWeaponChosen));
     } else if (actionNumber == 0) {
-      lookAroundSpace();
+      result.append(lookAroundSpace());
     } else if (actionNumber == 1) {
       String neighbours = currentPlayerRoom.getRoomNeighbours(false);
       String[] neighbourList = neighbours.split(",");
@@ -700,7 +705,7 @@ public class WorldImpl implements WorldInterface {
                 "ERROR: The current room does not have any neighbours to move to.");
       } else {
         String chosenRoomName = neighbourList[neighbourList.length - 1].trim();
-        movePlayer(chosenRoomName);
+        result.append(movePlayer(chosenRoomName));
       }
     } else if (actionNumber == 2) {
       String weapons = getCurrentPlayerRoomWeapons(false);
@@ -710,13 +715,14 @@ public class WorldImpl implements WorldInterface {
       } else {
         String[] weaponList = weapons.split(",");
         String chosenWeaponName = weaponList[weaponList.length - 1].trim();
-        pickWeapon(chosenWeaponName);
+        result.append(pickWeapon(chosenWeaponName));
       }
     } else if (actionNumber == 3) {
       String randomRoomChosen = this.rooms.get(random.getRandomWithinBound(this.rooms.size()))
               .getRoomName();
-      movePet(randomRoomChosen);
+      result.append(movePet(randomRoomChosen));
     }
+    return result.toString();
   }
 
 }

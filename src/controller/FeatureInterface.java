@@ -9,15 +9,15 @@ public interface FeatureInterface {
 
   void handleRoomClick(int row, int col);
 
-  String getPlayerDescription();
+  void getPlayerDescription();
 
-  String movePlayer(String roomName);
+  void movePlayer(String roomName);
 
-  String pickWeapon(String weaponName);
+  void pickWeapon(String weaponName);
 
-  String lookAround();
+  void lookAround();
 
-  String attackTarget(String weaponName);
+  void attackTarget(String weaponName);
 
-  String movePet(String roomName);
+  void movePet(String roomName);
 }
