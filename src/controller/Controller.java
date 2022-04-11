@@ -1,12 +1,7 @@
 package controller;
 
-import controller.commands.AttackTarget;
-import controller.commands.CommandsInterface;
-import controller.commands.GetPlayerDescription;
-import controller.commands.LookAround;
-import controller.commands.MovePet;
-import controller.commands.MovePlayer;
-import controller.commands.PickWeapon;
+import controller.commands.*;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -157,5 +152,25 @@ public class Controller implements FeatureInterface {
     movePet.execute(model);
     String result = movePet.getCommandResult();
     // gameView.refresh()
+  }
+
+  @Override
+  public void addPlayer(String playerName, String roomName, int maxNumberOfWeapons,
+                        boolean isComputerPlayer){
+    if (playerName == null || "".equals(playerName)) {
+      throw new IllegalArgumentException("Invalid player name");
+    }
+    if (roomName == null || "".equals(roomName)) {
+      throw new IllegalArgumentException("Invalid room name");
+    }
+    if (maxNumberOfWeapons < 0 || maxNumberOfWeapons != -1) {
+      throw new IllegalArgumentException("Invalid maximum number of weapons that a player "
+              + "can carry");
+    }
+
+    CommandsInterface addPlayer = new AddPlayer(playerName, roomName, maxNumberOfWeapons,
+            isComputerPlayer);
+    addPlayer.execute(model);
+    String result = addPlayer.getCommandResult();
   }
 }
