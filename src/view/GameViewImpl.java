@@ -40,7 +40,6 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
   private final MovePetPopup movePetPopup;
   private final AttackTargetPopup attackTargetPopup;
 
-
   public GameViewImpl(ReadOnlyWorldInterface model, FeatureInterface listener) {
 
     super("Game Started");
@@ -152,6 +151,11 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
   }
 
   @Override
+  public void refresh() {
+    this.repaint();
+  }
+
+  @Override
   public void makeVisible() {
     this.setVisible(true);
   }
@@ -161,6 +165,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     this.setVisible(false);
   }
 
+  // TODO: Show helper text for the pick weapon command
   private class PickWeaponPopup extends JDialog {
 
     JLabel label;
@@ -192,6 +197,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     }
   }
 
+  // TODO: Show helper text for the move pet command
   private class MovePetPopup extends JDialog {
 
     JLabel label;
@@ -223,6 +229,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     }
   }
 
+  // TODO: Show helper text for the attack target command
   private class AttackTargetPopup extends JDialog {
 
     JLabel label;
@@ -253,6 +260,5 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
       });
     }
   }
-
 
 }

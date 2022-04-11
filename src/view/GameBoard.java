@@ -2,6 +2,7 @@ package view;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import model.world.ReadOnlyWorldInterface;
@@ -20,4 +21,12 @@ public class GameBoard extends JPanel {
     add(welcomeMessage);
 
   }
+
+  // TODO: Paint the world on the game board
+  @Override
+  protected void paintComponent(Graphics g) {
+
+  }
+
+
 }

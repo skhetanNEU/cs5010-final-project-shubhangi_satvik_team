@@ -497,6 +497,7 @@ public class WorldImpl implements WorldInterface {
     }
   }
 
+  // TODO: Return copy of room object
   @Override
   public String getRoomInformation(String roomName) {
     if ("".equals(roomName) || roomName == null) {
@@ -550,6 +551,7 @@ public class WorldImpl implements WorldInterface {
     }
   }
 
+  // TODO: Return list of copy room objects
   @Override
   public String lookAroundSpace() {
     checkIfPlayersExistToPlayGame();

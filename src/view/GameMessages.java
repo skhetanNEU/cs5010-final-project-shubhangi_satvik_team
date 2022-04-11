@@ -9,6 +9,7 @@ import model.world.ReadOnlyWorldInterface;
 
 public class GameMessages extends JPanel {
 
+  // TODO: Add labels for displaying game information
   public GameMessages(ReadOnlyWorldInterface model, FeatureInterface listener) {
 
     setBackground(Color.LIGHT_GRAY);
@@ -21,4 +22,45 @@ public class GameMessages extends JPanel {
     add(welcomeCredits);
 
   }
+
+  // TODO: Show current player information
+  public void setCurrentPlayerInformation(String result) {
+
+  }
+
+  // TODO: Show current player's room information
+  public void setCurrentPlayerRoomInformation(String result) {
+
+  }
+
+  // TODO: Show target player information
+  public void setTargetPlayerInformation(String result) {
+
+  }
+
+  // TODO: Show result of the move player command
+  public void setMovePlayerResult(String result) {
+
+  }
+
+  // TODO: Show result of the move pet command
+  public void setMovePet(String result) {
+
+  }
+
+  // TODO: Show result of the pick weapon command
+  public void setPickWeapon(String result) {
+
+  }
+
+  // TODO: Show result of the attack target command
+  public void setAttackTargetResult(String result) {
+
+  }
+
+  // TODO: Show result of the look around command
+  public void setLookAround(String result) {
+
+  }
+
 }
