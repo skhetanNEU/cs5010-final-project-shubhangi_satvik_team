@@ -15,7 +15,7 @@ public class MovePet extends AbstractCommands {
 
   @Override
   public void execute(WorldInterface model) {
-    if(model == null){
+    if (model == null) {
       throw new IllegalArgumentException("Model is invalid");
     }
     try {

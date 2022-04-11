@@ -1,13 +1,13 @@
 package controller;
 
+import java.io.File;
+
 public interface FeatureInterface {
-  void playGame();
+  void quitGame();
+
+  void playGame(File file);
 
   void handleRoomClick(int row, int col);
-
-  void restartGame();
-
-  void newGame();
 
   String getPlayerDescription();
 

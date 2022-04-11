@@ -7,8 +7,9 @@ import controller.commands.LookAround;
 import controller.commands.MovePet;
 import controller.commands.MovePlayer;
 import controller.commands.PickWeapon;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import model.random.RandomClass;
 import model.random.RandomGenerator;
 import model.world.WorldImpl;
@@ -17,7 +18,7 @@ import view.GameViewImpl;
 import view.GameViewInterface;
 import view.PreGameViewInterface;
 
-public class Controller implements FeatureInterface, ActionListener {
+public class Controller implements FeatureInterface {
 
   private WorldInterface model;
   private GameViewInterface gameView;
@@ -42,36 +43,41 @@ public class Controller implements FeatureInterface, ActionListener {
     this.preGameView = preGameView;
   }
 
+
   @Override
-  public void actionPerformed(ActionEvent e) {
-    RandomGenerator rand = new RandomClass(true);
-    model = WorldImpl.getBuilder()
-            //        .parseInputFile(text)
-            .setRandomGenerator(rand)
-            .build();
-    this.gameView = new GameViewImpl(model, this);
-    playGame();
+  public void quitGame() {
+    if (this.gameView != null) {
+      this.gameView.close();
+    } else {
+      this.preGameView.close();
+    }
   }
 
   @Override
-  public void playGame() {
-    preGameView.close();
-    gameView.makeVisible();
-    gameView.addFeatures(this);
+  public void playGame(File file) {
+    File chosen = file;
+    if (file == null) {
+      chosen = new File("res/FriendsWorld.txt");
+    }
+    try {
+      Readable reader = new FileReader(chosen);
+      RandomGenerator rand = new RandomClass(true);
+      model = WorldImpl.getBuilder()
+              .parseInputFile(reader)
+              .setRandomGenerator(rand)
+              .build();
+      this.gameView = new GameViewImpl(model, this);
+      preGameView.close();
+      gameView.makeVisible();
+      gameView.addFeatures(this);
+    } catch (FileNotFoundException e) {
+      throw new IllegalArgumentException("File not found.");
+    }
+
   }
 
   @Override
   public void handleRoomClick(int row, int col) {
-  }
-
-  @Override
-  public void restartGame() {
-
-  }
-
-  @Override
-  public void newGame() {
-
   }
 
   @Override

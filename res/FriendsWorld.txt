@@ -1,0 +1,45 @@
+35 35 Friends World
+50 Janice
+Dog
+20
+9 25 11 27 Janice Home
+7 18 11 24 Ross's Museum
+7 12 11 17 Monica's Kitchen
+2 22 6 30 Joey's Movie Set
+2 10 6 21 Chandler's Office
+2 5 6 9 Rachel's Office
+2 0 9 4 Massage Parlor
+14 11 18 15 Ross's Home
+14 25 18 29 Phoebe's Home
+12 16 24 24 Central Perk
+25 15 28 16 Hallway
+27 10 30 14 Guys Living Room
+25 12 26 14 Guys Kitchen 
+24 5 28 9 Chandler's Room
+29 5 33 9 Joey's Room
+27 17 32 24 Girls Living Room
+25 17 26 19 Girls Kitchen
+24 25 28 28 Monica's Room
+29 25 34 28 Rachel's Room
+25 20 26 22 Balcony
+20
+9 10 Anti Annoying Pill
+7 5 Hockey Punk
+13 8 Sonic Laugh
+14 4 Poison
+16 6 Rachel's English Trifle
+9 5 Breakup Bomb
+8 4 Gladys
+16 3 Pure Fat
+10 2 Banana Peel
+4 2 Baseball
+5 2 Water Gun
+2 4 Pan
+1 2 Boot
+19 3 Broom
+9 7 Rachel's Coffee
+5 2 Straightner
+2 1 Spatula
+3 1 Knife
+6 1 Pillow
+3 1 Scarf
