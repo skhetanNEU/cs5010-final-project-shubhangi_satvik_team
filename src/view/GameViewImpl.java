@@ -4,7 +4,6 @@ import controller.FeatureInterface;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -52,8 +51,6 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     }
 
     this.setLayout(new BorderLayout());
-    this.setMinimumSize(new Dimension(300, 300));
-    this.setPreferredSize(new Dimension(600, 600));
     this.setResizable(true);
     this.setLocationRelativeTo(null);
     this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -61,15 +58,25 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     setMenuBar();
 
     JPanel container = new JPanel();
-    container.setLayout(new GridLayout(1, 2));
+    container.setLayout(new BorderLayout());
 
     this.gameBoard = new GameBoard(model);
     this.messages = new GameMessages(model, listener);
 
-    container.add(gameBoard);
-    container.add(messages);
+    container.setSize(64 * 40, 1000);
+    this.gameBoard.setSize(64 * 30, 1000);
+    this.messages.setSize(64 * 10, 1000);
 
-    JScrollPane scrollPane2 = new JScrollPane(container);
+    container.add(gameBoard, BorderLayout.CENTER);
+    container.add(messages, BorderLayout.EAST);
+
+    JScrollPane scrollPane2 = new JScrollPane(container,
+            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+    scrollPane2.setEnabled(true);
+
+    scrollPane2.setMinimumSize(new Dimension(300, 300));
+    scrollPane2.setPreferredSize(new Dimension(1200, 900));
+
     add(scrollPane2);
 
     pack();
@@ -101,8 +108,9 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     File file = null;
     JFileChooser fc = new JFileChooser();
     fc.removeChoosableFileFilter(fc.getAcceptAllFileFilter());
-    fc.setFileFilter(new FileNameExtensionFilter("txt"));
+    fc.setFileFilter(new FileNameExtensionFilter("*.txt", "txt"));
     int i = fc.showOpenDialog(this);
+    System.out.println(i);
     if (i == JFileChooser.APPROVE_OPTION) {
       file = fc.getSelectedFile();
     }
@@ -151,8 +159,8 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
   }
 
   @Override
-  public void refresh() {
-    this.repaint();
+  public void refresh(boolean isLookAround) {
+    this.gameBoard.refreshWorldView(isLookAround);
   }
 
   @Override
@@ -261,4 +269,30 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     }
   }
 
+  // TODO: Show result of the move player command
+  public void setMovePlayerResult(String result) {
+
+  }
+
+  // TODO: Show result of the move pet command
+  public void setMovePet(String result) {
+
+  }
+
+  // TODO: Show result of the pick weapon command
+  public void setPickWeapon(String result) {
+
+  }
+
+  // TODO: Show result of the attack target command
+  public void setAttackTargetResult(String result) {
+
+  }
+
+  // TODO: Show result of the look around command
+  public void setLookAround(String result) {
+
+  }
+
 }
+
