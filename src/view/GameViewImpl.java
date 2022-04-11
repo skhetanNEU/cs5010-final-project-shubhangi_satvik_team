@@ -3,6 +3,7 @@ package view;
 import controller.FeatureInterface;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -13,11 +14,13 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import model.world.ReadOnlyWorldInterface;
@@ -160,58 +163,94 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
 
   private class PickWeaponPopup extends JDialog {
 
+    JLabel label;
+    JTextField weaponName;
     JButton pick;
 
     public PickWeaponPopup(GameViewImpl frame) {
-      super(frame);
+      super(frame, "Pick Weapon");
+      setLayout(new FlowLayout());
+      label = new JLabel();
+      label.setText("Enter weapon name: ");
+      weaponName = new JTextField(15);
+      pick = new JButton("Pick");
+      add(label);
+      add(weaponName);
+      add(pick);
+      this.setSize(300, 150);
+      pack();
     }
 
     void addClickListener(FeatureInterface listener) {
-      //      pick.addMouseListener(new MouseAdapter() {
-      //        @Override
-      //        public void mouseClicked(MouseEvent e) {
-      //          listener.pickWeapon("");
-      //          pickWeaponPopup.setVisible(false);
-      //        }
-      //      });
+      pick.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          listener.pickWeapon(weaponName.getText());
+          pickWeaponPopup.setVisible(false);
+        }
+      });
     }
   }
 
   private class MovePetPopup extends JDialog {
 
+    JLabel label;
+    JTextField roomName;
     JButton move;
 
     public MovePetPopup(GameViewImpl frame) {
-      super(frame);
+      super(frame, "Move Pet");
+      setLayout(new FlowLayout());
+      label = new JLabel();
+      label.setText("Enter room name: ");
+      roomName = new JTextField(15);
+      move = new JButton("Move");
+      add(label);
+      add(roomName);
+      add(move);
+      this.setSize(300, 150);
+      pack();
     }
 
     void addClickListener(FeatureInterface listener) {
-      //      move.addMouseListener(new MouseAdapter() {
-      //        @Override
-      //        public void mouseClicked(MouseEvent e) {
-      //          listener.movePet("");
-      //          movePetPopup.setVisible(false);
-      //        }
-      //      });
+      move.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          listener.movePet(roomName.getText());
+          movePetPopup.setVisible(false);
+        }
+      });
     }
   }
 
   private class AttackTargetPopup extends JDialog {
 
+    JLabel label;
+    JTextField weaponName;
     JButton attack;
 
     public AttackTargetPopup(GameViewImpl frame) {
-      super(frame);
+      super(frame, "Attack Target");
+      setLayout(new FlowLayout());
+      label = new JLabel();
+      label.setText("Enter weapon name: ");
+      weaponName = new JTextField(15);
+      attack = new JButton("Attack");
+      add(label);
+      add(weaponName);
+      add(attack);
+      this.setSize(300, 150);
+      pack();
     }
 
     void addClickListener(FeatureInterface listener) {
-      //      attack.addMouseListener(new MouseAdapter() {
-      //        @Override
-      //        public void mouseClicked(MouseEvent e) {
-      //          listener.attackTarget("");
-      //          attackTargetPopup.setVisible(false);
-      //        }
-      //      });
+      attack.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          listener.attackTarget(weaponName.getText());
+          attackTargetPopup.setVisible(false);
+        }
+      });
     }
   }
 
