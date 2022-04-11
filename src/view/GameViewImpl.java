@@ -1,7 +1,6 @@
 package view;
 
 import controller.FeatureInterface;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -11,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.Objects;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -191,7 +191,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
   private class AddPlayersPopup extends JDialog {
 
     JLabel playerTypeLabel;
-    ButtonGroup  playerTypeBtnGrp;
+    ButtonGroup playerTypeBtnGrp;
     JRadioButton radioBtnHuman;
     JRadioButton radioBtnComputer;
 
@@ -210,24 +210,24 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     public AddPlayersPopup(GameViewImpl frame) {
       super(frame, "Add Players");
 
-      this.setMinimumSize(new Dimension(500,200));
+      this.setMinimumSize(new Dimension(500, 200));
       this.setResizable(false);
       this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
       this.setLocationRelativeTo(this);
 
-      JPanel form = new JPanel(new GridLayout(6,2));
+      JPanel form = new JPanel(new GridLayout(6, 2));
       form.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
       playerTypeLabel = new JLabel("Select player type");
       playerTypeBtnGrp = new ButtonGroup();
-      radioBtnHuman  = new JRadioButton("Human");
+      radioBtnHuman = new JRadioButton("Human");
       radioBtnHuman.setActionCommand("0");
       radioBtnComputer = new JRadioButton("Computer");
       radioBtnComputer.setActionCommand("1");
       playerTypeBtnGrp.add(radioBtnHuman);
       playerTypeBtnGrp.add(radioBtnComputer);
 
-      playerNameLabel= new JLabel("Enter player name");
+      playerNameLabel = new JLabel("Enter player name");
       playerNameField = new JTextField();
 
       playerStartRoomLabel = new JLabel("Enter starting room name");
@@ -261,18 +261,18 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
       pack();
     }
 
-    void clearForm(){
+    void clearForm() {
       playerTypeBtnGrp.clearSelection();
       playerNameField.setText(null);
       playerStartRoomField.setText(null);
       playerWeaponLimitField.setText(null);
     }
 
-    void addPlayer(FeatureInterface listener){
-//      listener.addPlayer(playerNameField.getText(),
-//        playerStartRoomField.getText(),
-//        playerWeaponLimitField.getText(),
-//        Objects.equals(playerTypeBtnGrp.getSelection().getActionCommand(), "1"));
+    void addPlayer(FeatureInterface listener) {
+      listener.addPlayer(playerNameField.getText(),
+              playerStartRoomField.getText(),
+              playerWeaponLimitField.getText(),
+              Objects.equals(playerTypeBtnGrp.getSelection().getActionCommand(), "1"));
     }
 
     void addClickListener(FeatureInterface listener) {

@@ -21,5 +21,6 @@ public interface FeatureInterface {
 
   void movePet(String roomName);
 
-  void addPlayer(String playerName, String roomName, int maxNumberOfWeapons, boolean isComputerPlayer);
+  void addPlayer(String playerName, String roomName, String maxNumberOfWeapons,
+                 boolean isComputerPlayer);
 }

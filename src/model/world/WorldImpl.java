@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Stack;
-import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import model.pet.PetImpl;
 import model.pet.PetInterface;
@@ -491,22 +490,27 @@ public class WorldImpl implements WorldInterface {
       g.drawString(room.getRoomName(), c1 + 5, r1 + 15);
 
       // Show current player to world
-      if (currentTurn != null && room.getRoomName().equalsIgnoreCase("Ross's Home")) {
+      if (currentTurn != null && room.getRoomName().equalsIgnoreCase(getCurrentPlayerRoomName())) {
         try {
           BufferedImage originalImage = ImageIO.read(new File("res/images/CurrentPlayer.png"));
           Image resultingImage = originalImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-          g.drawImage(resultingImage, c2 - 20, r2 - 20, null);
+          g.drawImage(resultingImage, c2 - 30, r2 - 30, null);
+
+          if (!"No weapons".equals(room.getAvailableWeapons(false))) {
+            BufferedImage weapon = ImageIO.read(new File("res/images/Weapons.png"));
+            Image resultingWeapon = weapon.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+            g.drawImage(resultingWeapon, c1 + 10, r2 - 30, null);
+          }
         } catch (IOException e) {
           e.printStackTrace();
         }
       }
-
       // Show target player to world
       if (room.getRoomName().equalsIgnoreCase(targetPlayer.getTargetPlayerRoom().getRoomName())) {
         try {
-          BufferedImage originalImage = ImageIO.read(new File("res/images/TargetPlayer.png"));
-          Image resultingImage = originalImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-          g.drawImage(resultingImage, c2 - 20, r2 - 20, null);
+          BufferedImage player = ImageIO.read(new File("res/images/TargetPlayer.png"));
+          Image resultingPlayer = player.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+          g.drawImage(resultingPlayer, ((int) (0.5 * (c1 + c2 + 1))) - 10, ((int) (0.5 * (r1 + r2 + 1))) - 10, null);
         } catch (IOException e) {
           e.printStackTrace();
         }

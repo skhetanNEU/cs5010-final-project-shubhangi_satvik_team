@@ -1,7 +1,13 @@
 package controller;
 
-import controller.commands.*;
-
+import controller.commands.AddPlayer;
+import controller.commands.AttackTarget;
+import controller.commands.CommandsInterface;
+import controller.commands.GetPlayerDescription;
+import controller.commands.LookAround;
+import controller.commands.MovePet;
+import controller.commands.MovePlayer;
+import controller.commands.PickWeapon;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -61,8 +67,8 @@ public class Controller implements FeatureInterface {
               .parseInputFile(reader)
               .setRandomGenerator(rand)
               .build();
+      quitGame();
       this.gameView = new GameViewImpl(model, this);
-      preGameView.close();
       gameView.makeVisible();
       gameView.addFeatures(this);
     } catch (FileNotFoundException e) {
@@ -75,20 +81,16 @@ public class Controller implements FeatureInterface {
   public void handleRoomClick(int row, int col) {
   }
 
-  // TODO: Change return type to void
   // TODO: Set result in view
-  // TODO: Repaint the view
   @Override
   public void getPlayerDescription() {
     CommandsInterface getPlayerDescription = new GetPlayerDescription();
     getPlayerDescription.execute(model);
     String result = getPlayerDescription.getCommandResult();
-    // gameView.refresh()
+    gameView.refresh(false);
   }
 
-  // TODO: Change return type to void
   // TODO: Set result in view
-  // TODO: Repaint the view
   // TODO: Input parameters should take in row and column value - model determines the room
   @Override
   public void movePlayer(String roomName) {
@@ -98,12 +100,10 @@ public class Controller implements FeatureInterface {
     CommandsInterface movePlayer = new MovePlayer(roomName);
     movePlayer.execute(model);
     String result = movePlayer.getCommandResult();
-    // gameView.refresh()
+    gameView.refresh(false);
   }
 
-  // TODO: Change return type to void
   // TODO: Set result in view
-  // TODO: Repaint the view
   @Override
   public void pickWeapon(String weaponName) {
     if (weaponName == null || "".equals(weaponName)) {
@@ -112,23 +112,19 @@ public class Controller implements FeatureInterface {
     CommandsInterface pickWeapon = new PickWeapon(weaponName);
     pickWeapon.execute(model);
     String result = pickWeapon.getCommandResult();
-    // gameView.refresh()
+    gameView.refresh(false);
   }
 
-  // TODO: Change return type to void
   // TODO: Set result in view
-  // TODO: Repaint the view
   @Override
   public void lookAround() {
     CommandsInterface lookAround = new LookAround();
     lookAround.execute(model);
     String result = lookAround.getCommandResult();
-    // gameView.refresh()
+    gameView.refresh(true);
   }
 
-  // TODO: Change return type to void
   // TODO: Set result in view
-  // TODO: Repaint the view
   @Override
   public void attackTarget(String weaponName) {
     if (weaponName == null || "".equals(weaponName)) {
@@ -137,12 +133,10 @@ public class Controller implements FeatureInterface {
     CommandsInterface attackTarget = new AttackTarget(weaponName);
     attackTarget.execute(model);
     String result = attackTarget.getCommandResult();
-    // gameView.refresh()
+    gameView.refresh(false);
   }
 
-  // TODO: Change return type to void
   // TODO: Set result in view
-  // TODO: Repaint the view
   @Override
   public void movePet(String roomName) {
     if (roomName == null || "".equals(roomName)) {
@@ -151,26 +145,33 @@ public class Controller implements FeatureInterface {
     CommandsInterface movePet = new MovePet(roomName);
     movePet.execute(model);
     String result = movePet.getCommandResult();
-    // gameView.refresh()
+    gameView.refresh(false);
   }
 
   @Override
-  public void addPlayer(String playerName, String roomName, int maxNumberOfWeapons,
-                        boolean isComputerPlayer){
+  public void addPlayer(String playerName, String roomName, String maxNumberOfWeapons,
+                        boolean isComputerPlayer) {
+    int numWeapons;
+
     if (playerName == null || "".equals(playerName)) {
       throw new IllegalArgumentException("Invalid player name");
     }
     if (roomName == null || "".equals(roomName)) {
       throw new IllegalArgumentException("Invalid room name");
     }
-    if (maxNumberOfWeapons < 0 || maxNumberOfWeapons != -1) {
+    try {
+      numWeapons = Integer.parseInt(maxNumberOfWeapons);
+    } catch (NumberFormatException nfe) {
+      throw new IllegalArgumentException("Maximum number of weapons should be a number");
+    }
+    if (numWeapons < -1) {
       throw new IllegalArgumentException("Invalid maximum number of weapons that a player "
               + "can carry");
     }
-
-    CommandsInterface addPlayer = new AddPlayer(playerName, roomName, maxNumberOfWeapons,
+    CommandsInterface addPlayer = new AddPlayer(playerName, roomName, numWeapons,
             isComputerPlayer);
     addPlayer.execute(model);
     String result = addPlayer.getCommandResult();
+    gameView.refresh(false);
   }
 }

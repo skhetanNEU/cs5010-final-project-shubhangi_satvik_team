@@ -16,7 +16,7 @@ public class AddPlayer extends AbstractCommands {
     if (roomName == null || "".equals(roomName)) {
       throw new IllegalArgumentException("Invalid room name");
     }
-    if (maxNumberOfWeapons < 0 || maxNumberOfWeapons != -1) {
+    if (maxNumberOfWeapons < -1) {
       throw new IllegalArgumentException("Invalid maximum number of weapons that a player "
               + "can carry");
     }
