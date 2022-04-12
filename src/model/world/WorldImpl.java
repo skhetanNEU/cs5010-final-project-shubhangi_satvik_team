@@ -440,6 +440,14 @@ public class WorldImpl implements WorldInterface {
     return null;
   }
 
+  private String getRoomInformation(String roomName) {
+    if ("".equals(roomName) || roomName == null) {
+      throw new IllegalArgumentException("ERROR: Room name cannot be null/empty");
+    }
+    RoomInterface room = getRoomByRoomName(roomName);
+    return room.toString();
+  }
+
   @Override
   public String getWorldName() {
     return this.worldName;
@@ -552,11 +560,11 @@ public class WorldImpl implements WorldInterface {
   }
 
   @Override
-  public String getRoomInformation(String roomName) {
-    if ("".equals(roomName) || roomName == null) {
-      throw new IllegalArgumentException("ERROR: Room name cannot be null/empty");
+  public String getCurrentPlayerRoomInformation() {
+    if (currentTurn == null) {
+      return "";
     }
-    RoomInterface room = getRoomByRoomName(roomName);
+    RoomInterface room = getRoomByRoomName(currentTurn.getPlayerRoomName());
     return room.toString();
   }
 

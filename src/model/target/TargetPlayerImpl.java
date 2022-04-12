@@ -80,8 +80,7 @@ public class TargetPlayerImpl implements TargetPlayerInterface {
 
   @Override
   public String toString() {
-    return String.format("---------- Target Player Details ----------\n"
-                    + "Name: %s\nHealth: %s\nCurrent Room: %s",
+    return String.format("Name: %s\nHealth: %s\nCurrent Room: %s",
             playerName,
             playerHealth,
             playerLocation.getRoomName());

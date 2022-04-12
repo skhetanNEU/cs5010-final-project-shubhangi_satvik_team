@@ -56,13 +56,12 @@ public interface ReadOnlyWorldInterface {
   String getCurrentPlayerRoomWeapons(boolean includeDamageValues);
 
   /**
-   * Retrieves the details of the room which includes the room id, name,
+   * Retrieves the details of the current player's room which includes the room id, name,
    * list of available weapons and the neighbours of the room.
    *
-   * @param roomName represents the name of the room whose details are needed
    * @return details of the room
    */
-  String getRoomInformation(String roomName);
+  String getCurrentPlayerRoomInformation();
 
   /**
    * Retrieves the details of the player which includes the name, list of available weapons

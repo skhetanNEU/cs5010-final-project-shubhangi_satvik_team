@@ -18,7 +18,7 @@ public class GameBoard extends JPanel {
     }
     this.model = model;
 
-    setBackground(Color.DARK_GRAY);
+    setBackground(Color.BLACK);
 
     world = new JLabel();
     add(world);

@@ -25,7 +25,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import model.world.ReadOnlyWorldInterface;
@@ -58,6 +60,8 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
       throw new IllegalArgumentException("Controller cannot be null");
     }
 
+    this.model = model;
+
     this.setLayout(new BorderLayout());
     this.setResizable(true);
     this.setLocationRelativeTo(null);
@@ -71,25 +75,22 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     this.gameBoard = new GameBoard(model);
     this.messages = new GameMessages(model, listener);
 
-    container.setSize(64 * 40, 1000);
-    this.gameBoard.setSize(64 * 30, 1000);
-    this.messages.setSize(64 * 10, 1000);
+    container.setPreferredSize(new Dimension(1200, 900));
+    this.gameBoard.setMinimumSize(new Dimension(800, 900));
+    this.messages.setMinimumSize(new Dimension(400, 900));
 
     container.add(gameBoard, BorderLayout.CENTER);
     container.add(messages, BorderLayout.EAST);
 
     JScrollPane scrollPane2 = new JScrollPane(container,
             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-    scrollPane2.setEnabled(true);
 
-    scrollPane2.setMinimumSize(new Dimension(300, 300));
-    scrollPane2.setPreferredSize(new Dimension(1200, 900));
+    scrollPane2.setEnabled(true);
 
     add(scrollPane2);
 
     pack();
 
-    this.model = model;
     this.addPlayerPopup = new AddPlayersPopup(this);
     this.pickWeaponPopup = new PickWeaponPopup(this);
     this.movePetPopup = new MovePetPopup(this);
@@ -122,11 +123,14 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
             case KeyEvent.VK_M -> movePetPopup.setVisible(true);
             case KeyEvent.VK_L -> {
               String outcome = features.lookAround();
-              int res = JOptionPane.showOptionDialog(getParent(), outcome,
-                      "Look Around Details", JOptionPane.DEFAULT_OPTION,
+              JTextArea textArea = new JTextArea(outcome, 20, 100);
+              JScrollPane sp = new JScrollPane(textArea);
+              sp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+              int res = JOptionPane.showOptionDialog(getParent(), sp, "Look Around Details", JOptionPane.DEFAULT_OPTION,
                       JOptionPane.INFORMATION_MESSAGE, null, null, null);
               if (res == JOptionPane.OK_OPTION) {
                 features.refreshGame(true);
+                messages.updateGameDetails();
               }
             }
             default -> {
@@ -149,6 +153,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
                   JOptionPane.INFORMATION_MESSAGE, null, null, null);
           if (res == JOptionPane.OK_OPTION) {
             features.refreshGame(false);
+            messages.updateGameDetails();
           }
         }
       }
@@ -306,6 +311,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
         public void mouseClicked(MouseEvent e) {
           addPlayer(listener);
           listener.refreshGame(false);
+          messages.updateGameDetails();
           getParent().setEnabled(true);
           addPlayerPopup.setVisible(false);
         }
@@ -343,6 +349,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
                   JOptionPane.INFORMATION_MESSAGE, null, null, null);
           if (res == JOptionPane.OK_OPTION) {
             listener.refreshGame(false);
+            messages.updateGameDetails();
           }
           pickWeaponPopup.setVisible(false);
         }
@@ -381,6 +388,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
                   JOptionPane.INFORMATION_MESSAGE, null, null, null);
           if (res == JOptionPane.OK_OPTION) {
             listener.refreshGame(false);
+            messages.updateGameDetails();
           }
           movePetPopup.setVisible(false);
         }
@@ -418,6 +426,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
                   JOptionPane.INFORMATION_MESSAGE, null, null, null);
           if (res == JOptionPane.OK_OPTION) {
             listener.refreshGame(false);
+            messages.updateGameDetails();
           }
           attackTargetPopup.setVisible(false);
         }
