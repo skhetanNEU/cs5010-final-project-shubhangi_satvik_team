@@ -27,7 +27,7 @@ public class Controller implements FeatureInterface {
 
   public Controller(PreGameViewInterface preGameView) {
     if (preGameView == null) {
-      throw new IllegalArgumentException("Cannot be null");
+      throw new IllegalArgumentException("View cannot be null");
     }
     this.preGameView = preGameView;
     this.preGameView.addFeatures(this);
@@ -37,13 +37,12 @@ public class Controller implements FeatureInterface {
   public Controller(WorldInterface model, GameViewInterface gameView,
                     PreGameViewInterface preGameView) {
     if (model == null || gameView == null || preGameView == null) {
-      throw new IllegalArgumentException("Cannot be null");
+      throw new IllegalArgumentException("View/model cannot be null");
     }
     this.model = model;
     this.gameView = gameView;
     this.preGameView = preGameView;
   }
-
 
   @Override
   public void quitGame() {
@@ -76,96 +75,87 @@ public class Controller implements FeatureInterface {
     }
   }
 
-  // TODO: Set result in view
   @Override
-  public void getPlayerDescription() {
+  public String getPlayerDescription() {
     CommandsInterface getPlayerDescription = new GetPlayerDescription();
     getPlayerDescription.execute(model);
-    String result = getPlayerDescription.getCommandResult();
-    gameView.refresh(false);
+    return getPlayerDescription.getCommandResult();
   }
 
-  // TODO: Set result in view
   @Override
-  public void movePlayer(int row, int col) {
+  public String movePlayer(int row, int col) {
     if (row < 0 || col < 0) {
-      throw new IllegalArgumentException("Inavlid coordinates.");
+      return "Coordinates cannot be negative";
     }
     CommandsInterface movePlayer = new MovePlayer(row, col);
     movePlayer.execute(model);
-    String result = movePlayer.getCommandResult();
-    gameView.refresh(false);
+    return movePlayer.getCommandResult();
   }
 
-  // TODO: Set result in view
   @Override
-  public void pickWeapon(String weaponName) {
+  public String pickWeapon(String weaponName) {
     if (weaponName == null || "".equals(weaponName)) {
-      throw new IllegalArgumentException("Weapon name is invalid");
+      return "Weapon name cannot be empty";
     }
     CommandsInterface pickWeapon = new PickWeapon(weaponName);
     pickWeapon.execute(model);
-    String result = pickWeapon.getCommandResult();
-    gameView.refresh(false);
+    return pickWeapon.getCommandResult();
   }
 
-  // TODO: Set result in view
   @Override
-  public void lookAround() {
+  public String lookAround() {
     CommandsInterface lookAround = new LookAround();
     lookAround.execute(model);
-    String result = lookAround.getCommandResult();
-    gameView.refresh(true);
+    return lookAround.getCommandResult();
   }
 
-  // TODO: Set result in view
   @Override
-  public void attackTarget(String weaponName) {
+  public String attackTarget(String weaponName) {
     if (weaponName == null || "".equals(weaponName)) {
-      throw new IllegalArgumentException("Weapon name is invalid");
+      return "Weapon name cannot be empty";
     }
     CommandsInterface attackTarget = new AttackTarget(weaponName);
     attackTarget.execute(model);
-    String result = attackTarget.getCommandResult();
-    gameView.refresh(false);
+    return attackTarget.getCommandResult();
   }
 
-  // TODO: Set result in view
   @Override
-  public void movePet(String roomName) {
+  public String movePet(String roomName) {
     if (roomName == null || "".equals(roomName)) {
-      throw new IllegalArgumentException("Room name is invalid");
+      return "Room name cannot be empty";
     }
     CommandsInterface movePet = new MovePet(roomName);
     movePet.execute(model);
-    String result = movePet.getCommandResult();
-    gameView.refresh(false);
+    return movePet.getCommandResult();
   }
 
   @Override
-  public void addPlayer(String playerName, String roomName, String maxNumberOfWeapons,
+  public String addPlayer(String playerName, String roomName, String maxNumberOfWeapons,
                         boolean isComputerPlayer) {
     int numWeapons;
 
     if (playerName == null || "".equals(playerName)) {
-      throw new IllegalArgumentException("Invalid player name");
+      return "Player name cannot be empty";
     }
     if (roomName == null || "".equals(roomName)) {
-      throw new IllegalArgumentException("Invalid room name");
+      return "Room name cannot be empty";
     }
     try {
       numWeapons = Integer.parseInt(maxNumberOfWeapons);
     } catch (NumberFormatException nfe) {
-      throw new IllegalArgumentException("Maximum number of weapons should be a number");
+      return "Maximum number of weapons must be a number";
     }
     if (numWeapons < -1) {
-      throw new IllegalArgumentException("Invalid maximum number of weapons that a player "
-              + "can carry");
+      return "Maximum number of weapons should be -1 or positive";
     }
     CommandsInterface addPlayer = new AddPlayer(playerName, roomName, numWeapons,
             isComputerPlayer);
     addPlayer.execute(model);
-    String result = addPlayer.getCommandResult();
-    gameView.refresh(false);
+    return addPlayer.getCommandResult();
+  }
+
+  @Override
+  public void refreshGame(boolean isLookAround) {
+    gameView.refresh(isLookAround);
   }
 }

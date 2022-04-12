@@ -425,19 +425,14 @@ public class WorldImpl implements WorldInterface {
     return neighbourRoomPlayerCount > 0;
   }
 
-
-  private String getRoomCellClicked(int c, int r) {
-
+  private String getRoomCellClicked(int r, int c) {
     int zoomFactor = 25;
-
     for (RoomInterface room : this.rooms) {
-
       List<Integer> roomCoordinates = room.getRoomCoordinates();
       int r1 = (roomCoordinates.get(0) * zoomFactor) - zoomFactor / 2;
       int r2 = (roomCoordinates.get(2) * zoomFactor) + zoomFactor / 2;
       int c1 = (roomCoordinates.get(1) * zoomFactor) - zoomFactor / 2 + 30;
       int c2 = (roomCoordinates.get(3) * zoomFactor) + zoomFactor / 2 + 30;
-
       if (r < r2 && r > r1 && c < c2 && c > c1) {
         return room.getRoomName();
       }
@@ -470,16 +465,25 @@ public class WorldImpl implements WorldInterface {
 
   @Override
   public String getCurrentPlayerWeapons() {
+    if (currentTurn == null) {
+      return "";
+    }
     return currentTurn.getPlayerWeapons(true);
   }
 
   @Override
   public String getCurrentPlayerRoomName() {
+    if (currentTurn == null) {
+      return "";
+    }
     return currentTurn.getPlayerRoomName();
   }
 
   @Override
   public String getCurrentPlayerRoomWeapons(boolean includeDamageValues) {
+    if (currentTurn == null) {
+      return "";
+    }
     RoomInterface currentPlayerRoom = getRoomByRoomName(currentTurn.getPlayerRoomName());
     return currentPlayerRoom.getAvailableWeapons(includeDamageValues);
   }
@@ -643,7 +647,8 @@ public class WorldImpl implements WorldInterface {
     moveTargetPlayer();
     movePetAfterTurnDfs();
     currentTurn = getNextTurnPlayer();
-    return new StringBuilder().append("Player has moved to room ").append(roomName).toString();
+    return new StringBuilder().append("Player has successfully moved to room ")
+            .append(roomName).toString();
   }
 
   @Override
@@ -659,11 +664,10 @@ public class WorldImpl implements WorldInterface {
       moveTargetPlayer();
       movePetAfterTurnDfs();
       currentTurn = getNextTurnPlayer();
-      return new StringBuilder().append("Player has moved to room ").append(roomName).toString();
+      return new StringBuilder().append("Player has successfully moved to room ")
+              .append(roomName).toString();
     }
-    return new StringBuilder().append("Player cannot be moved to room ")
-            .append(roomName).append(". Invalid room.")
-            .toString();
+    return new StringBuilder().append("ERROR: Player cannot be moved. Invalid room.").toString();
   }
 
   @Override
@@ -680,7 +684,7 @@ public class WorldImpl implements WorldInterface {
     moveTargetPlayer();
     movePetAfterTurnDfs();
     currentTurn = getNextTurnPlayer();
-    return new StringBuilder().append("Player has picked the weapon ")
+    return new StringBuilder().append("Player has successfully picked up ")
             .append(weaponName).toString();
   }
 
@@ -703,7 +707,8 @@ public class WorldImpl implements WorldInterface {
     moveTargetPlayer();
     movePetAfterTurnDfs();
     currentTurn = getNextTurnPlayer();
-    return new StringBuilder().append("Player has moved the pet").toString();
+    return new StringBuilder().append("Player has successfully moved the pet to ").append(roomName)
+            .toString();
   }
 
   @Override
@@ -744,8 +749,8 @@ public class WorldImpl implements WorldInterface {
     moveTargetPlayer();
     movePetAfterTurnDfs();
     currentTurn = getNextTurnPlayer();
-    return isAttackSuccessful ? "Attack on target was successful" : "Attack on target was not "
-            + "successful";
+    return isAttackSuccessful ? "Attack on target was successful" :
+            "Attack on target was not successful";
   }
 
   @Override

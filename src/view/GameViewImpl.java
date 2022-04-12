@@ -21,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -44,6 +45,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
   private final PickWeaponPopup pickWeaponPopup;
   private final MovePetPopup movePetPopup;
   private final AttackTargetPopup attackTargetPopup;
+
 
   public GameViewImpl(ReadOnlyWorldInterface model, FeatureInterface listener) {
 
@@ -87,11 +89,11 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
 
     pack();
 
+    this.model = model;
     this.addPlayerPopup = new AddPlayersPopup(this);
     this.pickWeaponPopup = new PickWeaponPopup(this);
     this.movePetPopup = new MovePetPopup(this);
     this.attackTargetPopup = new AttackTargetPopup(this);
-    this.model = model;
 
     this.setEnabled(false);
     this.addPlayerPopup.setVisible(true);
@@ -118,7 +120,15 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
             case KeyEvent.VK_P -> pickWeaponPopup.setVisible(true);
             case KeyEvent.VK_A -> attackTargetPopup.setVisible(true);
             case KeyEvent.VK_M -> movePetPopup.setVisible(true);
-            case KeyEvent.VK_L -> features.lookAround();
+            case KeyEvent.VK_L -> {
+              String outcome = features.lookAround();
+              int res = JOptionPane.showOptionDialog(getParent(), outcome,
+                      "Look Around Details", JOptionPane.DEFAULT_OPTION,
+                      JOptionPane.INFORMATION_MESSAGE, null, null, null);
+              if (res == JOptionPane.OK_OPTION) {
+                features.refreshGame(true);
+              }
+            }
             default -> {
             }
           }
@@ -133,7 +143,13 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
           super.mouseClicked(event);
           int row = event.getY();
           int column = event.getX();
-          features.handleRoomClick(row, column);
+          String outcome = features.movePlayer(row, column);
+          int res = JOptionPane.showOptionDialog(getParent(), outcome,
+                  "Move Player", JOptionPane.DEFAULT_OPTION,
+                  JOptionPane.INFORMATION_MESSAGE, null, null, null);
+          if (res == JOptionPane.OK_OPTION) {
+            features.refreshGame(false);
+          }
         }
       }
     );
@@ -222,6 +238,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
       playerTypeBtnGrp = new ButtonGroup();
       radioBtnHuman = new JRadioButton("Human");
       radioBtnHuman.setActionCommand("0");
+      radioBtnHuman.setSelected(true);
       radioBtnComputer = new JRadioButton("Computer");
       radioBtnComputer.setActionCommand("1");
       playerTypeBtnGrp.add(radioBtnHuman);
@@ -288,6 +305,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
         @Override
         public void mouseClicked(MouseEvent e) {
           addPlayer(listener);
+          listener.refreshGame(false);
           getParent().setEnabled(true);
           addPlayerPopup.setVisible(false);
         }
@@ -295,7 +313,6 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     }
   }
 
-  // TODO: Show helper text for the pick weapon command
   private class PickWeaponPopup extends JDialog {
 
     JLabel label;
@@ -320,14 +337,20 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
       pick.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-          listener.pickWeapon(weaponName.getText());
+          String outcome = listener.pickWeapon(weaponName.getText());
+          int res = JOptionPane.showOptionDialog(getParent(), outcome,
+                  "Pick Weapon", JOptionPane.DEFAULT_OPTION,
+                  JOptionPane.INFORMATION_MESSAGE, null, null, null);
+          if (res == JOptionPane.OK_OPTION) {
+            listener.refreshGame(false);
+          }
           pickWeaponPopup.setVisible(false);
         }
       });
     }
+
   }
 
-  // TODO: Show helper text for the move pet command
   private class MovePetPopup extends JDialog {
 
     JLabel label;
@@ -352,14 +375,19 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
       move.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-          listener.movePet(roomName.getText());
+          String outcome = listener.movePet(roomName.getText());
+          int res = JOptionPane.showOptionDialog(getParent(), outcome,
+                  "Move Pet", JOptionPane.DEFAULT_OPTION,
+                  JOptionPane.INFORMATION_MESSAGE, null, null, null);
+          if (res == JOptionPane.OK_OPTION) {
+            listener.refreshGame(false);
+          }
           movePetPopup.setVisible(false);
         }
       });
     }
   }
 
-  // TODO: Show helper text for the attack target command
   private class AttackTargetPopup extends JDialog {
 
     JLabel label;
@@ -384,37 +412,19 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
       attack.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-          listener.attackTarget(weaponName.getText());
+          String outcome = listener.attackTarget(weaponName.getText());
+          int res = JOptionPane.showOptionDialog(getParent(), outcome,
+                  "Attack Target", JOptionPane.DEFAULT_OPTION,
+                  JOptionPane.INFORMATION_MESSAGE, null, null, null);
+          if (res == JOptionPane.OK_OPTION) {
+            listener.refreshGame(false);
+          }
           attackTargetPopup.setVisible(false);
         }
       });
     }
   }
 
-  // TODO: Show result of the move player command
-  public void setMovePlayerResult(String result) {
-
-  }
-
-  // TODO: Show result of the move pet command
-  public void setMovePet(String result) {
-
-  }
-
-  // TODO: Show result of the pick weapon command
-  public void setPickWeapon(String result) {
-
-  }
-
-  // TODO: Show result of the attack target command
-  public void setAttackTargetResult(String result) {
-
-  }
-
-  // TODO: Show result of the look around command
-  public void setLookAround(String result) {
-
-  }
 
 }
 

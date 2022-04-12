@@ -3,22 +3,25 @@ package controller;
 import java.io.File;
 
 public interface FeatureInterface {
+
+  void refreshGame(boolean isLookAround);
+
   void quitGame();
 
   void playGame(File file);
 
-  void getPlayerDescription();
+  String getPlayerDescription();
 
-  void movePlayer(int row, int col);
+  String movePlayer(int row, int col);
 
-  void pickWeapon(String weaponName);
+  String pickWeapon(String weaponName);
 
-  void lookAround();
+  String lookAround();
 
-  void attackTarget(String weaponName);
+  String attackTarget(String weaponName);
 
-  void movePet(String roomName);
+  String movePet(String roomName);
 
-  void addPlayer(String playerName, String roomName, String maxNumberOfWeapons,
+  String addPlayer(String playerName, String roomName, String maxNumberOfWeapons,
                  boolean isComputerPlayer);
 }
