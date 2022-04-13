@@ -4,24 +4,22 @@ import java.io.File;
 
 public interface FeatureInterface {
 
-  void refreshGame(boolean isLookAround);
+  void playGame(File file);
 
   void quitGame();
 
-  void playGame(File file);
-
   String getPlayerDescription();
 
-  String movePlayer(int row, int col);
-
-  String pickWeapon(String weaponName);
-
-  String lookAround();
-
-  String attackTarget(String weaponName);
-
-  String movePet(String roomName);
-
   String addPlayer(String playerName, String roomName, String maxNumberOfWeapons,
-                 boolean isComputerPlayer);
+                   boolean isComputerPlayer);
+
+  void lookAround();
+
+  void movePlayer(int row, int col);
+
+  void pickWeapon();
+
+  void attackTarget();
+
+  void movePet();
 }

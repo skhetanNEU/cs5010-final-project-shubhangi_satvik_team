@@ -1,15 +1,15 @@
 package view;
 
-import controller.FeatureInterface;
+import java.util.List;
 
-public interface GameViewInterface {
-
-  void addFeatures(FeatureInterface features);
-
+public interface GameViewInterface extends PreGameViewInterface {
   void refresh(boolean isLookAround);
 
-  void makeVisible();
+  int showCommandOutcome(String title, String outcome);
 
-  void close();
+  String showPickWeaponDialog();
 
+  String showMovePetDialog();
+
+  String showAttackTargetDialog();
 }

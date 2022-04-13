@@ -2,18 +2,18 @@ package view;
 
 import controller.FeatureInterface;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.Objects;
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -23,11 +23,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import model.world.ReadOnlyWorldInterface;
@@ -35,19 +32,12 @@ import model.world.ReadOnlyWorldInterface;
 public class GameViewImpl extends JFrame implements GameViewInterface {
 
   private final ReadOnlyWorldInterface model;
-
   private JMenuItem currentConfiguration;
   private JMenuItem newConfiguration;
   private JMenuItem quitGame;
-
   private final GameBoard gameBoard;
   private final GameMessages messages;
-
   private final AddPlayersPopup addPlayerPopup;
-  private final PickWeaponPopup pickWeaponPopup;
-  private final MovePetPopup movePetPopup;
-  private final AttackTargetPopup attackTargetPopup;
-
 
   public GameViewImpl(ReadOnlyWorldInterface model, FeatureInterface listener) {
 
@@ -85,6 +75,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     JScrollPane scrollPane2 = new JScrollPane(container,
             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
+    scrollPane2.setMinimumSize(new Dimension(300, 300));
     scrollPane2.setEnabled(true);
 
     add(scrollPane2);
@@ -92,93 +83,8 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     pack();
 
     this.addPlayerPopup = new AddPlayersPopup(this);
-    this.pickWeaponPopup = new PickWeaponPopup(this);
-    this.movePetPopup = new MovePetPopup(this);
-    this.attackTargetPopup = new AttackTargetPopup(this);
-
-    this.setEnabled(false);
     this.addPlayerPopup.setVisible(true);
-
-  }
-
-  @Override
-  public void addFeatures(FeatureInterface features) {
-
-    currentConfiguration.addActionListener(l -> features.playGame(null));
-    newConfiguration.addActionListener(l -> {
-      File chosen = chooseFile();
-      if (chosen != null) {
-        features.playGame(chosen);
-      }
-    });
-    quitGame.addActionListener(l -> features.quitGame());
-
-    this.addKeyListener(
-      new KeyAdapter() {
-        @Override
-        public void keyReleased(KeyEvent e) {
-          switch (e.getKeyCode()) {
-            case KeyEvent.VK_P -> pickWeaponPopup.setVisible(true);
-            case KeyEvent.VK_A -> attackTargetPopup.setVisible(true);
-            case KeyEvent.VK_M -> movePetPopup.setVisible(true);
-            case KeyEvent.VK_L -> {
-              String outcome = features.lookAround();
-              JTextArea textArea = new JTextArea(outcome, 20, 100);
-              JScrollPane sp = new JScrollPane(textArea);
-              sp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-              int res = JOptionPane.showOptionDialog(getParent(), sp, "Look Around Details", JOptionPane.DEFAULT_OPTION,
-                      JOptionPane.INFORMATION_MESSAGE, null, null, null);
-              if (res == JOptionPane.OK_OPTION) {
-                features.refreshGame(true);
-                messages.updateGameDetails();
-              }
-            }
-            default -> {
-            }
-          }
-        }
-      }
-    );
-
-    gameBoard.addMouseListener(
-      new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent event) {
-          super.mouseClicked(event);
-          int row = event.getY();
-          int column = event.getX();
-          String outcome = features.movePlayer(row, column);
-          int res = JOptionPane.showOptionDialog(getParent(), outcome,
-                  "Move Player", JOptionPane.DEFAULT_OPTION,
-                  JOptionPane.INFORMATION_MESSAGE, null, null, null);
-          if (res == JOptionPane.OK_OPTION) {
-            features.refreshGame(false);
-            messages.updateGameDetails();
-          }
-        }
-      }
-    );
-
-    this.pickWeaponPopup.addClickListener(features);
-    this.movePetPopup.addClickListener(features);
-    this.attackTargetPopup.addClickListener(features);
-    this.addPlayerPopup.addClickListener(features);
-
-  }
-
-  @Override
-  public void refresh(boolean isLookAround) {
-    this.gameBoard.refreshWorldView(isLookAround);
-  }
-
-  @Override
-  public void makeVisible() {
-    this.setVisible(true);
-  }
-
-  @Override
-  public void close() {
-    this.setVisible(false);
+    this.setEnabled(false);
   }
 
   /**
@@ -209,231 +115,293 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     return file;
   }
 
-  private class AddPlayersPopup extends JDialog {
+  @Override
+  public void addFeatures(FeatureInterface features) {
 
-    JLabel playerTypeLabel;
-    ButtonGroup playerTypeBtnGrp;
-    JRadioButton radioBtnHuman;
-    JRadioButton radioBtnComputer;
+    currentConfiguration.addActionListener(l -> features.playGame(null));
+    newConfiguration.addActionListener(l -> {
+      File chosen = chooseFile();
+      if (chosen != null) {
+        features.playGame(chosen);
+      }
+    });
+    quitGame.addActionListener(l -> features.quitGame());
+
+    this.addKeyListener(
+      new KeyAdapter() {
+        @Override
+        public void keyReleased(KeyEvent e) {
+          switch (e.getKeyCode()) {
+            case KeyEvent.VK_P -> features.pickWeapon();
+            case KeyEvent.VK_A -> features.attackTarget();
+            case KeyEvent.VK_M -> features.movePet();
+            case KeyEvent.VK_L -> features.lookAround();
+            default -> {
+            }
+          }
+        }
+      }
+    );
+    gameBoard.addMouseListener(
+      new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent event) {
+          super.mouseClicked(event);
+          int row = event.getY();
+          int column = event.getX();
+          features.movePlayer(row, column);
+        }
+      }
+    );
+
+    this.addPlayerPopup.addClickListener(features);
+  }
+
+  @Override
+  public void makeVisible() {
+    this.setVisible(true);
+  }
+
+  @Override
+  public void close() {
+    this.setVisible(false);
+  }
+
+  @Override
+  public void refresh(boolean isLookAround) {
+    this.gameBoard.refreshWorldView(isLookAround);
+    this.messages.updateGameDetails();
+  }
+
+  @Override
+  public int showCommandOutcome(String title, String outcome) {
+    return JOptionPane.showOptionDialog(getParent(), outcome,
+            title, JOptionPane.DEFAULT_OPTION,
+            JOptionPane.INFORMATION_MESSAGE, null, null, null);
+  }
+
+  @Override
+  public String showPickWeaponDialog() {
+
+    JPanel panel = new JPanel(new GridLayout(0, 1));
+
+    JLabel availableWeaponLabel = new JLabel(String.format("Weapons available in room: %s ",
+            model.getCurrentPlayerRoomWeapons(false)));
+    JLabel pickWeaponLabel = new JLabel("Enter weapon name to pick:");
+    JTextField weaponField = new JTextField();
+
+    panel.add(availableWeaponLabel);
+    panel.add(pickWeaponLabel);
+    panel.add(weaponField);
+
+    Object[] options = {"Pick Weapon", "Cancel"};
+
+    int result = JOptionPane.showOptionDialog(this,
+            panel,
+            "Pick Weapon",
+            JOptionPane.OK_CANCEL_OPTION,
+            JOptionPane.PLAIN_MESSAGE,
+            null,
+            options,
+            options[0]);
+
+    if (result == JOptionPane.OK_OPTION) {
+      return weaponField.getText();
+    } else {
+      return null;
+    }
+
+  }
+
+  @Override
+  public String showMovePetDialog() {
+    JPanel panel = new JPanel(new GridLayout(0, 1));
+
+    JLabel movePetLabel = new JLabel("Enter room name to move pet to:");
+    JTextField roomNameField = new JTextField();
+
+    panel.add(movePetLabel);
+    panel.add(roomNameField);
+
+    Object[] options = {"Move Pet", "Cancel"};
+
+    int result = JOptionPane.showOptionDialog(this,
+            panel,
+            "Move Pet",
+            JOptionPane.OK_CANCEL_OPTION,
+            JOptionPane.PLAIN_MESSAGE,
+            null,
+            options,
+            options[0]);
+
+    if (result == JOptionPane.OK_OPTION) {
+      return roomNameField.getText();
+    } else {
+      return null;
+    }
+  }
+
+  @Override
+  public String showAttackTargetDialog() {
+    JPanel panel = new JPanel(new GridLayout(0, 1));
+
+    JLabel availableWeaponLabel = new JLabel(String.format("Weapons available with player: %s ",
+            model.getCurrentPlayerWeapons()));
+    JLabel attackWeaponLabel = new JLabel("Enter weapon name to attack with: ");
+    JTextField weaponField = new JTextField();
+
+    panel.add(availableWeaponLabel);
+    panel.add(attackWeaponLabel);
+    panel.add(weaponField);
+
+    Object[] options = {"Attack Target", "Cancel"};
+
+    int result = JOptionPane.showOptionDialog(this,
+            panel,
+            "Attack Target",
+            JOptionPane.OK_CANCEL_OPTION,
+            JOptionPane.PLAIN_MESSAGE,
+            null,
+            options,
+            options[0]);
+
+    if (result == JOptionPane.OK_OPTION) {
+      return weaponField.getText();
+    } else {
+      return null;
+    }
+
+  }
+
+  private class AddPlayersPopup extends JDialog {
 
     JLabel playerNameLabel;
     JTextField playerNameField;
-
     JLabel playerStartRoomLabel;
     JTextField playerStartRoomField;
-
     JLabel playerWeaponLimitLabel;
     JTextField playerWeaponLimitField;
+    JLabel playerTypeLabel;
+    JComboBox<String> playerTypeOptions;
+    String[] items = {"Human", "Computer"};
 
-    JButton startGameBtn;
-    JButton addPlayerBtn;
+    JLabel errorMessage;
+
+    JButton clear;
+    JButton addNext;
+    JButton startGame;
 
     public AddPlayersPopup(GameViewImpl frame) {
-      super(frame, "Add Players");
+
+      super(frame, "Add Players to Game");
 
       this.setMinimumSize(new Dimension(500, 200));
       this.setResizable(false);
       this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
       this.setLocationRelativeTo(this);
 
-      JPanel form = new JPanel(new GridLayout(6, 2));
-      form.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+      JPanel contentPane = new JPanel();
+      contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
+      contentPane.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
-      playerTypeLabel = new JLabel("Select player type");
-      playerTypeBtnGrp = new ButtonGroup();
-      radioBtnHuman = new JRadioButton("Human");
-      radioBtnHuman.setActionCommand("0");
-      radioBtnHuman.setSelected(true);
-      radioBtnComputer = new JRadioButton("Computer");
-      radioBtnComputer.setActionCommand("1");
-      playerTypeBtnGrp.add(radioBtnHuman);
-      playerTypeBtnGrp.add(radioBtnComputer);
+      JPanel panel = new JPanel(new GridLayout(0, 2));
 
       playerNameLabel = new JLabel("Enter player name");
       playerNameField = new JTextField();
+      panel.add(playerNameLabel);
+      panel.add(playerNameField);
 
       playerStartRoomLabel = new JLabel("Enter starting room name");
       playerStartRoomField = new JTextField();
+      panel.add(playerStartRoomLabel);
+      panel.add(playerStartRoomField);
 
       playerWeaponLimitLabel = new JLabel("Enter limit on weapons");
       playerWeaponLimitField = new JTextField();
+      panel.add(playerWeaponLimitLabel);
+      panel.add(playerWeaponLimitField);
 
-      startGameBtn = new JButton("Play Game");
-      addPlayerBtn = new JButton("Add Another Player");
+      playerTypeLabel = new JLabel("Choose player type");
+      playerTypeOptions = new JComboBox<>(items);
+      panel.add(playerTypeLabel);
+      panel.add(playerTypeOptions);
 
-      form.add(playerNameLabel);
-      form.add(playerNameField);
+      errorMessage = new JLabel("");
+      errorMessage.setForeground(Color.RED);
+      panel.add(errorMessage);
 
-      form.add(playerStartRoomLabel);
-      form.add(playerStartRoomField);
+      JPanel buttons = new JPanel(new GridLayout(1, 3));
+      buttons.setSize(new Dimension(getWidth(), 80));
 
-      form.add(playerWeaponLimitLabel);
-      form.add(playerWeaponLimitField);
+      clear = new JButton("Clear Details");
+      buttons.add(clear);
 
-      form.add(playerTypeLabel);
-      form.add(new JLabel());
-      form.add(radioBtnHuman);
-      form.add(radioBtnComputer);
+      addNext = new JButton("Add Next Player");
+      buttons.add(addNext);
 
-      form.add(startGameBtn);
-      form.add(addPlayerBtn);
+      startGame = new JButton("Add and Start Game");
+      buttons.add(startGame);
 
-      add(form);
+      contentPane.add(panel);
+      contentPane.add(new JLabel());
+      contentPane.add(buttons);
+
+      add(contentPane);
 
       pack();
     }
 
-    void clearForm() {
-      playerTypeBtnGrp.clearSelection();
+    private void clearForm() {
       playerNameField.setText(null);
       playerStartRoomField.setText(null);
       playerWeaponLimitField.setText(null);
+      errorMessage.setText(null);
     }
 
-    void addPlayer(FeatureInterface listener) {
-      listener.addPlayer(playerNameField.getText(),
+    private boolean addPlayer(FeatureInterface listener) {
+      String outcome = listener.addPlayer(playerNameField.getText(),
               playerStartRoomField.getText(),
               playerWeaponLimitField.getText(),
-              Objects.equals(playerTypeBtnGrp.getSelection().getActionCommand(), "1"));
+              playerTypeOptions.getSelectedIndex() == 1);
+      if (!"".equalsIgnoreCase(outcome)) {
+        errorMessage.setText(outcome);
+        return false;
+      } else {
+        errorMessage.setText(null);
+        return true;
+      }
     }
 
-    void addClickListener(FeatureInterface listener) {
-      addPlayerBtn.addMouseListener(new MouseAdapter() {
+    public void addClickListener(FeatureInterface listener) {
+
+      clear.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-          addPlayer(listener);
           clearForm();
         }
       });
 
-      startGameBtn.addMouseListener(new MouseAdapter() {
+      addNext.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-          addPlayer(listener);
-          listener.refreshGame(false);
-          messages.updateGameDetails();
-          getParent().setEnabled(true);
-          addPlayerPopup.setVisible(false);
-        }
-      });
-    }
-  }
-
-  private class PickWeaponPopup extends JDialog {
-
-    JLabel label;
-    JTextField weaponName;
-    JButton pick;
-
-    public PickWeaponPopup(GameViewImpl frame) {
-      super(frame, "Pick Weapon");
-      setLayout(new FlowLayout());
-      label = new JLabel();
-      label.setText("Enter weapon name: ");
-      weaponName = new JTextField(15);
-      pick = new JButton("Pick");
-      add(label);
-      add(weaponName);
-      add(pick);
-      this.setSize(300, 150);
-      pack();
-    }
-
-    void addClickListener(FeatureInterface listener) {
-      pick.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          String outcome = listener.pickWeapon(weaponName.getText());
-          int res = JOptionPane.showOptionDialog(getParent(), outcome,
-                  "Pick Weapon", JOptionPane.DEFAULT_OPTION,
-                  JOptionPane.INFORMATION_MESSAGE, null, null, null);
-          if (res == JOptionPane.OK_OPTION) {
-            listener.refreshGame(false);
-            messages.updateGameDetails();
+          if (addPlayer(listener)) {
+            clearForm();
           }
-          pickWeaponPopup.setVisible(false);
         }
       });
-    }
 
-  }
-
-  private class MovePetPopup extends JDialog {
-
-    JLabel label;
-    JTextField roomName;
-    JButton move;
-
-    public MovePetPopup(GameViewImpl frame) {
-      super(frame, "Move Pet");
-      setLayout(new FlowLayout());
-      label = new JLabel();
-      label.setText("Enter room name: ");
-      roomName = new JTextField(15);
-      move = new JButton("Move");
-      add(label);
-      add(roomName);
-      add(move);
-      this.setSize(300, 150);
-      pack();
-    }
-
-    void addClickListener(FeatureInterface listener) {
-      move.addMouseListener(new MouseAdapter() {
+      startGame.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-          String outcome = listener.movePet(roomName.getText());
-          int res = JOptionPane.showOptionDialog(getParent(), outcome,
-                  "Move Pet", JOptionPane.DEFAULT_OPTION,
-                  JOptionPane.INFORMATION_MESSAGE, null, null, null);
-          if (res == JOptionPane.OK_OPTION) {
-            listener.refreshGame(false);
-            messages.updateGameDetails();
+          if (addPlayer(listener)) {
+            clearForm();
+            getParent().setEnabled(true);
+            addPlayerPopup.setVisible(false);
           }
-          movePetPopup.setVisible(false);
         }
       });
     }
   }
-
-  private class AttackTargetPopup extends JDialog {
-
-    JLabel label;
-    JTextField weaponName;
-    JButton attack;
-
-    public AttackTargetPopup(GameViewImpl frame) {
-      super(frame, "Attack Target");
-      setLayout(new FlowLayout());
-      label = new JLabel();
-      label.setText("Enter weapon name: ");
-      weaponName = new JTextField(15);
-      attack = new JButton("Attack");
-      add(label);
-      add(weaponName);
-      add(attack);
-      this.setSize(300, 150);
-      pack();
-    }
-
-    void addClickListener(FeatureInterface listener) {
-      attack.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          String outcome = listener.attackTarget(weaponName.getText());
-          int res = JOptionPane.showOptionDialog(getParent(), outcome,
-                  "Attack Target", JOptionPane.DEFAULT_OPTION,
-                  JOptionPane.INFORMATION_MESSAGE, null, null, null);
-          if (res == JOptionPane.OK_OPTION) {
-            listener.refreshGame(false);
-            messages.updateGameDetails();
-          }
-          attackTargetPopup.setVisible(false);
-        }
-      });
-    }
-  }
-
 
 }
 
