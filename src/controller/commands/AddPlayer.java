@@ -36,10 +36,10 @@ public class AddPlayer extends AbstractCommands {
     try {
       model.addPlayerToGame(this.playerName, this.maxNumberOfWeapons,
               this.isComputerPlayer, this.roomName);
-//      commandResult.append("Player ")
-//              .append(this.playerName)
-//              .append(" is added to room ")
-//              .append(this.roomName);
+      // commandResult.append("Player ")
+      //         .append(this.playerName)
+      //         .append(" is added to room ")
+      //         .append(this.roomName);
       isCommandSuccessful = true;
     } catch (IllegalArgumentException exception) {
       commandResult.append(exception.getMessage());

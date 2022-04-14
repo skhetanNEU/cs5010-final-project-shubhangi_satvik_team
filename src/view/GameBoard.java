@@ -17,9 +17,7 @@ public class GameBoard extends JPanel {
       throw new IllegalArgumentException("Model cannot be null");
     }
     this.model = model;
-
-    setBackground(Color.BLACK);
-
+    setBackground(Color.WHITE);
     world = new JLabel();
     add(world);
     refreshWorldView(false);

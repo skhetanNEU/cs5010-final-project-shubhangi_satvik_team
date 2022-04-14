@@ -25,34 +25,45 @@ public class PreGameViewImpl extends JFrame implements PreGameViewInterface {
 
   public PreGameViewImpl() {
 
-    super("Welcome");
+    super("Welcome to Milestone 4");
     this.setLayout(new BorderLayout());
-    this.setMinimumSize(new Dimension(300, 300));
     this.setPreferredSize(new Dimension(600, 300));
-    this.setResizable(true);
-    this.setLocationRelativeTo(null);
+    this.setResizable(false);
+    this.setLocation(200, 200);
     this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
     setMenuBar();
 
     JPanel container = new JPanel();
     container.setLayout(new GridLayout(2, 1));
-    container.setBackground(Color.DARK_GRAY);
+    container.setBackground(Color.decode("#D7CCC8"));
 
-    JLabel welcomeMessage = new JLabel("Welcome to KDL");
-    welcomeMessage.setForeground(Color.WHITE);
+
+    JPanel welcome = new JPanel();
+    welcome.setLayout(new GridLayout(0, 1));
+
+    JLabel welcomeMessage = new JLabel("Welcome to");
+    welcomeMessage.setForeground(Color.decode("#4E342E"));
     welcomeMessage.setFont(new Font("Times New Roman", Font.BOLD, 30));
     welcomeMessage.setHorizontalAlignment(0);
+    JLabel welcomeMessage2 = new JLabel("Kill Doctor Lucky");
+    welcomeMessage2.setForeground(Color.decode("#4E342E"));
+    welcomeMessage2.setFont(new Font("Times New Roman", Font.BOLD, 36));
+    welcomeMessage2.setHorizontalAlignment(0);
+
+    welcome.add(welcomeMessage);
+    welcome.add(welcomeMessage2);
 
     JLabel welcomeCredits = new JLabel("Created by Satvik and Shubhangi");
-    welcomeCredits.setForeground(Color.WHITE);
+    welcomeCredits.setForeground(Color.decode("#4E342E"));
     welcomeCredits.setFont(new Font("Times New Roman", Font.PLAIN, 20));
     welcomeCredits.setHorizontalAlignment(0);
 
-    container.add(welcomeMessage);
+    container.add(welcome);
     container.add(welcomeCredits);
 
     this.add(container, BorderLayout.CENTER);
+
     pack();
 
   }

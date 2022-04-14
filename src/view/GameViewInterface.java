@@ -5,7 +5,7 @@ import java.util.List;
 public interface GameViewInterface extends PreGameViewInterface {
   void refresh(boolean isLookAround);
 
-  int showCommandOutcome(String title, String outcome);
+  int showCommandOutcome(String title, String outcome, boolean isLookAround);
 
   String showPickWeaponDialog();
 

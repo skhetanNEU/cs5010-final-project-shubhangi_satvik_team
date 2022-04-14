@@ -4,6 +4,7 @@ import controller.FeatureInterface;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -24,7 +25,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import model.world.ReadOnlyWorldInterface;
@@ -52,39 +56,37 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
 
     this.model = model;
 
-    this.setLayout(new BorderLayout());
-    this.setResizable(true);
-    this.setLocationRelativeTo(null);
-    this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
+    setLayout(new BorderLayout());
     setMenuBar();
 
     JPanel container = new JPanel();
     container.setLayout(new BorderLayout());
 
     this.gameBoard = new GameBoard(model);
-    this.messages = new GameMessages(model, listener);
-
-    container.setPreferredSize(new Dimension(1200, 900));
-    this.gameBoard.setMinimumSize(new Dimension(800, 900));
-    this.messages.setMinimumSize(new Dimension(400, 900));
-
+    this.gameBoard.setMinimumSize(new Dimension(700, 900));
     container.add(gameBoard, BorderLayout.CENTER);
+
+    this.messages = new GameMessages(model);
+    this.messages.setMinimumSize(new Dimension(400, 900));
     container.add(messages, BorderLayout.EAST);
 
     JScrollPane scrollPane2 = new JScrollPane(container,
-            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
-    scrollPane2.setMinimumSize(new Dimension(300, 300));
+            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+            JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
     scrollPane2.setEnabled(true);
-
     add(scrollPane2);
 
-    pack();
+    this.setResizable(true);
+    this.setMinimumSize(new Dimension(300, 300));
+    this.setPreferredSize(new Dimension(1200, 900));
+    this.setLocation(150, 100);
+    this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
     this.addPlayerPopup = new AddPlayersPopup(this);
     this.addPlayerPopup.setVisible(true);
     this.setEnabled(false);
+
+    pack();
   }
 
   /**
@@ -174,23 +176,48 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
   }
 
   @Override
-  public int showCommandOutcome(String title, String outcome) {
-    return JOptionPane.showOptionDialog(getParent(), outcome,
-            title, JOptionPane.DEFAULT_OPTION,
-            JOptionPane.INFORMATION_MESSAGE, null, null, null);
+  public int showCommandOutcome(String title, String outcome, boolean isLookAround) {
+
+    if (isLookAround) {
+      UIManager.put("OptionPane.background", Color.decode("#D6DBDF"));
+      UIManager.put("Panel.background", Color.decode("#D6DBDF"));
+      UIManager.put("Button.background", Color.WHITE);
+      JTextArea textArea = new JTextArea(outcome, 20, 60);
+      textArea.setLineWrap(true);
+      textArea.setWrapStyleWord(true);
+      textArea.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+      JScrollPane sp = new JScrollPane(textArea);
+      sp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+      return JOptionPane.showOptionDialog(getParent(), sp, title, JOptionPane.DEFAULT_OPTION,
+              JOptionPane.PLAIN_MESSAGE, null, null, null);
+
+    }
+    UIManager.put("OptionPane.background", Color.decode("#FCF3CF"));
+    UIManager.put("Panel.background", Color.decode("#FCF3CF"));
+    UIManager.put("Button.background", Color.WHITE);
+    return JOptionPane.showOptionDialog(getParent(), outcome, title, JOptionPane.DEFAULT_OPTION,
+            JOptionPane.PLAIN_MESSAGE, null, null, null);
   }
 
   @Override
   public String showPickWeaponDialog() {
 
-    JPanel panel = new JPanel(new GridLayout(0, 1));
+    UIManager.put("OptionPane.background", Color.decode("#512E5F"));
+    UIManager.put("Panel.background", Color.decode("#512E5F"));
+    UIManager.put("Label.foreground", Color.WHITE);
 
-    JLabel availableWeaponLabel = new JLabel(String.format("Weapons available in room: %s ",
-            model.getCurrentPlayerRoomWeapons(false)));
+    JPanel panel = new JPanel(new GridLayout(0, 1));
+    panel.setOpaque(false);
+
+    JLabel availableWeaponLabel = new JLabel("Weapons available in room:");
+    JLabel availableWeaponInfo = new JLabel(model.getCurrentPlayerRoomWeapons(true));
+    availableWeaponLabel.setFont(availableWeaponInfo.getFont().deriveFont(Font.BOLD));
+    panel.add(availableWeaponLabel);
+    panel.add(availableWeaponInfo);
+
     JLabel pickWeaponLabel = new JLabel("Enter weapon name to pick:");
     JTextField weaponField = new JTextField();
-
-    panel.add(availableWeaponLabel);
+    pickWeaponLabel.setFont(pickWeaponLabel.getFont().deriveFont(Font.BOLD));
     panel.add(pickWeaponLabel);
     panel.add(weaponField);
 
@@ -203,7 +230,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
             JOptionPane.PLAIN_MESSAGE,
             null,
             options,
-            options[0]);
+            null);
 
     if (result == JOptionPane.OK_OPTION) {
       return weaponField.getText();
@@ -215,9 +242,15 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
 
   @Override
   public String showMovePetDialog() {
+
+    UIManager.put("OptionPane.background", Color.decode("#006064"));
+    UIManager.put("Panel.background", Color.decode("#006064"));
+    UIManager.put("Label.foreground", Color.WHITE);
+
     JPanel panel = new JPanel(new GridLayout(0, 1));
 
     JLabel movePetLabel = new JLabel("Enter room name to move pet to:");
+    movePetLabel.setFont(movePetLabel.getFont().deriveFont(Font.BOLD));
     JTextField roomNameField = new JTextField();
 
     panel.add(movePetLabel);
@@ -232,7 +265,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
             JOptionPane.PLAIN_MESSAGE,
             null,
             options,
-            options[0]);
+            null);
 
     if (result == JOptionPane.OK_OPTION) {
       return roomNameField.getText();
@@ -243,14 +276,22 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
 
   @Override
   public String showAttackTargetDialog() {
+
+    UIManager.put("OptionPane.background", Color.decode("#AF601A"));
+    UIManager.put("Panel.background", Color.decode("#AF601A"));
+    UIManager.put("Label.foreground", Color.WHITE);
+
     JPanel panel = new JPanel(new GridLayout(0, 1));
 
-    JLabel availableWeaponLabel = new JLabel(String.format("Weapons available with player: %s ",
-            model.getCurrentPlayerWeapons()));
+    JLabel availableWeaponLabel = new JLabel("Weapons available with player:");
+    JLabel availableWeaponInfo = new JLabel(model.getCurrentPlayerWeapons());
+    availableWeaponLabel.setFont(availableWeaponLabel.getFont().deriveFont(Font.BOLD));
+    panel.add(availableWeaponLabel);
+    panel.add(availableWeaponInfo);
+
     JLabel attackWeaponLabel = new JLabel("Enter weapon name to attack with: ");
     JTextField weaponField = new JTextField();
-
-    panel.add(availableWeaponLabel);
+    attackWeaponLabel.setFont(attackWeaponLabel.getFont().deriveFont(Font.BOLD));
     panel.add(attackWeaponLabel);
     panel.add(weaponField);
 
@@ -263,7 +304,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
             JOptionPane.PLAIN_MESSAGE,
             null,
             options,
-            options[0]);
+            null);
 
     if (result == JOptionPane.OK_OPTION) {
       return weaponField.getText();
@@ -295,43 +336,51 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
 
       super(frame, "Add Players to Game");
 
-      this.setMinimumSize(new Dimension(500, 200));
       this.setResizable(false);
+      this.setPreferredSize(new Dimension(500, 250));
       this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-      this.setLocationRelativeTo(this);
+      this.setLocation(200,200);
 
       JPanel contentPane = new JPanel();
       contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
       contentPane.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+      contentPane.setBackground(Color.decode("#003366"));
 
       JPanel panel = new JPanel(new GridLayout(0, 2));
+      panel.setOpaque(false);
 
       playerNameLabel = new JLabel("Enter player name");
       playerNameField = new JTextField();
+      playerNameLabel.setForeground(Color.WHITE);
       panel.add(playerNameLabel);
       panel.add(playerNameField);
 
       playerStartRoomLabel = new JLabel("Enter starting room name");
       playerStartRoomField = new JTextField();
+      playerStartRoomLabel.setForeground(Color.WHITE);
       panel.add(playerStartRoomLabel);
       panel.add(playerStartRoomField);
 
       playerWeaponLimitLabel = new JLabel("Enter limit on weapons");
       playerWeaponLimitField = new JTextField();
+      playerWeaponLimitLabel.setForeground(Color.WHITE);
       panel.add(playerWeaponLimitLabel);
       panel.add(playerWeaponLimitField);
 
       playerTypeLabel = new JLabel("Choose player type");
       playerTypeOptions = new JComboBox<>(items);
+      playerTypeLabel.setForeground(Color.WHITE);
       panel.add(playerTypeLabel);
       panel.add(playerTypeOptions);
 
       errorMessage = new JLabel("");
+      errorMessage.setFont(errorMessage.getFont().deriveFont(Font.BOLD));
       errorMessage.setForeground(Color.RED);
       panel.add(errorMessage);
 
       JPanel buttons = new JPanel(new GridLayout(1, 3));
-      buttons.setSize(new Dimension(getWidth(), 80));
+      buttons.setSize(new Dimension(getWidth(), 70));
+      buttons.setOpaque(false);
 
       clear = new JButton("Clear Details");
       buttons.add(clear);

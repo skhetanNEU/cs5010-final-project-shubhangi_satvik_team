@@ -112,18 +112,18 @@ public class Controller implements FeatureInterface {
   public void lookAround() {
     CommandsInterface lookAround = new LookAround();
     lookAround.execute(model);
-    gameView.showCommandOutcome("Look Around Details", lookAround.getCommandResult());
+    gameView.showCommandOutcome("Look Around Details", lookAround.getCommandResult(), true);
     gameView.refresh(true);
   }
 
   @Override
   public void movePlayer(int row, int col) {
     if (row < 0 || col < 0) {
-      gameView.showCommandOutcome("Move Player Result", "Coordinates cannot be negative");
+      gameView.showCommandOutcome("Move Player Result", "Coordinates cannot be negative", false);
     } else {
       CommandsInterface movePlayer = new MovePlayer(row, col);
       movePlayer.execute(model);
-      gameView.showCommandOutcome("Move Player Result", movePlayer.getCommandResult());
+      gameView.showCommandOutcome("Move Player Result", movePlayer.getCommandResult(), false);
     }
     gameView.refresh(true);
   }
@@ -132,11 +132,11 @@ public class Controller implements FeatureInterface {
   public void pickWeapon() {
     String weaponName = gameView.showPickWeaponDialog();
     if (weaponName == null || "".equals(weaponName)) {
-      gameView.showCommandOutcome("Pick Weapon Result", "Weapon name cannot be empty");
+      gameView.showCommandOutcome("Pick Weapon Result", "Weapon name cannot be empty", false);
     } else {
       CommandsInterface pickWeapon = new PickWeapon(weaponName);
       pickWeapon.execute(model);
-      gameView.showCommandOutcome("Pick Weapon Result", pickWeapon.getCommandResult());
+      gameView.showCommandOutcome("Pick Weapon Result", pickWeapon.getCommandResult(), false);
     }
     gameView.refresh(false);
   }
@@ -145,11 +145,11 @@ public class Controller implements FeatureInterface {
   public void attackTarget() {
     String weaponName = gameView.showAttackTargetDialog();
     if (weaponName == null || "".equals(weaponName)) {
-      gameView.showCommandOutcome("Attack Target Result", "Weapon name cannot be empty");
+      gameView.showCommandOutcome("Attack Target Result", "Weapon name cannot be empty", false);
     } else {
       CommandsInterface attackTarget = new AttackTarget(weaponName);
       attackTarget.execute(model);
-      gameView.showCommandOutcome("Attack Target Result", attackTarget.getCommandResult());
+      gameView.showCommandOutcome("Attack Target Result", attackTarget.getCommandResult(), false);
     }
     gameView.refresh(false);
   }
@@ -158,11 +158,11 @@ public class Controller implements FeatureInterface {
   public void movePet() {
     String roomName = gameView.showMovePetDialog();
     if (roomName == null || "".equals(roomName)) {
-      gameView.showCommandOutcome("Move Pet Result", "Room name cannot be empty");
+      gameView.showCommandOutcome("Move Pet Result", "Room name cannot be empty", false);
     } else {
       CommandsInterface movePet = new MovePet(roomName);
       movePet.execute(model);
-      gameView.showCommandOutcome("Move Pet Result", movePet.getCommandResult());
+      gameView.showCommandOutcome("Move Pet Result", movePet.getCommandResult(), false);
     }
     gameView.refresh(false);
   }
