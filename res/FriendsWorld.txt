@@ -23,7 +23,7 @@ Dog
 29 25 34 28 Rachel's Room
 25 20 26 22 Balcony
 20
-9 10 Anti Annoying Pill
+0 10 Anti Annoying Pill
 7 5 Hockey Punk
 13 8 Sonic Laugh
 14 4 Poison

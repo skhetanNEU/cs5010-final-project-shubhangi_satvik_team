@@ -124,6 +124,26 @@ public class GameMessages extends JPanel {
       c.gridy = 3;
       content.add(weaponKey, c);
 
+      // Key for other players
+      BufferedImage other = ImageIO.read(new File("res/images/OtherPlayers.png"));
+      Image resultingOther = other.getScaledInstance(50, 30, Image.SCALE_SMOOTH);
+      JLabel otherPic = new JLabel(new ImageIcon(resultingOther));
+      otherPic.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+
+      JLabel otherLabel = new JLabel("Other Players in Room");
+      otherLabel.setForeground(Color.WHITE);
+      otherLabel.setFont(otherLabel.getFont().deriveFont(Font.BOLD));
+
+      JPanel otherKey = new JPanel();
+      otherKey.setLayout(new BorderLayout());
+      otherKey.setBorder(BorderFactory.createEmptyBorder(-5, 5, 0, 5));
+      otherKey.setOpaque(false);
+      otherKey.add(otherPic, BorderLayout.WEST);
+      otherKey.add(otherLabel, BorderLayout.CENTER);
+
+      c.gridy = 4;
+      content.add(otherKey, c);
+
     } catch (IOException e) {
       // Do nothing
     }
@@ -194,21 +214,21 @@ public class GameMessages extends JPanel {
     currentPlayerRoomInfo.setWrapStyleWord(true);
     currentPlayerRoomInfo.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-    c.gridy = 4;
-    content.add(currentTurnLabel, c);
     c.gridy = 5;
-    content.add(currentTurnName, c);
+    content.add(currentTurnLabel, c);
     c.gridy = 6;
-    content.add(targetPlayerLabel, c);
+    content.add(currentTurnName, c);
     c.gridy = 7;
-    content.add(targetPlayerInfo, c);
+    content.add(targetPlayerLabel, c);
     c.gridy = 8;
-    content.add(currentPlayerLabel, c);
+    content.add(targetPlayerInfo, c);
     c.gridy = 9;
-    content.add(currentPlayerInfo, c);
+    content.add(currentPlayerLabel, c);
     c.gridy = 10;
-    content.add(currentPlayerRoomLabel, c);
+    content.add(currentPlayerInfo, c);
     c.gridy = 11;
+    content.add(currentPlayerRoomLabel, c);
+    c.gridy = 12;
     content.add(currentPlayerRoomInfo, c);
 
     add(content, BorderLayout.NORTH);

@@ -111,9 +111,10 @@ public class Controller implements FeatureInterface {
   @Override
   public void lookAround() {
     CommandsInterface lookAround = new LookAround();
+    gameView.refresh(true);
     lookAround.execute(model);
     gameView.showCommandOutcome("Look Around Details", lookAround.getCommandResult(), true);
-    gameView.refresh(true);
+    gameView.refresh(false);
   }
 
   @Override

@@ -524,17 +524,25 @@ public class WorldImpl implements WorldInterface {
       // Show current player to world
       if (currentTurn != null && room.getRoomName().equalsIgnoreCase(getCurrentPlayerRoomName())) {
         try {
-          BufferedImage originalImage = ImageIO.read(new File("res/images/CurrentPlayer.png"));
-          Image resultingImage = originalImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-          g.drawImage(resultingImage, c2 - 30, r2 - 30, null);
-
           if (!"No weapons".equals(room.getAvailableWeapons(false))) {
             BufferedImage weapon = ImageIO.read(new File("res/images/Weapons.png"));
             Image resultingWeapon = weapon.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-            g.drawImage(resultingWeapon, c1 + 10, r2 - 30, null);
+            g.drawImage(resultingWeapon, c1 + 5, r2 - 50, null);
+          }
+          if (room.getNumberOfPlayersInRoom() - 1 > 0) {
+            BufferedImage other = ImageIO.read(new File("res/images/OtherPlayers.png"));
+            Image resultingOther = other.getScaledInstance(30, 20, Image.SCALE_SMOOTH);
+            g.drawImage(resultingOther, c1 + 5, r2 - 25, null);
+          }
+          BufferedImage originalImage = ImageIO.read(new File("res/images/CurrentPlayer.png"));
+          Image resultingImage = originalImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+          g.drawImage(resultingImage, c2 - 25, r2 - 25, null);
+
+          if (isLookAround) {
+            bi = drawLookAround(bi, room, zoomFactor);
           }
         } catch (IOException e) {
-          e.printStackTrace();
+          // Do Nothing
         }
       }
       // Show target player to world
@@ -542,21 +550,51 @@ public class WorldImpl implements WorldInterface {
         try {
           BufferedImage player = ImageIO.read(new File("res/images/TargetPlayer.png"));
           Image resultingPlayer = player.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-          g.drawImage(resultingPlayer,
-                  ((int) (0.5 * (c1 + c2 + 1))) - 10,
-                  ((int) (0.5 * (r1 + r2 + 1))) - 10,
-                  null);
+          g.drawImage(resultingPlayer, c2 - 24, r2 - 50, null);
         } catch (IOException e) {
           e.printStackTrace();
         }
       }
 
-      if (isLookAround) {
-        // TODO
-      }
-
     }
     return bi;
+  }
+
+  private BufferedImage drawLookAround(BufferedImage b, RoomInterface room, int zoomFactor) {
+
+    String currentPlayerRoomNeighbours = room.getRoomNeighbours(false);
+    Graphics g = b.getGraphics();
+
+    try {
+      BufferedImage weapon = ImageIO.read(new File("res/images/Weapons.png"));
+      Image resultingWeapon = weapon.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+
+      BufferedImage other = ImageIO.read(new File("res/images/OtherPlayers.png"));
+      Image resultingOther = other.getScaledInstance(30, 20, Image.SCALE_SMOOTH);
+
+      if (!Objects.equals(currentPlayerRoomNeighbours, "No neighbours")) {
+        String[] neighbours = currentPlayerRoomNeighbours.split(",");
+        for (String n : neighbours) {
+          RoomInterface nei = getRoomByRoomName(n);
+          List<Integer> roomCoordinates = nei.getRoomCoordinates();
+          int r2 = (roomCoordinates.get(2) * zoomFactor) + zoomFactor / 2;
+          int c1 = (roomCoordinates.get(1) * zoomFactor) - zoomFactor / 2 + 30;
+          if (!nei.isPetInRoom()) {
+            if (nei.getNumberOfPlayersInRoom() > 0) {
+              g.drawImage(resultingOther, c1 + 5, r2 - 25, null);
+            }
+            if (!"No weapons".equalsIgnoreCase(nei.getAvailableWeapons(false))) {
+              g.drawImage(resultingWeapon, c1 + 5, r2 - 50, null);
+            }
+          }
+        }
+      }
+
+    } catch (IOException e) {
+      // Do Nothing
+    }
+
+    return b;
   }
 
   @Override
