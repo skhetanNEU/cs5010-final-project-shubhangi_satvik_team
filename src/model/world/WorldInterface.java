@@ -25,15 +25,7 @@ public interface WorldInterface extends ReadOnlyWorldInterface {
    */
   String lookAroundSpace();
 
-  /**
-   * Moves the player to the room.
-   *
-   * @param roomName represents the name of the room to which the player has to be moved.
-   * @return String representing that player has moved to the specified room.
-   */
-  String movePlayer(String roomName);
-
-  String movePlayer(int x, int y);
+  String handleRoomClick(int x, int y);
 
   /**
    * Picks the weapon for the current player.
@@ -64,5 +56,7 @@ public interface WorldInterface extends ReadOnlyWorldInterface {
    * @return String representing outcome of operation done by the computer player.
    */
   String takeTurnForComputerPlayer();
+
+  void updateWorldView(boolean isLookAround);
 
 }

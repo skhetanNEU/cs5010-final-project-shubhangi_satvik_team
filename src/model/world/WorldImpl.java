@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -42,6 +43,10 @@ public class WorldImpl implements WorldInterface {
   private final Stack<Integer> dfsStack;
   private final Set<Integer> dfsVisited;
   private final RandomGenerator random;
+
+  private BufferedImage worldView;
+  private BufferedImage playersView;
+  private int zoomFactor;
 
   /**
    * Construct a WorldImpl object that represents the world.
@@ -109,6 +114,17 @@ public class WorldImpl implements WorldInterface {
     this.dfsStack = new Stack<>();
     this.dfsVisited.add(0);
     this.dfsStack.push(0);
+
+    this.zoomFactor = 24;
+    this.worldView = new BufferedImage(
+            (worldCoordinates.get(1) + 1) * zoomFactor,
+            (worldCoordinates.get(0) + 1) * zoomFactor,
+            BufferedImage.TYPE_INT_RGB);
+    this.playersView = new BufferedImage(
+            (worldCoordinates.get(1) + 1) * zoomFactor,
+            (worldCoordinates.get(0) + 1) * zoomFactor,
+            BufferedImage.TYPE_INT_ARGB);
+    drawWorld();
   }
 
   /**
@@ -325,6 +341,27 @@ public class WorldImpl implements WorldInterface {
   }
 
   /**
+   * Checks if there is alteast one player to take a turn and play the game.
+   */
+  private void checkIfPlayersExistToPlayGame() {
+    if (this.players.size() <= 0) {
+      throw new IllegalArgumentException(
+              "ERROR: Game must have atleast 1 player. Please add players to use this option.");
+    }
+  }
+
+  /**
+   * Gets the next player in turn.
+   *
+   * @return the next player
+   */
+  private PlayerInterface getNextTurnPlayer() {
+    int playerIndex = players.indexOf(currentTurn);
+    int nextPlayerIndex = (playerIndex + 1) % this.players.size();
+    return players.get(nextPlayerIndex);
+  }
+
+  /**
    * Moves the target player to the next room.
    */
   private void moveTargetPlayer() {
@@ -378,27 +415,6 @@ public class WorldImpl implements WorldInterface {
   }
 
   /**
-   * Gets the next player in turn.
-   *
-   * @return the next player
-   */
-  private PlayerInterface getNextTurnPlayer() {
-    int playerIndex = players.indexOf(currentTurn);
-    int nextPlayerIndex = (playerIndex + 1) % this.players.size();
-    return players.get(nextPlayerIndex);
-  }
-
-  /**
-   * Checks if there is alteast one player to take a turn and play the game.
-   */
-  private void checkIfPlayersExistToPlayGame() {
-    if (this.players.size() <= 0) {
-      throw new IllegalArgumentException(
-              "ERROR: Game must have atleast 1 player. Please add players to use this option.");
-    }
-  }
-
-  /**
    * Checks if the player can be seen from current room & neighbouring rooms.
    *
    * @return true if the player cannot be seen
@@ -425,41 +441,170 @@ public class WorldImpl implements WorldInterface {
     return neighbourRoomPlayerCount > 0;
   }
 
+  @Override
+  public boolean isPlayerIconClicked(int r, int c) {
+    String roomName = this.getRoomCellClicked(r, c);
+    if (roomName.equalsIgnoreCase(currentTurn.getPlayerRoomName())) {
+      List<Integer> roomCoordinates = getRoomViewCoordinates(getRoomByRoomName(roomName));
+      if (r >= roomCoordinates.get(1) - 25
+              && r <= roomCoordinates.get(1) - 5
+              && c >= roomCoordinates.get(3) - 25
+              && c <= roomCoordinates.get(3) - 5
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   private String getRoomCellClicked(int r, int c) {
-    int zoomFactor = 25;
     for (RoomInterface room : this.rooms) {
-      List<Integer> roomCoordinates = room.getRoomCoordinates();
-      int r1 = (roomCoordinates.get(0) * zoomFactor) - zoomFactor / 2;
-      int r2 = (roomCoordinates.get(2) * zoomFactor) + zoomFactor / 2;
-      int c1 = (roomCoordinates.get(1) * zoomFactor) - zoomFactor / 2 + 30;
-      int c2 = (roomCoordinates.get(3) * zoomFactor) + zoomFactor / 2 + 30;
-      if (r < r2 && r > r1 && c < c2 && c > c1) {
+      List<Integer> roomCoordinates = getRoomViewCoordinates(room);
+      if (r < roomCoordinates.get(1)
+              && r > roomCoordinates.get(0)
+              && c < roomCoordinates.get(3)
+              && c > roomCoordinates.get(2)
+      ) {
         return room.getRoomName();
       }
     }
     return null;
   }
 
-  private String getRoomInformation(String roomName) {
-    if ("".equals(roomName) || roomName == null) {
-      throw new IllegalArgumentException("ERROR: Room name cannot be null/empty");
+  private String movePlayer(String roomName) {
+    if (roomName != null && !"".equals(roomName)) {
+      RoomInterface destinationRoom = getRoomByRoomName(roomName);
+      RoomInterface currentPlayerRoom = getRoomByRoomName(getCurrentPlayerRoomName());
+      currentPlayerRoom.checkIfRoomNeighbour(roomName, false);
+      currentPlayerRoom.removePlayerFromRoom(currentTurn);
+      currentTurn.setPlayerRoom(destinationRoom);
+      destinationRoom.addPlayerToRoom(currentTurn);
+      moveTargetPlayer();
+      movePetAfterTurnDfs();
+      currentTurn = getNextTurnPlayer();
+      return new StringBuilder().append("Player has successfully moved to room ")
+              .append(roomName).toString();
     }
-    RoomInterface room = getRoomByRoomName(roomName);
-    return room.toString();
+    return "ERROR: Player cannot be moved. Invalid room.";
+  }
+
+  private void drawWorld() {
+
+    Graphics g = worldView.getGraphics();
+    g.setFont(g.getFont().deriveFont(10f));
+    g.setColor(Color.WHITE);
+    g.fillRect(0, 0, worldView.getWidth(), worldView.getHeight());
+
+    for (RoomInterface room : this.rooms) {
+      List<Integer> roomCoordinates = getRoomViewCoordinates(room);
+      g.setColor(Color.BLACK);
+      g.drawRect(roomCoordinates.get(2), roomCoordinates.get(0),
+              roomCoordinates.get(3) - roomCoordinates.get(2),
+              roomCoordinates.get(1) - roomCoordinates.get(0));
+      g.drawString(room.getRoomName(), roomCoordinates.get(2) + 5, roomCoordinates.get(0) + 15);
+    }
+
+  }
+
+  private List<Integer> getRoomViewCoordinates(RoomInterface room) {
+    List<Integer> roomCoordinates = room.getRoomCoordinates();
+    int r1 = (roomCoordinates.get(0) * zoomFactor) - zoomFactor / 2;
+    int r2 = (roomCoordinates.get(2) * zoomFactor) + zoomFactor / 2;
+    int c1 = (roomCoordinates.get(1) * zoomFactor) - zoomFactor / 2 + 30;
+    int c2 = (roomCoordinates.get(3) * zoomFactor) + zoomFactor / 2 + 30;
+
+    return new ArrayList<>(Arrays.asList(r1, r2, c1, c2));
+
+  }
+
+  @Override
+  public void updateWorldView(boolean isLookAround) {
+
+    this.playersView = new BufferedImage(worldView.getWidth(), worldView.getHeight(),
+            BufferedImage.TYPE_INT_ARGB);
+    Graphics g = playersView.getGraphics();
+
+    // Show current player and lookAround to world
+    if (currentTurn != null) {
+
+      RoomInterface currentPlayerRoom = getRoomByRoomName(getCurrentPlayerRoomName());
+      List<Integer> roomCoordinates = getRoomViewCoordinates(currentPlayerRoom);
+
+      try {
+        BufferedImage player = ImageIO.read(new File("res/images/CurrentPlayer.png"));
+        BufferedImage others = ImageIO.read(new File("res/images/OtherPlayers.png"));
+        BufferedImage weapons = ImageIO.read(new File("res/images/Weapons.png"));
+
+        Image scaledPlayer = player.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        Image scaledOther = others.getScaledInstance(30, 20, Image.SCALE_SMOOTH);
+        Image scaledWeapon = weapons.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+
+        g.drawImage(scaledPlayer, roomCoordinates.get(3) - 25, roomCoordinates.get(1) - 25, null);
+
+        if (!"No weapons".equals(currentPlayerRoom.getAvailableWeapons(false))) {
+          g.drawImage(scaledWeapon, roomCoordinates.get(2) + 5, roomCoordinates.get(1) - 50, null);
+        }
+        if (currentPlayerRoom.getNumberOfPlayersInRoom() - 1 > 0) {
+          g.drawImage(scaledOther, roomCoordinates.get(2) + 5, roomCoordinates.get(1) - 25, null);
+        }
+
+        if (isLookAround) {
+          String currentPlayerRoomNeighbours = currentPlayerRoom.getRoomNeighbours(false);
+          if (!Objects.equals(currentPlayerRoomNeighbours, "No neighbours")) {
+            String[] neighbours = currentPlayerRoomNeighbours.split(",");
+            for (String n : neighbours) {
+              RoomInterface nei = getRoomByRoomName(n);
+              List<Integer> neiRoomCoordinates = getRoomViewCoordinates(nei);
+              int r2 = neiRoomCoordinates.get(1);
+              int c1 = neiRoomCoordinates.get(2);
+              if (!nei.isPetInRoom()) {
+                if (nei.getNumberOfPlayersInRoom() > 0) {
+                  g.drawImage(scaledOther, c1 + 5, r2 - 25, null);
+                }
+                if (!"No weapons".equalsIgnoreCase(nei.getAvailableWeapons(false))) {
+                  g.drawImage(scaledWeapon, c1 + 5, r2 - 50, null);
+                }
+              }
+            }
+          }
+        }
+
+      } catch (IOException e) {
+        // Do Nothing
+      }
+    }
+
+    // Show target player to world
+    try {
+      BufferedImage target = ImageIO.read(new File("res/images/TargetPlayer.png"));
+      Image scaledTarget = target.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+      List<Integer> targetRoomCoordinates = getRoomViewCoordinates(
+              targetPlayer.getTargetPlayerRoom());
+      g.drawImage(scaledTarget,
+              targetRoomCoordinates.get(3) - 24,
+              targetRoomCoordinates.get(1) - 50,
+              null);
+    } catch (IOException e) {
+      // Do Nothing
+    }
+
+  }
+
+  @Override
+  public BufferedImage getWorldView() {
+
+    BufferedImage combinedView = new BufferedImage(worldView.getWidth(), worldView.getHeight(),
+            BufferedImage.TYPE_INT_ARGB);
+    Graphics g = combinedView.getGraphics();
+    g.drawImage(worldView, 0, 0, null);
+    g.drawImage(playersView, 0, 0, null);
+
+    return combinedView;
   }
 
   @Override
   public String getWorldName() {
     return this.worldName;
-  }
-
-  @Override
-  public String getCurrentPlayerName() {
-    if (currentTurn == null) {
-      throw new IllegalArgumentException(
-              "ERROR: Cannot play turn. Game must have atleast 1 player.");
-    }
-    return currentTurn.getPlayerName();
   }
 
   @Override
@@ -469,6 +614,15 @@ public class WorldImpl implements WorldInterface {
               "ERROR: Cannot play turn. Game must have atleast 1 player.");
     }
     return currentTurn.isComputerPlayer();
+  }
+
+  @Override
+  public String getCurrentPlayerName() {
+    if (currentTurn == null) {
+      throw new IllegalArgumentException(
+              "ERROR: Cannot play turn. Game must have atleast 1 player.");
+    }
+    return currentTurn.getPlayerName();
   }
 
   @Override
@@ -497,104 +651,17 @@ public class WorldImpl implements WorldInterface {
   }
 
   @Override
-  public BufferedImage displayWorld(boolean isLookAround) {
-
-    int zoomFactor = 24;
-
-    BufferedImage bi = new BufferedImage((worldCoordinates.get(1) + 1) * zoomFactor,
-            (worldCoordinates.get(0) + 1) * zoomFactor, BufferedImage.TYPE_INT_RGB);
-
-    Graphics g = bi.getGraphics();
-    g.setFont(g.getFont().deriveFont(10f));
-    g.setColor(Color.WHITE);
-    g.fillRect(0, 0, bi.getWidth(), bi.getHeight());
-
-    for (RoomInterface room : this.rooms) {
-
-      List<Integer> roomCoordinates = room.getRoomCoordinates();
-      int r1 = (roomCoordinates.get(0) * zoomFactor) - zoomFactor / 2;
-      int r2 = (roomCoordinates.get(2) * zoomFactor) + zoomFactor / 2;
-      int c1 = (roomCoordinates.get(1) * zoomFactor) - zoomFactor / 2 + 30;
-      int c2 = (roomCoordinates.get(3) * zoomFactor) + zoomFactor / 2 + 30;
-
-      g.setColor(Color.BLACK);
-      g.drawRect(c1, r1, c2 - c1, r2 - r1);
-      g.drawString(room.getRoomName(), c1 + 5, r1 + 15);
-
-      // Show current player to world
-      if (currentTurn != null && room.getRoomName().equalsIgnoreCase(getCurrentPlayerRoomName())) {
-        try {
-          if (!"No weapons".equals(room.getAvailableWeapons(false))) {
-            BufferedImage weapon = ImageIO.read(new File("res/images/Weapons.png"));
-            Image resultingWeapon = weapon.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-            g.drawImage(resultingWeapon, c1 + 5, r2 - 50, null);
-          }
-          if (room.getNumberOfPlayersInRoom() - 1 > 0) {
-            BufferedImage other = ImageIO.read(new File("res/images/OtherPlayers.png"));
-            Image resultingOther = other.getScaledInstance(30, 20, Image.SCALE_SMOOTH);
-            g.drawImage(resultingOther, c1 + 5, r2 - 25, null);
-          }
-          BufferedImage originalImage = ImageIO.read(new File("res/images/CurrentPlayer.png"));
-          Image resultingImage = originalImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-          g.drawImage(resultingImage, c2 - 25, r2 - 25, null);
-
-          if (isLookAround) {
-            bi = drawLookAround(bi, room, zoomFactor);
-          }
-        } catch (IOException e) {
-          // Do Nothing
-        }
-      }
-      // Show target player to world
-      if (room.getRoomName().equalsIgnoreCase(targetPlayer.getTargetPlayerRoom().getRoomName())) {
-        try {
-          BufferedImage player = ImageIO.read(new File("res/images/TargetPlayer.png"));
-          Image resultingPlayer = player.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-          g.drawImage(resultingPlayer, c2 - 24, r2 - 50, null);
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-      }
-
-    }
-    return bi;
+  public String getTargetPlayerDetails() {
+    return this.targetPlayer.toString();
   }
 
-  private BufferedImage drawLookAround(BufferedImage b, RoomInterface room, int zoomFactor) {
-
-    String currentPlayerRoomNeighbours = room.getRoomNeighbours(false);
-    Graphics g = b.getGraphics();
-
-    try {
-      BufferedImage weapon = ImageIO.read(new File("res/images/Weapons.png"));
-      Image resultingWeapon = weapon.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-
-      BufferedImage other = ImageIO.read(new File("res/images/OtherPlayers.png"));
-      Image resultingOther = other.getScaledInstance(30, 20, Image.SCALE_SMOOTH);
-
-      if (!Objects.equals(currentPlayerRoomNeighbours, "No neighbours")) {
-        String[] neighbours = currentPlayerRoomNeighbours.split(",");
-        for (String n : neighbours) {
-          RoomInterface nei = getRoomByRoomName(n);
-          List<Integer> roomCoordinates = nei.getRoomCoordinates();
-          int r2 = (roomCoordinates.get(2) * zoomFactor) + zoomFactor / 2;
-          int c1 = (roomCoordinates.get(1) * zoomFactor) - zoomFactor / 2 + 30;
-          if (!nei.isPetInRoom()) {
-            if (nei.getNumberOfPlayersInRoom() > 0) {
-              g.drawImage(resultingOther, c1 + 5, r2 - 25, null);
-            }
-            if (!"No weapons".equalsIgnoreCase(nei.getAvailableWeapons(false))) {
-              g.drawImage(resultingWeapon, c1 + 5, r2 - 50, null);
-            }
-          }
-        }
-      }
-
-    } catch (IOException e) {
-      // Do Nothing
+  @Override
+  public String getCurrentPlayerInformation() {
+    if (currentTurn == null) {
+      throw new IllegalArgumentException(
+              "ERROR: Cannot play turn. Game must have atleast 1 player.");
     }
-
-    return b;
+    return currentTurn.toString();
   }
 
   @Override
@@ -604,20 +671,6 @@ public class WorldImpl implements WorldInterface {
     }
     RoomInterface room = getRoomByRoomName(currentTurn.getPlayerRoomName());
     return room.toString();
-  }
-
-  @Override
-  public String getPlayerInformation() {
-    if (currentTurn == null) {
-      throw new IllegalArgumentException(
-              "ERROR: Cannot play turn. Game must have atleast 1 player.");
-    }
-    return currentTurn.toString();
-  }
-
-  @Override
-  public String getTargetPlayerDetails() {
-    return this.targetPlayer.toString();
   }
 
   @Override
@@ -655,7 +708,7 @@ public class WorldImpl implements WorldInterface {
     checkIfPlayersExistToPlayGame();
     StringBuilder result = new StringBuilder("------Current Room Details------").append("\n");
     String currentRoomName = currentTurn.getPlayerRoomName();
-    result.append(getRoomInformation(currentRoomName)).append("\n\n");
+    result.append(currentRoomName).append("\n\n");
     RoomInterface currentRoom = getRoomByRoomName(currentTurn.getPlayerRoomName());
     String currentPlayerRoomNeighbours = currentRoom.getRoomNeighbours(false);
     if (!Objects.equals(currentPlayerRoomNeighbours, "No neighbours")) {
@@ -663,7 +716,7 @@ public class WorldImpl implements WorldInterface {
       result.append("------Neighboring Room Details------").append("\n");
       for (String n : neighbours) {
         result.append("\n");
-        result.append(getRoomInformation(n)).append("\n");
+        result.append(n).append("\n");
       }
     }
     moveTargetPlayer();
@@ -673,47 +726,9 @@ public class WorldImpl implements WorldInterface {
   }
 
   @Override
-  public String movePlayer(String roomName) {
-    checkIfPlayersExistToPlayGame();
-    if (roomName == null || "".equals(roomName)) {
-      throw new IllegalArgumentException(
-              "ERROR: Player destination room name cannot be empty or null.");
-    }
-    String currentPlayerRoomName = currentTurn.getPlayerRoomName();
-    if (currentPlayerRoomName.equalsIgnoreCase(roomName)) {
-      throw new IllegalArgumentException(
-              "ERROR: Unable to move player. Destination room same as current room.");
-    }
-    RoomInterface destinationRoom = getRoomByRoomName(roomName);
-    RoomInterface currentPlayerRoom = getRoomByRoomName(currentPlayerRoomName);
-    currentPlayerRoom.checkIfRoomNeighbour(roomName, false);
-    currentPlayerRoom.removePlayerFromRoom(currentTurn);
-    currentTurn.setPlayerRoom(destinationRoom);
-    destinationRoom.addPlayerToRoom(currentTurn);
-    moveTargetPlayer();
-    movePetAfterTurnDfs();
-    currentTurn = getNextTurnPlayer();
-    return new StringBuilder().append("Player has successfully moved to room ")
-            .append(roomName).toString();
-  }
-
-  @Override
-  public String movePlayer(int x, int y) {
+  public String handleRoomClick(int x, int y) {
     String roomName = this.getRoomCellClicked(x, y);
-    if (roomName != null) {
-      RoomInterface destinationRoom = getRoomByRoomName(roomName);
-      RoomInterface currentPlayerRoom = getRoomByRoomName(getCurrentPlayerRoomName());
-      currentPlayerRoom.checkIfRoomNeighbour(roomName, false);
-      currentPlayerRoom.removePlayerFromRoom(currentTurn);
-      currentTurn.setPlayerRoom(destinationRoom);
-      destinationRoom.addPlayerToRoom(currentTurn);
-      moveTargetPlayer();
-      movePetAfterTurnDfs();
-      currentTurn = getNextTurnPlayer();
-      return new StringBuilder().append("Player has successfully moved to room ")
-              .append(roomName).toString();
-    }
-    return new StringBuilder().append("ERROR: Player cannot be moved. Invalid room.").toString();
+    return movePlayer(roomName);
   }
 
   @Override
@@ -730,8 +745,10 @@ public class WorldImpl implements WorldInterface {
     moveTargetPlayer();
     movePetAfterTurnDfs();
     currentTurn = getNextTurnPlayer();
-    return new StringBuilder().append("Player has successfully picked up ")
-            .append(weaponName).toString();
+    return new StringBuilder()
+            .append("Player has successfully picked up ")
+            .append(weaponName)
+            .toString();
   }
 
   @Override
@@ -753,7 +770,9 @@ public class WorldImpl implements WorldInterface {
     moveTargetPlayer();
     movePetAfterTurnDfs();
     currentTurn = getNextTurnPlayer();
-    return new StringBuilder().append("Player has successfully moved the pet to ").append(roomName)
+    return new StringBuilder()
+            .append("Player has successfully moved the pet to ")
+            .append(roomName)
             .toString();
   }
 
@@ -840,5 +859,6 @@ public class WorldImpl implements WorldInterface {
     }
     return result.toString();
   }
+
 
 }

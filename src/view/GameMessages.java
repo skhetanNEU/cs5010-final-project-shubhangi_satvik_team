@@ -259,7 +259,7 @@ public class GameMessages extends JPanel {
     // numTurns.setText(listener.getNumOfTurnsLeft());
     currentTurnName.setText(model.getCurrentPlayerName());
     targetPlayerInfo.setText(model.getTargetPlayerDetails());
-    currentPlayerInfo.setText(model.getPlayerInformation());
+    currentPlayerInfo.setText(model.getCurrentPlayerInformation());
     currentPlayerRoomInfo.setText(model.getCurrentPlayerRoomInformation());
   }
 

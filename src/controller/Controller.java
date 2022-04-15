@@ -76,13 +76,6 @@ public class Controller implements FeatureInterface {
   }
 
   @Override
-  public String getPlayerDescription() {
-    CommandsInterface getPlayerDescription = new GetPlayerDescription();
-    getPlayerDescription.execute(model);
-    return getPlayerDescription.getCommandResult();
-  }
-
-  @Override
   public String addPlayer(String playerName, String roomName, String maxNumberOfWeapons,
                           boolean isComputerPlayer) {
     int numWeapons;
@@ -104,67 +97,81 @@ public class Controller implements FeatureInterface {
     CommandsInterface addPlayer = new AddPlayer(playerName, roomName, numWeapons,
             isComputerPlayer);
     addPlayer.execute(model);
-    gameView.refresh(false);
+    model.updateWorldView(false);
+    gameView.refresh();
     return addPlayer.getCommandResult();
   }
 
   @Override
   public void lookAround() {
     CommandsInterface lookAround = new LookAround();
-    gameView.refresh(true);
+    model.updateWorldView(true);
+    gameView.refresh();
     lookAround.execute(model);
     gameView.showCommandOutcome("Look Around Details", lookAround.getCommandResult(), true);
-    gameView.refresh(false);
+    model.updateWorldView(false);
+    gameView.refresh();
+
   }
 
   @Override
-  public void movePlayer(int row, int col) {
+  public void handleRoomClick(int row, int col) {
     if (row < 0 || col < 0) {
-      gameView.showCommandOutcome("Move Player Result", "Coordinates cannot be negative", false);
+      gameView.showCommandOutcome("ERROR", "Coordinates cannot be negative", false);
     } else {
-      CommandsInterface movePlayer = new MovePlayer(row, col);
-      movePlayer.execute(model);
-      gameView.showCommandOutcome("Move Player Result", movePlayer.getCommandResult(), false);
+      if (model.isPlayerIconClicked(row, col)) {
+        CommandsInterface playerInfo = new GetPlayerDescription();
+        playerInfo.execute(model);
+        gameView.showCommandOutcome("Current Player Details", playerInfo.getCommandResult(), false);
+      } else {
+        CommandsInterface cellClick = new MovePlayer(row, col);
+        cellClick.execute(model);
+        gameView.showCommandOutcome("Move Player Result", cellClick.getCommandResult(), false);
+      }
     }
-    gameView.refresh(true);
+    model.updateWorldView(false);
+    gameView.refresh();
   }
 
   @Override
   public void pickWeapon() {
     String weaponName = gameView.showPickWeaponDialog();
     if (weaponName == null || "".equals(weaponName)) {
-      gameView.showCommandOutcome("Pick Weapon Result", "Weapon name cannot be empty", false);
+      gameView.showCommandOutcome("ERROR", "Weapon name cannot be empty", false);
     } else {
       CommandsInterface pickWeapon = new PickWeapon(weaponName);
       pickWeapon.execute(model);
       gameView.showCommandOutcome("Pick Weapon Result", pickWeapon.getCommandResult(), false);
     }
-    gameView.refresh(false);
+    model.updateWorldView(false);
+    gameView.refresh();
   }
 
   @Override
   public void attackTarget() {
     String weaponName = gameView.showAttackTargetDialog();
     if (weaponName == null || "".equals(weaponName)) {
-      gameView.showCommandOutcome("Attack Target Result", "Weapon name cannot be empty", false);
+      gameView.showCommandOutcome("ERROR", "Weapon name cannot be empty", false);
     } else {
       CommandsInterface attackTarget = new AttackTarget(weaponName);
       attackTarget.execute(model);
       gameView.showCommandOutcome("Attack Target Result", attackTarget.getCommandResult(), false);
     }
-    gameView.refresh(false);
+    model.updateWorldView(false);
+    gameView.refresh();
   }
 
   @Override
   public void movePet() {
     String roomName = gameView.showMovePetDialog();
     if (roomName == null || "".equals(roomName)) {
-      gameView.showCommandOutcome("Move Pet Result", "Room name cannot be empty", false);
+      gameView.showCommandOutcome("ERROR", "Room name cannot be empty", false);
     } else {
       CommandsInterface movePet = new MovePet(roomName);
       movePet.execute(model);
       gameView.showCommandOutcome("Move Pet Result", movePet.getCommandResult(), false);
     }
-    gameView.refresh(false);
+    model.updateWorldView(false);
+    gameView.refresh();
   }
 }

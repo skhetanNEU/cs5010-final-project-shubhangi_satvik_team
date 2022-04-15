@@ -21,7 +21,7 @@ public class MovePlayer extends AbstractCommands {
       throw new IllegalArgumentException("Model is invalid");
     }
     try {
-      String result = model.movePlayer(row, col);
+      String result = model.handleRoomClick(row, col);
       commandResult.append(result);
       isCommandSuccessful = true;
     } catch (IllegalArgumentException exception) {

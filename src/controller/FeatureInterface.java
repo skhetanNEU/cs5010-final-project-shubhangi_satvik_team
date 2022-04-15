@@ -8,14 +8,12 @@ public interface FeatureInterface {
 
   void quitGame();
 
-  String getPlayerDescription();
-
   String addPlayer(String playerName, String roomName, String maxNumberOfWeapons,
                    boolean isComputerPlayer);
 
   void lookAround();
 
-  void movePlayer(int row, int col);
+  void handleRoomClick(int row, int col);
 
   void pickWeapon();
 

@@ -3,7 +3,8 @@ package view;
 import java.util.List;
 
 public interface GameViewInterface extends PreGameViewInterface {
-  void refresh(boolean isLookAround);
+
+  void refresh();
 
   int showCommandOutcome(String title, String outcome, boolean isLookAround);
 

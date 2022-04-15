@@ -63,14 +63,16 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     container.setLayout(new BorderLayout());
 
     this.gameBoard = new GameBoard(model);
-    this.gameBoard.setMinimumSize(new Dimension(600, 900));
+    this.gameBoard.setMinimumSize(new Dimension(400, 900));
+    this.gameBoard.setPreferredSize(new Dimension(600, 900));
 
     JScrollPane scrollPane1 = new JScrollPane(this.gameBoard,
             JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
             JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     scrollPane1.setEnabled(true);
-    scrollPane1.setPreferredSize(new Dimension(600,900));
+    scrollPane1.setPreferredSize(new Dimension(600, 900));
     add(scrollPane1);
+
     container.add(scrollPane1, BorderLayout.CENTER);
 
     this.messages = new GameMessages(model);
@@ -78,8 +80,8 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     container.add(messages, BorderLayout.EAST);
 
     JScrollPane scrollPane2 = new JScrollPane(container,
-            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-            JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+            JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+            JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     scrollPane2.setEnabled(true);
     add(scrollPane2);
 
@@ -158,7 +160,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
           super.mouseClicked(event);
           int row = event.getY();
           int column = event.getX();
-          features.movePlayer(row, column);
+          features.handleRoomClick(row, column);
         }
       }
     );
@@ -177,8 +179,8 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
   }
 
   @Override
-  public void refresh(boolean isLookAround) {
-    this.gameBoard.refreshWorldView(isLookAround);
+  public void refresh() {
+    this.gameBoard.repaint();
     this.messages.updateGameDetails();
   }
 
@@ -346,7 +348,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
       this.setResizable(false);
       this.setPreferredSize(new Dimension(500, 250));
       this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-      this.setLocation(200,200);
+      this.setLocation(200, 200);
 
       JPanel contentPane = new JPanel();
       contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));

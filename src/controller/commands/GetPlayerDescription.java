@@ -10,7 +10,7 @@ public class GetPlayerDescription extends AbstractCommands {
       throw new IllegalArgumentException("Model is invalid");
     }
     try {
-      commandResult.append(model.getPlayerInformation());
+      commandResult.append(model.getCurrentPlayerInformation());
       isCommandSuccessful = true;
     } catch (IllegalArgumentException exception) {
       commandResult.append(exception.getMessage());
