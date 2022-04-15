@@ -21,6 +21,7 @@ import model.world.ReadOnlyWorldInterface;
 public class GameMessages extends JPanel {
 
   ReadOnlyWorldInterface model;
+  JLabel numTurns;
   JLabel currentTurnName;
   JTextArea targetPlayerInfo;
   JTextArea currentPlayerInfo;
@@ -49,7 +50,6 @@ public class GameMessages extends JPanel {
     c.gridx = 0;
     c.anchor = GridBagConstraints.WEST;
     c.fill = GridBagConstraints.HORIZONTAL;
-    c.insets = new Insets(5, 0, 10, 0);
     c.ipady = 10;
 
     JLabel welcomeText = new JLabel(String.format("WELCOME TO %s!",
@@ -62,6 +62,8 @@ public class GameMessages extends JPanel {
 
     c.gridy = 0;
     content.add(welcomeText, c);
+
+    c.insets = new Insets(5, 0, 0, 0);
 
     try {
       // Key for target player
@@ -148,6 +150,18 @@ public class GameMessages extends JPanel {
       // Do nothing
     }
 
+    JLabel numTurnLabel = new JLabel("Number of Turns Remaining");
+    numTurnLabel.setOpaque(true);
+    numTurnLabel.setForeground(Color.decode("#EF6C00"));
+    numTurnLabel.setBackground(Color.decode("#FFE0B2"));
+    numTurnLabel.setFont(numTurnLabel.getFont().deriveFont(Font.BOLD, 14));
+    numTurnLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+    numTurns = new JLabel("TODO");
+    numTurns.setForeground(Color.WHITE);
+    numTurns.setFont(numTurns.getFont().deriveFont(Font.BOLD, 12));
+    numTurns.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
     JLabel currentTurnLabel = new JLabel("Current Turn");
     currentTurnLabel.setOpaque(true);
     currentTurnLabel.setForeground(Color.decode("#512DA8"));
@@ -214,27 +228,35 @@ public class GameMessages extends JPanel {
     currentPlayerRoomInfo.setWrapStyleWord(true);
     currentPlayerRoomInfo.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
+    c.insets = new Insets(10, 0, 5, 0);
     c.gridy = 5;
-    content.add(currentTurnLabel, c);
+    content.add(numTurnLabel, c);
+    c.insets = new Insets(5, 0, 5, 0);
     c.gridy = 6;
-    content.add(currentTurnName, c);
+    content.add(numTurns, c);
     c.gridy = 7;
-    content.add(targetPlayerLabel, c);
+    content.add(currentTurnLabel, c);
     c.gridy = 8;
-    content.add(targetPlayerInfo, c);
+    content.add(currentTurnName, c);
     c.gridy = 9;
-    content.add(currentPlayerLabel, c);
+    content.add(targetPlayerLabel, c);
     c.gridy = 10;
-    content.add(currentPlayerInfo, c);
+    content.add(targetPlayerInfo, c);
     c.gridy = 11;
-    content.add(currentPlayerRoomLabel, c);
+    content.add(currentPlayerLabel, c);
     c.gridy = 12;
+    content.add(currentPlayerInfo, c);
+    c.gridy = 13;
+    content.add(currentPlayerRoomLabel, c);
+    c.gridy = 14;
     content.add(currentPlayerRoomInfo, c);
 
     add(content, BorderLayout.NORTH);
   }
 
   public void updateGameDetails() {
+    // TODO
+    // numTurns.setText(listener.getNumOfTurnsLeft());
     currentTurnName.setText(model.getCurrentPlayerName());
     targetPlayerInfo.setText(model.getTargetPlayerDetails());
     currentPlayerInfo.setText(model.getPlayerInformation());
