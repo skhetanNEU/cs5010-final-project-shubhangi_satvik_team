@@ -707,16 +707,15 @@ public class WorldImpl implements WorldInterface {
   public String lookAroundSpace() {
     checkIfPlayersExistToPlayGame();
     StringBuilder result = new StringBuilder("------Current Room Details------").append("\n");
-    String currentRoomName = currentTurn.getPlayerRoomName();
-    result.append(currentRoomName).append("\n\n");
     RoomInterface currentRoom = getRoomByRoomName(currentTurn.getPlayerRoomName());
+    result.append(currentRoom).append("\n\n");
     String currentPlayerRoomNeighbours = currentRoom.getRoomNeighbours(false);
     if (!Objects.equals(currentPlayerRoomNeighbours, "No neighbours")) {
       String[] neighbours = currentPlayerRoomNeighbours.split(",");
       result.append("------Neighboring Room Details------").append("\n");
       for (String n : neighbours) {
         result.append("\n");
-        result.append(n).append("\n");
+        result.append(getRoomByRoomName(n)).append("\n");
       }
     }
     moveTargetPlayer();
