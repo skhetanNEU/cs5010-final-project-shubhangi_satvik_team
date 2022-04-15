@@ -619,8 +619,7 @@ public class WorldImpl implements WorldInterface {
   @Override
   public String getCurrentPlayerName() {
     if (currentTurn == null) {
-      throw new IllegalArgumentException(
-              "ERROR: Cannot play turn. Game must have atleast 1 player.");
+      return "-";
     }
     return currentTurn.getPlayerName();
   }
@@ -658,8 +657,7 @@ public class WorldImpl implements WorldInterface {
   @Override
   public String getCurrentPlayerInformation() {
     if (currentTurn == null) {
-      throw new IllegalArgumentException(
-              "ERROR: Cannot play turn. Game must have atleast 1 player.");
+      return "-";
     }
     return currentTurn.toString();
   }

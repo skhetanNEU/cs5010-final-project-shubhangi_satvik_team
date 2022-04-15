@@ -19,8 +19,7 @@ public class PickWeapon extends AbstractCommands {
       throw new IllegalArgumentException("Model is invalid");
     }
     try {
-      model.pickWeapon(this.weaponName);
-      commandResult.append("Player has picked the weapon");
+      commandResult.append(model.pickWeapon(this.weaponName));
       isCommandSuccessful = true;
     } catch (IllegalArgumentException exception) {
       commandResult.append(exception.getMessage());

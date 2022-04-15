@@ -19,8 +19,7 @@ public class AttackTarget extends AbstractCommands {
       throw new IllegalArgumentException("Model is invalid");
     }
     try {
-      model.attackTargetPlayer(this.weaponName);
-      commandResult.append("Attack on target successful");
+      commandResult.append(model.attackTargetPlayer(this.weaponName));
       isCommandSuccessful = true;
     } catch (IllegalArgumentException exception) {
       commandResult.append(exception.getMessage());
