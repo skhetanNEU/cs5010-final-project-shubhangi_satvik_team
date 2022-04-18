@@ -2,9 +2,11 @@ package controller;
 
 import java.io.File;
 
-public interface FeatureInterface {
+public interface FeatureInterface{
 
   void playGame(File file);
+
+  void startPlaying();
 
   void quitGame();
 

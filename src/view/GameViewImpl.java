@@ -143,12 +143,20 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
         @Override
         public void keyReleased(KeyEvent e) {
           switch (e.getKeyCode()) {
-            case KeyEvent.VK_P -> features.pickWeapon();
-            case KeyEvent.VK_A -> features.attackTarget();
-            case KeyEvent.VK_M -> features.movePet();
-            case KeyEvent.VK_L -> features.lookAround();
-            default -> {
-            }
+            case KeyEvent.VK_P:
+              features.pickWeapon();
+              break;
+            case KeyEvent.VK_A:
+              features.attackTarget();
+              break;
+            case KeyEvent.VK_M:
+              features.movePet();
+              break;
+            case KeyEvent.VK_L:
+              features.lookAround();
+              break;
+            default:
+              break;
           }
         }
       }
@@ -455,6 +463,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
             clearForm();
             getParent().setEnabled(true);
             addPlayerPopup.setVisible(false);
+            listener.startPlaying();
           }
         }
       });

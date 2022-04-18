@@ -43,6 +43,7 @@ public class WorldImpl implements WorldInterface {
   private final Stack<Integer> dfsStack;
   private final Set<Integer> dfsVisited;
   private final RandomGenerator random;
+  private int currentTurnNumber;
 
   private BufferedImage worldView;
   private BufferedImage playersView;
@@ -102,6 +103,7 @@ public class WorldImpl implements WorldInterface {
     this.players = new ArrayList<>();
     this.currentTurn = null;
     this.random = random;
+    this.currentTurnNumber = 0;
 
     initializeRooms(roomCoordinates, roomNames, worldCoordinates);
     initializeWeapons(numRooms, weaponNames, weaponDamageValues, weaponRoomIds);
@@ -358,6 +360,7 @@ public class WorldImpl implements WorldInterface {
   private PlayerInterface getNextTurnPlayer() {
     int playerIndex = players.indexOf(currentTurn);
     int nextPlayerIndex = (playerIndex + 1) % this.players.size();
+    currentTurnNumber++;
     return players.get(nextPlayerIndex);
   }
 
@@ -855,6 +858,11 @@ public class WorldImpl implements WorldInterface {
       result.append(movePet(randomRoomChosen));
     }
     return result.toString();
+  }
+
+  @Override
+  public int GetTurnNumber(){
+    return this.currentTurnNumber;
   }
 
 
