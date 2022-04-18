@@ -56,7 +56,7 @@ public class WeaponImpl implements WeaponInterface {
 
   @Override
   public String toString() {
-    return String.format("%s with damage value %s", weaponName, weaponDamageValue);
+    return String.format("%s (Damage: %s)", weaponName, weaponDamageValue);
   }
 
   @Override

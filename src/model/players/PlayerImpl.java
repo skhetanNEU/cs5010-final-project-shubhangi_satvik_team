@@ -11,7 +11,6 @@ import model.weapon.WeaponInterface;
  * PlayerImpl represents the normal player in the world of Kill Doctor Lucky.
  * It consists of the player id, name, player type, limit on weapon,
  * list of weapons and current location data.
- *
  */
 public class PlayerImpl implements PlayerInterface {
 
@@ -28,11 +27,11 @@ public class PlayerImpl implements PlayerInterface {
   /**
    * Constructs a Player object that represents the normal player.
    *
-   * @param playerId          represents the id of the player
-   * @param playerName        represents the name of the player
-   * @param weaponLimit       represents the max limit on number of weapons a player can pick
-   * @param isComputer        represents if the player is a computer player or not
-   * @param currentRoom       represents the current room in which the player is
+   * @param playerId    represents the id of the player
+   * @param playerName  represents the name of the player
+   * @param weaponLimit represents the max limit on number of weapons a player can pick
+   * @param isComputer  represents if the player is a computer player or not
+   * @param currentRoom represents the current room in which the player is
    * @throws IllegalArgumentException if parameters are not valid
    */
   public PlayerImpl(int playerId, String playerName, int weaponLimit,
@@ -113,21 +112,21 @@ public class PlayerImpl implements PlayerInterface {
   }
 
   @Override
-  public String getPlayerWeapons(boolean includePoke) {
+  public List<String> getPlayerWeapons(boolean includePoke, boolean includeDamageValue) {
+    List<String> weapons = new ArrayList<>();
     if (!includePoke && (playerWeapons == null || playerWeapons.size() == 0)) {
-      return "No weapons";
+      return weapons;
     }
     Collections.sort(playerWeapons);
-    List<String> weapons = new ArrayList<>();
     for (WeaponInterface w : playerWeapons) {
-      weapons.add(w.toString());
+      weapons.add(includeDamageValue ? w.toString() : w.getWeaponName());
     }
     if (includePoke) {
       if ((isComputerPlayer() && weapons.size() == 0) || !isComputerPlayer()) {
-        weapons.add(weaponPoke.toString());
+        weapons.add(includeDamageValue ? weaponPoke.toString() : weaponPoke.getWeaponName());
       }
     }
-    return String.join(", ", weapons);
+    return weapons;
   }
 
   @Override
@@ -153,6 +152,7 @@ public class PlayerImpl implements PlayerInterface {
             playerName,
             playerType,
             getPlayerRoomName(),
-            getPlayerWeapons(false));
+            playerWeapons.size() > 0 ? String.join(", ", getPlayerWeapons(false, true)) : "-"
+    );
   }
 }

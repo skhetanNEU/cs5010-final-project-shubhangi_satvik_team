@@ -12,7 +12,6 @@ import model.weapon.WeaponInterface;
  * RoomImpl represents a room of the world in Kill Doctor Lucky.
  * It consists of room id, room name, room coordinates, list of neighbours
  * and list of available weapons.
- *
  */
 public class RoomImpl implements RoomInterface {
 
@@ -166,16 +165,16 @@ public class RoomImpl implements RoomInterface {
   }
 
   @Override
-  public String getAvailableWeapons(boolean includeDamageValues) {
+  public List<String> getAvailableWeapons(boolean includeDamageValues) {
+    List<String> weapons = new ArrayList<>();
     if (weaponsInSpace == null || weaponsInSpace.size() == 0) {
-      return "No weapons";
+      return weapons;
     }
     Collections.sort(weaponsInSpace);
-    List<String> weapons = new ArrayList<>();
     for (WeaponInterface w : weaponsInSpace) {
       weapons.add(includeDamageValues ? w.toString() : w.getWeaponName());
     }
-    return String.join(", ", weapons);
+    return weapons;
   }
 
   @Override
@@ -270,7 +269,9 @@ public class RoomImpl implements RoomInterface {
                     + "\nPlayers: %s\nIs Target Present: %s\nIs Pet Present: %s",
             roomName,
             getRoomNeighbours(false),
-            getAvailableWeapons(true),
+            weaponsInSpace.size() > 0
+                    ? String.join(", ", getAvailableWeapons(true))
+                    : '-',
             getPlayersInRoom(),
             isTargetPlayerInRoom ? "Yes" : "No",
             isPetInRoom ? "Yes" : "No"

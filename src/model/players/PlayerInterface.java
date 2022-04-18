@@ -1,5 +1,6 @@
 package model.players;
 
+import java.util.List;
 import model.room.RoomInterface;
 import model.weapon.WeaponInterface;
 
@@ -52,13 +53,7 @@ public interface PlayerInterface {
    */
   WeaponInterface removeWeaponFromPlayer(String weaponName);
 
-  /**
-   * Gives a string of weapons that the player has.
-   *
-   * @param includePoke represents if poke should be part of the weapon
-   * @return list of weapons
-   */
-  String getPlayerWeapons(boolean includePoke);
+  List<String> getPlayerWeapons(boolean includePoke, boolean includeDamageValue);
 
   /**
    * Gives the weapon that has maximum damage value.

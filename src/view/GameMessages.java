@@ -152,8 +152,8 @@ public class GameMessages extends JPanel {
 
     JLabel numTurnLabel = new JLabel("Number of Turns Remaining");
     numTurnLabel.setOpaque(true);
-    numTurnLabel.setForeground(Color.decode("#EF6C00"));
-    numTurnLabel.setBackground(Color.decode("#FFE0B2"));
+    numTurnLabel.setForeground(Color.decode("#512DA8"));
+    numTurnLabel.setBackground(Color.decode("#EDE7F6"));
     numTurnLabel.setFont(numTurnLabel.getFont().deriveFont(Font.BOLD, 14));
     numTurnLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
@@ -164,8 +164,8 @@ public class GameMessages extends JPanel {
 
     JLabel currentTurnLabel = new JLabel("Current Turn");
     currentTurnLabel.setOpaque(true);
-    currentTurnLabel.setForeground(Color.decode("#512DA8"));
-    currentTurnLabel.setBackground(Color.decode("#EDE7F6"));
+    currentTurnLabel.setForeground(Color.decode("#B9770E"));
+    currentTurnLabel.setBackground(Color.decode("#FFF9C4"));
     currentTurnLabel.setFont(currentTurnLabel.getFont().deriveFont(Font.BOLD, 14));
     currentTurnLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
@@ -176,8 +176,8 @@ public class GameMessages extends JPanel {
 
     JLabel targetPlayerLabel = new JLabel("Target Player Details");
     targetPlayerLabel.setOpaque(true);
-    targetPlayerLabel.setForeground(Color.decode("#B9770E"));
-    targetPlayerLabel.setBackground(Color.decode("#FFF9C4"));
+    targetPlayerLabel.setForeground(Color.decode("#7B241C"));
+    targetPlayerLabel.setBackground(Color.decode("#F2D7D5"));
     targetPlayerLabel.setFont(targetPlayerLabel.getFont().deriveFont(Font.BOLD, 14));
     targetPlayerLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
@@ -191,24 +191,6 @@ public class GameMessages extends JPanel {
     targetPlayerInfo.setLineWrap(true);
     targetPlayerInfo.setWrapStyleWord(true);
     targetPlayerInfo.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-    JLabel currentPlayerLabel = new JLabel("Current Player Details");
-    currentPlayerLabel.setOpaque(true);
-    currentPlayerLabel.setForeground(Color.decode("#7B241C"));
-    currentPlayerLabel.setBackground(Color.decode("#F2D7D5"));
-    currentPlayerLabel.setFont(currentPlayerLabel.getFont().deriveFont(Font.BOLD, 14));
-    currentPlayerLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-    currentPlayerInfo = new JTextArea("-");
-    currentPlayerInfo.setForeground(Color.WHITE);
-    currentPlayerInfo.setFont(currentPlayerInfo.getFont().deriveFont(Font.BOLD, 12));
-    currentPlayerInfo.setEditable(false);
-    currentPlayerInfo.setCursor(null);
-    currentPlayerInfo.setOpaque(false);
-    currentPlayerInfo.setFocusable(false);
-    currentPlayerInfo.setLineWrap(true);
-    currentPlayerInfo.setWrapStyleWord(true);
-    currentPlayerInfo.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
     JLabel currentPlayerRoomLabel = new JLabel("Current Player Room Details");
     currentPlayerRoomLabel.setOpaque(true);
@@ -243,12 +225,8 @@ public class GameMessages extends JPanel {
     c.gridy = 10;
     content.add(targetPlayerInfo, c);
     c.gridy = 11;
-    content.add(currentPlayerLabel, c);
-    c.gridy = 12;
-    content.add(currentPlayerInfo, c);
-    c.gridy = 13;
     content.add(currentPlayerRoomLabel, c);
-    c.gridy = 14;
+    c.gridy = 12;
     content.add(currentPlayerRoomInfo, c);
 
     add(content, BorderLayout.NORTH);
@@ -259,7 +237,6 @@ public class GameMessages extends JPanel {
     // numTurns.setText(listener.getNumOfTurnsLeft());
     currentTurnName.setText(model.getCurrentPlayerName());
     targetPlayerInfo.setText(model.getTargetPlayerDetails());
-    currentPlayerInfo.setText(model.getCurrentPlayerInformation());
     currentPlayerRoomInfo.setText(model.getCurrentPlayerRoomInformation());
   }
 

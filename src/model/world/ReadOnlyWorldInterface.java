@@ -1,6 +1,7 @@
 package model.world;
 
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 /**
  * An interface class for representing the World for Kill Doctor Lucky.
@@ -14,6 +15,8 @@ public interface ReadOnlyWorldInterface {
    * @return the name of the world
    */
   String getWorldName();
+
+  List<String> getListOfRooms();
 
   /**
    * Checks if the current player is a computer player.
@@ -29,12 +32,7 @@ public interface ReadOnlyWorldInterface {
    */
   String getCurrentPlayerName();
 
-  /**
-   * Gives all weapons that player has.
-   *
-   * @return list of weapons with the player.
-   */
-  String getCurrentPlayerWeapons();
+  List<String> getCurrentPlayerWeapons(boolean includeDamage);
 
   /**
    * Gives the room that the current player is in.
@@ -43,12 +41,7 @@ public interface ReadOnlyWorldInterface {
    */
   String getCurrentPlayerRoomName();
 
-  /**
-   * Returns the weapons with damage value available in current player's room.
-   *
-   * @return list of weapons with damage value available in current player's room
-   */
-  String getCurrentPlayerRoomWeapons(boolean includeDamageValues);
+  List<String> getCurrentPlayerRoomWeapons(boolean includeDamageValues);
 
   /**
    * Gets the details of the target player.

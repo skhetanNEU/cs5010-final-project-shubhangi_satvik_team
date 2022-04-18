@@ -81,12 +81,7 @@ public interface RoomInterface extends Comparable<RoomInterface> {
    */
   void checkIfRoomNeighbour(String roomName, boolean includeInvisibleRooms);
 
-  /**
-   * Gets the available weapons of the room.
-   *
-   * @return list of available weapons with their names and damage value
-   */
-  String getAvailableWeapons(boolean includeDamageValues);
+  List<String> getAvailableWeapons(boolean includeDamageValues);
 
   /**
    * Returns the weapon object.

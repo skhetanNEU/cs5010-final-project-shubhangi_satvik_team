@@ -13,9 +13,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Stack;
-
+import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
-
 import model.pet.PetImpl;
 import model.pet.PetInterface;
 import model.players.PlayerImpl;
@@ -546,7 +545,7 @@ public class WorldImpl implements WorldInterface {
 
         g.drawImage(scaledPlayer, roomCoordinates.get(3) - 25, roomCoordinates.get(1) - 25, null);
 
-        if (!"No weapons".equals(currentPlayerRoom.getAvailableWeapons(false))) {
+        if (currentPlayerRoom.getAvailableWeapons(false).size() > 0) {
           g.drawImage(scaledWeapon, roomCoordinates.get(2) + 5, roomCoordinates.get(1) - 50, null);
         }
         if (currentPlayerRoom.getNumberOfPlayersInRoom() - 1 > 0) {
@@ -566,7 +565,7 @@ public class WorldImpl implements WorldInterface {
                 if (nei.getNumberOfPlayersInRoom() > 0) {
                   g.drawImage(scaledOther, c1 + 5, r2 - 25, null);
                 }
-                if (!"No weapons".equalsIgnoreCase(nei.getAvailableWeapons(false))) {
+                if (nei.getAvailableWeapons(false).size() > 0) {
                   g.drawImage(scaledWeapon, c1 + 5, r2 - 50, null);
                 }
               }
@@ -613,6 +612,11 @@ public class WorldImpl implements WorldInterface {
   }
 
   @Override
+  public List<String> getListOfRooms() {
+    return this.rooms.stream().map(RoomInterface::getRoomName).collect(Collectors.toList());
+  }
+
+  @Override
   public boolean isCurrentPlayerComputer() {
     if (currentTurn == null) {
       throw new IllegalArgumentException(
@@ -630,11 +634,11 @@ public class WorldImpl implements WorldInterface {
   }
 
   @Override
-  public String getCurrentPlayerWeapons() {
+  public List<String> getCurrentPlayerWeapons(boolean includeDamage) {
     if (currentTurn == null) {
-      return "";
+      return new ArrayList<>();
     }
-    return currentTurn.getPlayerWeapons(true);
+    return currentTurn.getPlayerWeapons(true, includeDamage);
   }
 
   @Override
@@ -646,9 +650,9 @@ public class WorldImpl implements WorldInterface {
   }
 
   @Override
-  public String getCurrentPlayerRoomWeapons(boolean includeDamageValues) {
+  public List<String> getCurrentPlayerRoomWeapons(boolean includeDamageValues) {
     if (currentTurn == null) {
-      return "";
+      return new ArrayList<>();
     }
     RoomInterface currentPlayerRoom = getRoomByRoomName(currentTurn.getPlayerRoomName());
     return currentPlayerRoom.getAvailableWeapons(includeDamageValues);
@@ -845,13 +849,12 @@ public class WorldImpl implements WorldInterface {
         result.append(movePlayer(chosenRoomName));
       }
     } else if (actionNumber == 2) {
-      String weapons = getCurrentPlayerRoomWeapons(false);
-      if ("No weapons".equals(weapons)) {
+      List<String> weaponList = getCurrentPlayerRoomWeapons(false);
+      if (weaponList.size() < 1) {
         throw new IllegalArgumentException(
                 "ERROR: The current room does not have any weapons to pick.");
       } else {
-        String[] weaponList = weapons.split(",");
-        String chosenWeaponName = weaponList[weaponList.length - 1].trim();
+        String chosenWeaponName = weaponList.get(weaponList.size() - 1).trim();
         result.append(pickWeapon(chosenWeaponName));
       }
     } else if (actionNumber == 3) {

@@ -149,7 +149,9 @@ public class Controller implements FeatureInterface {
   @Override
   public void pickWeapon() {
     String weaponName = gameView.showPickWeaponDialog();
-    if (weaponName == null || "".equals(weaponName)) {
+    if (weaponName == null) {
+      gameView.showCommandOutcome("CANCELLED", "Pick weapon cancelled", false);
+    } else if ("".equals(weaponName)) {
       gameView.showCommandOutcome("ERROR", "Weapon name cannot be empty", false);
     } else {
       CommandsInterface pickWeapon = new PickWeapon(weaponName);
@@ -163,7 +165,9 @@ public class Controller implements FeatureInterface {
   @Override
   public void attackTarget() {
     String weaponName = gameView.showAttackTargetDialog();
-    if (weaponName == null || "".equals(weaponName)) {
+    if (weaponName == null) {
+      gameView.showCommandOutcome("CANCELLED", "Attack target cancelled", false);
+    } else if ("".equals(weaponName)) {
       gameView.showCommandOutcome("ERROR", "Weapon name cannot be empty", false);
     } else {
       CommandsInterface attackTarget = new AttackTarget(weaponName);
@@ -177,7 +181,9 @@ public class Controller implements FeatureInterface {
   @Override
   public void movePet() {
     String roomName = gameView.showMovePetDialog();
-    if (roomName == null || "".equals(roomName)) {
+    if (roomName == null) {
+      gameView.showCommandOutcome("CANCELLED", "Move pet cancelled", false);
+    } else if ("".equals(roomName)) {
       gameView.showCommandOutcome("ERROR", "Room name cannot be empty", false);
     } else {
       CommandsInterface movePet = new MovePet(roomName);

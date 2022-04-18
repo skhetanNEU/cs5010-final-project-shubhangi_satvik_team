@@ -227,18 +227,31 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     panel.setOpaque(false);
 
     JLabel availableWeaponLabel = new JLabel("Weapons available in room:");
-    JLabel availableWeaponInfo = new JLabel(model.getCurrentPlayerRoomWeapons(true));
+    JTextArea availableWeaponInfo = new JTextArea(
+            String.join("\n", model.getCurrentPlayerRoomWeapons(true)));
+
     availableWeaponLabel.setFont(availableWeaponInfo.getFont().deriveFont(Font.BOLD));
+    availableWeaponInfo.setForeground(Color.WHITE);
+    availableWeaponInfo.setOpaque(false);
+    availableWeaponInfo.setEditable(false);
+    availableWeaponInfo.setCursor(null);
+    availableWeaponInfo.setFocusable(false);
+    availableWeaponInfo.setLineWrap(true);
+    availableWeaponInfo.setWrapStyleWord(true);
+
     panel.add(availableWeaponLabel);
     panel.add(availableWeaponInfo);
 
-    JLabel pickWeaponLabel = new JLabel("Enter weapon name to pick:");
-    JTextField weaponField = new JTextField();
+    JLabel pickWeaponLabel = new JLabel("Select weapon to pick:");
+    String[] weaponList = model.getCurrentPlayerRoomWeapons(false).toArray(new String[0]);
+    JComboBox<String> weaponField = new JComboBox<>(weaponList);
     pickWeaponLabel.setFont(pickWeaponLabel.getFont().deriveFont(Font.BOLD));
     panel.add(pickWeaponLabel);
     panel.add(weaponField);
 
     Object[] options = {"Pick Weapon", "Cancel"};
+
+    panel.setMaximumSize(new Dimension(100, panel.getHeight()));
 
     int result = JOptionPane.showOptionDialog(this,
             panel,
@@ -250,7 +263,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
             null);
 
     if (result == JOptionPane.OK_OPTION) {
-      return weaponField.getText();
+      return weaponList[weaponField.getSelectedIndex()];
     } else {
       return null;
     }
@@ -266,9 +279,10 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
 
     JPanel panel = new JPanel(new GridLayout(0, 1));
 
-    JLabel movePetLabel = new JLabel("Enter room name to move pet to:");
+    JLabel movePetLabel = new JLabel("Select room to move pet to:");
     movePetLabel.setFont(movePetLabel.getFont().deriveFont(Font.BOLD));
-    JTextField roomNameField = new JTextField();
+    String[] roomList = model.getListOfRooms().toArray(new String[0]);
+    JComboBox<String> roomNameField = new JComboBox<>(roomList);
 
     panel.add(movePetLabel);
     panel.add(roomNameField);
@@ -285,7 +299,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
             null);
 
     if (result == JOptionPane.OK_OPTION) {
-      return roomNameField.getText();
+      return roomList[roomNameField.getSelectedIndex()];
     } else {
       return null;
     }
@@ -301,18 +315,32 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     JPanel panel = new JPanel(new GridLayout(0, 1));
 
     JLabel availableWeaponLabel = new JLabel("Weapons available with player:");
-    JLabel availableWeaponInfo = new JLabel(model.getCurrentPlayerWeapons());
+    JTextArea availableWeaponInfo = new JTextArea(
+            String.join("\n", model.getCurrentPlayerWeapons(true)));
+
     availableWeaponLabel.setFont(availableWeaponLabel.getFont().deriveFont(Font.BOLD));
+    availableWeaponInfo.setForeground(Color.WHITE);
+    availableWeaponInfo.setOpaque(false);
+    availableWeaponInfo.setEditable(false);
+    availableWeaponInfo.setCursor(null);
+    availableWeaponInfo.setFocusable(false);
+    availableWeaponInfo.setLineWrap(true);
+    availableWeaponInfo.setWrapStyleWord(true);
+
     panel.add(availableWeaponLabel);
     panel.add(availableWeaponInfo);
 
-    JLabel attackWeaponLabel = new JLabel("Enter weapon name to attack with: ");
-    JTextField weaponField = new JTextField();
+    JLabel attackWeaponLabel = new JLabel("Select weapon to attack with: ");
+    String[] weaponList = model.getCurrentPlayerWeapons(false).toArray(new String[0]);
+    JComboBox<String> weaponField = new JComboBox<>(weaponList);
+
     attackWeaponLabel.setFont(attackWeaponLabel.getFont().deriveFont(Font.BOLD));
     panel.add(attackWeaponLabel);
     panel.add(weaponField);
 
     Object[] options = {"Attack Target", "Cancel"};
+
+    panel.setSize(200, panel.getHeight());
 
     int result = JOptionPane.showOptionDialog(this,
             panel,
@@ -324,7 +352,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
             null);
 
     if (result == JOptionPane.OK_OPTION) {
-      return weaponField.getText();
+      return weaponList[weaponField.getSelectedIndex()];
     } else {
       return null;
     }
@@ -463,7 +491,8 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
             clearForm();
             getParent().setEnabled(true);
             addPlayerPopup.setVisible(false);
-            listener.startPlaying();
+            // TODO
+            // listener.startPlaying();
           }
         }
       });
