@@ -19,75 +19,60 @@ import view.GameViewImpl;
 import view.GameViewInterface;
 import view.PreGameViewInterface;
 
-public class Controller implements FeatureInterface{
+public class Controller implements FeatureInterface {
 
   private WorldInterface model;
   private GameViewInterface gameView;
   private final PreGameViewInterface preGameView;
   private final int maxNumberOfTurns;
-  private Readable worldConfiguration;
+  private Readable defaultConfiguration;
 
   public Controller(PreGameViewInterface preGameView,
                     FileReader worldConfiguration, int maxNumberOfTurns) {
     if (preGameView == null) {
       throw new IllegalArgumentException("View cannot be null");
     }
-    if(worldConfiguration == null){
+    if (worldConfiguration == null) {
       throw new IllegalArgumentException("Invalid configuration file");
     }
-    if(maxNumberOfTurns <= 0){
-      throw new IllegalArgumentException("Number of turns cannot be zero");
+    if (maxNumberOfTurns <= 0) {
+      throw new IllegalArgumentException("Number of turns cannot be non-positive");
     }
 
-    this.worldConfiguration = worldConfiguration;
+    this.defaultConfiguration = worldConfiguration;
+    this.maxNumberOfTurns = maxNumberOfTurns;
     this.preGameView = preGameView;
     this.preGameView.addFeatures(this);
     this.preGameView.makeVisible();
-    this.maxNumberOfTurns = maxNumberOfTurns;
-
   }
-
-//  public Controller(WorldInterface model, GameViewInterface gameView,
-//                    PreGameViewInterface preGameView, int maxNumberOfTurns) {
-//    if (model == null || gameView == null || preGameView == null) {
-//      throw new IllegalArgumentException("View/model cannot be null");
-//    }
-//    this.model = model;
-//    this.gameView = gameView;
-//    this.preGameView = preGameView;
-//    this.maxNumberOfTurns = maxNumberOfTurns;
-//  }
 
   @Override
   public void playGame(File file) {
-    //File chosen = file;
-
+    Readable chosen = defaultConfiguration;
     try {
       if (file != null) {
-        this.worldConfiguration = new FileReader(file);
-        //chosen = new File("res/FriendsWorld.txt");
+        chosen = new FileReader("res/FriendsWorld.txt");
       }
       RandomGenerator rand = new RandomClass(true);
       model = WorldImpl.getBuilder()
-              .parseInputFile(this.worldConfiguration)
+              .parseInputFile(chosen)
               .setRandomGenerator(rand)
               .build();
       quitGame();
-      this.gameView = new GameViewImpl(model, this);
+      gameView = new GameViewImpl(model, this);
       gameView.makeVisible();
       gameView.addFeatures(this);
     } catch (FileNotFoundException e) {
-      throw new IllegalArgumentException("File not found.");
+      throw new IllegalArgumentException("ERROR: File not found.");
     }
   }
 
   @Override
-  public void startPlaying(){
-    while(model.GetTurnNumber()<maxNumberOfTurns){
-      if(model.isCurrentPlayerComputer()){
+  public void startPlaying() {
+    while (model.getTurnNumber() < maxNumberOfTurns) {
+      if (model.isCurrentPlayerComputer()) {
         String result = model.takeTurnForComputerPlayer();
-        gameView.showCommandOutcome("Computer Player Turn Details", result,
-                false);
+        gameView.showCommandOutcome("Computer Player Turn Details", result, false);
         model.updateWorldView(false);
         gameView.refresh();
       }
@@ -96,10 +81,10 @@ public class Controller implements FeatureInterface{
 
   @Override
   public void quitGame() {
-    if (this.gameView != null) {
-      this.gameView.close();
+    if (gameView != null) {
+      gameView.close();
     } else {
-      this.preGameView.close();
+      preGameView.close();
     }
   }
 

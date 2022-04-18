@@ -84,5 +84,5 @@ public interface ReadOnlyWorldInterface {
 
   boolean isPlayerIconClicked(int r, int c);
 
-  int GetTurnNumber();
+  int getTurnNumber();
 }

@@ -13,7 +13,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Stack;
+
 import javax.imageio.ImageIO;
+
 import model.pet.PetImpl;
 import model.pet.PetInterface;
 import model.players.PlayerImpl;
@@ -38,16 +40,19 @@ public class WorldImpl implements WorldInterface {
   private PetInterface targetPet;
   private TargetPlayerInterface targetPlayer;
   private final List<PlayerInterface> players;
+
   private PlayerInterface currentTurn;
+  private int currentTurnNumber;
+
   private int dfsStartRoom;
   private final Stack<Integer> dfsStack;
   private final Set<Integer> dfsVisited;
-  private final RandomGenerator random;
-  private int currentTurnNumber;
 
   private BufferedImage worldView;
   private BufferedImage playersView;
-  private int zoomFactor;
+  private final int zoomFactor;
+
+  private final RandomGenerator random;
 
   /**
    * Construct a WorldImpl object that represents the world.
@@ -447,15 +452,12 @@ public class WorldImpl implements WorldInterface {
   @Override
   public boolean isPlayerIconClicked(int r, int c) {
     String roomName = this.getRoomCellClicked(r, c);
-    if (roomName.equalsIgnoreCase(currentTurn.getPlayerRoomName())) {
+    if (roomName != null && roomName.equalsIgnoreCase(currentTurn.getPlayerRoomName())) {
       List<Integer> roomCoordinates = getRoomViewCoordinates(getRoomByRoomName(roomName));
-      if (r >= roomCoordinates.get(1) - 25
+      return r >= roomCoordinates.get(1) - 25
               && r <= roomCoordinates.get(1) - 5
               && c >= roomCoordinates.get(3) - 25
-              && c <= roomCoordinates.get(3) - 5
-      ) {
-        return true;
-      }
+              && c <= roomCoordinates.get(3) - 5;
     }
     return false;
   }
@@ -861,7 +863,7 @@ public class WorldImpl implements WorldInterface {
   }
 
   @Override
-  public int GetTurnNumber(){
+  public int getTurnNumber() {
     return this.currentTurnNumber;
   }
 
