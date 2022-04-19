@@ -24,7 +24,7 @@ public class GameBoard extends JPanel {
     super.paintComponent(g);
     BufferedImage img = model.getWorldView();
     g.drawImage(img, 0, 0, null);
-    this.setPreferredSize(new Dimension(img.getWidth(),img.getHeight()));
+    this.setPreferredSize(new Dimension(img.getWidth(), img.getHeight()));
   }
 
 }

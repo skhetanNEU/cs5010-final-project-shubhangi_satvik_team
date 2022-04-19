@@ -1,7 +1,14 @@
 package controller;
 
-import controller.commands.*;
-
+import controller.commands.AddPlayer;
+import controller.commands.AttackTarget;
+import controller.commands.CommandsInterface;
+import controller.commands.GetPlayerDescription;
+import controller.commands.LookAround;
+import controller.commands.MovePet;
+import controller.commands.MovePlayer;
+import controller.commands.PickWeapon;
+import controller.commands.PlayTurnForComputerPlayer;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -23,7 +30,7 @@ public class Controller implements FeatureInterface {
   private int currentTurnNumber;
 
   public Controller(PreGameViewInterface preGameView,
-                    FileReader worldConfiguration, int maxNumberOfTurns) {
+                    Readable worldConfiguration, int maxNumberOfTurns) {
     if (preGameView == null) {
       throw new IllegalArgumentException("View cannot be null");
     }
@@ -42,6 +49,18 @@ public class Controller implements FeatureInterface {
     this.currentTurnNumber = 0;
   }
 
+  private boolean checkIfGameIsOver() {
+    return model.isGameOver() || this.currentTurnNumber >= this.maxNumberOfTurns;
+  }
+
+  private void showGameOverMessage() {
+    if (checkIfGameIsOver()) {
+      String message = model.isGameOver() ? model.getWinner() : "Target has escaped alive!";
+      gameView.refresh();
+      gameView.showCommandOutcome("Game Over!", message, false);
+    }
+  }
+
   @Override
   public void playGame(File file) {
     Readable chosen = defaultConfiguration;
@@ -58,6 +77,7 @@ public class Controller implements FeatureInterface {
       gameView = new GameViewImpl(model, this);
       gameView.makeVisible();
       gameView.addFeatures(this);
+      currentTurnNumber = 0;
     } catch (FileNotFoundException e) {
       throw new IllegalArgumentException("ERROR: File not found.");
     }
@@ -101,141 +121,157 @@ public class Controller implements FeatureInterface {
 
   @Override
   public void lookAround() {
-    CommandsInterface lookAround = new LookAround();
-    model.updateWorldView(true);
-    gameView.refresh();
-    lookAround.execute(model);
-    gameView.showCommandOutcome("Look Around Details", lookAround.getCommandResult(), true);
-    model.updateWorldView(false);
-    gameView.refresh();
-    if(lookAround.isCommandSuccessful()){
-      this.currentTurnNumber++;
-      checkAndPlayTurnForComputerPlayer();
-      checkIfGameIsOver();
+    if (!checkIfGameIsOver()) {
+      CommandsInterface lookAround = new LookAround();
+      model.updateWorldView(true);
+      gameView.refresh();
+      lookAround.execute(model);
+      gameView.showCommandOutcome("Look Around Details", lookAround.getCommandResult(), true);
+      if (lookAround.isCommandSuccessful()) {
+        this.currentTurnNumber++;
+        checkAndPlayTurnForComputerPlayer();
+        showGameOverMessage();
+      }
+      model.updateWorldView(false);
+      gameView.refresh();
+    } else {
+      gameView.showCommandOutcome("Game Over!", "No more turns allowed. Start a new game.", false);
     }
   }
 
   @Override
   public void handleRoomClick(int row, int col) {
-    CommandsInterface cellClick = null;
-    if (row < 0 || col < 0) {
-      gameView.showCommandOutcome("ERROR", "Coordinates cannot be negative", false);
-    } else {
-      if (model.isPlayerIconClicked(row, col)) {
-        CommandsInterface playerInfo = new GetPlayerDescription();
-        playerInfo.execute(model);
-        gameView.showCommandOutcome("Current Player Details", playerInfo.getCommandResult(), false);
+    if (!checkIfGameIsOver()) {
+      CommandsInterface cellClick = null;
+      if (row < 0 || col < 0) {
+        gameView.showCommandOutcome("ERROR", "Coordinates cannot be negative", false);
       } else {
-        cellClick = new MovePlayer(row, col);
-        cellClick.execute(model);
-        gameView.showCommandOutcome("Move Player Result", cellClick.getCommandResult(), false);
+        if (model.isPlayerIconClicked(row, col)) {
+          CommandsInterface playerInfo = new GetPlayerDescription();
+          playerInfo.execute(model);
+          gameView.showCommandOutcome("Current Player Details",
+                  playerInfo.getCommandResult(), false);
+        } else {
+          cellClick = new MovePlayer(row, col);
+          cellClick.execute(model);
+          gameView.showCommandOutcome("Move Player Result", cellClick.getCommandResult(), false);
+        }
       }
-    }
-    model.updateWorldView(false);
-    gameView.refresh();
-    if(cellClick!=null && cellClick.isCommandSuccessful()){
-      this.currentTurnNumber++;
-      checkAndPlayTurnForComputerPlayer();
-      checkIfGameIsOver();
+      if (cellClick != null && cellClick.isCommandSuccessful()) {
+        this.currentTurnNumber++;
+        checkAndPlayTurnForComputerPlayer();
+        showGameOverMessage();
+      }
+      model.updateWorldView(false);
+      gameView.refresh();
+    } else {
+      gameView.showCommandOutcome("Game Over!", "No more turns allowed. Start a new game.", false);
     }
   }
 
   @Override
   public void pickWeapon() {
-    CommandsInterface pickWeapon = null;
-    String weaponName = gameView.showPickWeaponDialog();
-    if (weaponName == null) {
-      gameView.showCommandOutcome("CANCELLED", "Pick weapon cancelled", false);
-    } else if ("".equals(weaponName)) {
-      gameView.showCommandOutcome("ERROR", "Weapon name cannot be empty", false);
+    if (!checkIfGameIsOver()) {
+      CommandsInterface pickWeapon = null;
+      String weaponName = gameView.showPickWeaponDialog();
+      if (weaponName == null) {
+        gameView.showCommandOutcome("CANCELLED", "Pick weapon cancelled", false);
+      } else if ("".equals(weaponName)) {
+        gameView.showCommandOutcome("ERROR", "Weapon name cannot be empty", false);
+      } else {
+        pickWeapon = new PickWeapon(weaponName);
+        pickWeapon.execute(model);
+        gameView.showCommandOutcome("Pick Weapon Result", pickWeapon.getCommandResult(), false);
+      }
+      if (pickWeapon != null && pickWeapon.isCommandSuccessful()) {
+        this.currentTurnNumber++;
+        checkAndPlayTurnForComputerPlayer();
+        showGameOverMessage();
+      }
+      model.updateWorldView(false);
+      gameView.refresh();
     } else {
-      pickWeapon = new PickWeapon(weaponName);
-      pickWeapon.execute(model);
-      gameView.showCommandOutcome("Pick Weapon Result", pickWeapon.getCommandResult(), false);
-    }
-    model.updateWorldView(false);
-    gameView.refresh();
-    if(pickWeapon!=null && pickWeapon.isCommandSuccessful()){
-      this.currentTurnNumber++;
-      checkAndPlayTurnForComputerPlayer();
-      checkIfGameIsOver();
+      gameView.showCommandOutcome("Game Over!", "No more turns allowed. Start a new game.", false);
     }
   }
 
   @Override
   public void attackTarget() {
-    CommandsInterface attackTarget = null;
-    String weaponName = gameView.showAttackTargetDialog();
-    if (weaponName == null) {
-      gameView.showCommandOutcome("CANCELLED", "Attack target cancelled", false);
-    } else if ("".equals(weaponName)) {
-      gameView.showCommandOutcome("ERROR", "Weapon name cannot be empty", false);
+    if (!checkIfGameIsOver()) {
+      CommandsInterface attackTarget = null;
+      String weaponName = gameView.showAttackTargetDialog();
+      if (weaponName == null) {
+        gameView.showCommandOutcome("CANCELLED", "Attack target cancelled", false);
+      } else if ("".equals(weaponName)) {
+        gameView.showCommandOutcome("ERROR", "Weapon name cannot be empty", false);
+      } else {
+        attackTarget = new AttackTarget(weaponName);
+        attackTarget.execute(model);
+        gameView.showCommandOutcome("Attack Target Result", attackTarget.getCommandResult(), false);
+      }
+      if (attackTarget != null && attackTarget.isCommandSuccessful()) {
+        this.currentTurnNumber++;
+        checkAndPlayTurnForComputerPlayer();
+        showGameOverMessage();
+      }
+      model.updateWorldView(false);
+      gameView.refresh();
     } else {
-      attackTarget = new AttackTarget(weaponName);
-      attackTarget.execute(model);
-      gameView.showCommandOutcome("Attack Target Result", attackTarget.getCommandResult(), false);
-    }
-    model.updateWorldView(false);
-    gameView.refresh();
-    if(attackTarget!=null && attackTarget.isCommandSuccessful()){
-      this.currentTurnNumber++;
-      checkAndPlayTurnForComputerPlayer();
-      checkIfGameIsOver();
+      gameView.showCommandOutcome("Game Over!", "No more turns allowed. Start a new game.", false);
     }
   }
 
   @Override
   public void movePet() {
-    CommandsInterface movePet = null;
-    String roomName = gameView.showMovePetDialog();
-    if (roomName == null) {
-      gameView.showCommandOutcome("CANCELLED", "Move pet cancelled", false);
-    } else if ("".equals(roomName)) {
-      gameView.showCommandOutcome("ERROR", "Room name cannot be empty", false);
-    } else {
-      movePet = new MovePet(roomName);
-      movePet.execute(model);
-      gameView.showCommandOutcome("Move Pet Result", movePet.getCommandResult(), false);
-    }
-    model.updateWorldView(false);
-    gameView.refresh();
-    if(movePet!=null && movePet.isCommandSuccessful()){
-      this.currentTurnNumber++;
-      checkAndPlayTurnForComputerPlayer();
-      checkIfGameIsOver();
-    }
-  }
-
-  @Override
-  public void checkAndPlayTurnForComputerPlayer(){
-    if (model.isCurrentPlayerComputer()) {
-      CommandsInterface playTurnForComputerPlayer = new PlayTurnForComputerPlayer();
-      playTurnForComputerPlayer.execute(model);
-      gameView.showCommandOutcome("Computer Player Turn Details", playTurnForComputerPlayer.getCommandResult(),
-              false);
+    if (!checkIfGameIsOver()) {
+      CommandsInterface movePet = null;
+      String roomName = gameView.showMovePetDialog();
+      if (roomName == null) {
+        gameView.showCommandOutcome("CANCELLED", "Move pet cancelled", false);
+      } else if ("".equals(roomName)) {
+        gameView.showCommandOutcome("ERROR", "Room name cannot be empty", false);
+      } else {
+        movePet = new MovePet(roomName);
+        movePet.execute(model);
+        gameView.showCommandOutcome("Move Pet Result", movePet.getCommandResult(), false);
+      }
+      if (movePet != null && movePet.isCommandSuccessful()) {
+        this.currentTurnNumber++;
+        checkAndPlayTurnForComputerPlayer();
+        showGameOverMessage();
+      }
       model.updateWorldView(false);
       gameView.refresh();
-      if(playTurnForComputerPlayer.isCommandSuccessful()){
-        this.currentTurnNumber++;
-        checkIfGameIsOver();
-      }
-    }
-    if(model.isCurrentPlayerComputer()){
-      checkAndPlayTurnForComputerPlayer();
+    } else {
+      gameView.showCommandOutcome("Game Over!", "No more turns allowed. Start a new game.", false);
     }
   }
 
   @Override
-  public int getTurnNumber(){
-    return this.currentTurnNumber;
+  public void checkAndPlayTurnForComputerPlayer() {
+    if (!checkIfGameIsOver()) {
+      if (model.isCurrentPlayerComputer()) {
+        CommandsInterface playTurnForComputerPlayer = new PlayTurnForComputerPlayer();
+        playTurnForComputerPlayer.execute(model);
+        gameView.showCommandOutcome("Computer Player Turn Details",
+                playTurnForComputerPlayer.getCommandResult(),
+                false);
+        if (playTurnForComputerPlayer.isCommandSuccessful()) {
+          this.currentTurnNumber++;
+          showGameOverMessage();
+        }
+        model.updateWorldView(false);
+        gameView.refresh();
+      }
+      if (model.isCurrentPlayerComputer()) {
+        checkAndPlayTurnForComputerPlayer();
+      }
+    }
   }
 
-  private void checkIfGameIsOver(){
-    if(model.isGameOver()){
-      gameView.showCommandOutcome("Game Over!",model.getWinner(), false);
-    } else if(this.currentTurnNumber >= this.maxNumberOfTurns){
-      gameView.showCommandOutcome("Game Over!", "Target has escaped alive!", false);
-    }
-    gameView.refresh();
+  @Override
+  public int getNumTurnsRemaining() {
+    return maxNumberOfTurns - currentTurnNumber;
   }
+
 }

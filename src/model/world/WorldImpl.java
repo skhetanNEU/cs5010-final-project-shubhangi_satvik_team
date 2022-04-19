@@ -41,7 +41,6 @@ public class WorldImpl implements WorldInterface {
   private final List<PlayerInterface> players;
 
   private PlayerInterface currentTurn;
-  private int currentTurnNumber;
 
   private int dfsStartRoom;
   private final Stack<Integer> dfsStack;
@@ -107,7 +106,6 @@ public class WorldImpl implements WorldInterface {
     this.players = new ArrayList<>();
     this.currentTurn = null;
     this.random = random;
-    this.currentTurnNumber = 0;
 
     initializeRooms(roomCoordinates, roomNames, worldCoordinates);
     initializeWeapons(numRooms, weaponNames, weaponDamageValues, weaponRoomIds);
@@ -364,7 +362,6 @@ public class WorldImpl implements WorldInterface {
   private PlayerInterface getNextTurnPlayer() {
     int playerIndex = players.indexOf(currentTurn);
     int nextPlayerIndex = (playerIndex + 1) % this.players.size();
-    currentTurnNumber++;
     return players.get(nextPlayerIndex);
   }
 
@@ -866,10 +863,10 @@ public class WorldImpl implements WorldInterface {
   }
 
   @Override
-  public String getWinner(){
+  public String getWinner() {
     checkIfPlayersExistToPlayGame();
-    if(this.targetPlayer.getTargetPlayerHealth() == 0){
-      return "Player "+this.getCurrentPlayerName()+" has killed the target and won the game";
+    if (this.targetPlayer.getTargetPlayerHealth() == 0) {
+      return "Player " + this.getCurrentPlayerName() + " has killed the target and won the game";
     }
     return "";
   }

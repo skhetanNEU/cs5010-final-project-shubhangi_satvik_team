@@ -1,5 +1,6 @@
 package view;
 
+import controller.FeatureInterface;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -21,18 +22,22 @@ import model.world.ReadOnlyWorldInterface;
 public class GameMessages extends JPanel {
 
   ReadOnlyWorldInterface model;
+  FeatureInterface listener;
   JLabel numTurns;
   JLabel currentTurnName;
   JTextArea targetPlayerInfo;
-  JTextArea currentPlayerInfo;
   JTextArea currentPlayerRoomInfo;
 
 
-  public GameMessages(ReadOnlyWorldInterface model) {
+  public GameMessages(ReadOnlyWorldInterface model, FeatureInterface listener) {
     if (model == null) {
       throw new IllegalArgumentException("Model cannot be null");
     }
+    if (listener == null) {
+      throw new IllegalArgumentException("Controller cannot be null");
+    }
     this.model = model;
+    this.listener = listener;
     initialize();
   }
 
@@ -233,8 +238,7 @@ public class GameMessages extends JPanel {
   }
 
   public void updateGameDetails() {
-    // TODO
-    // numTurns.setText(listener.getNumOfTurnsLeft());
+    numTurns.setText(String.valueOf(listener.getNumTurnsRemaining()));
     currentTurnName.setText(model.getCurrentPlayerName());
     targetPlayerInfo.setText(model.getTargetPlayerDetails());
     currentPlayerRoomInfo.setText(model.getCurrentPlayerRoomInformation());

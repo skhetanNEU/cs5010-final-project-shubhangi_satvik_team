@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -73,7 +74,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     // add(scrollPane1)
     container.add(gameBoard, BorderLayout.CENTER);
 
-    this.messages = new GameMessages(model);
+    this.messages = new GameMessages(model, listener);
     this.messages.setMinimumSize(new Dimension(400, 900));
     container.add(messages, BorderLayout.EAST);
 
@@ -225,8 +226,8 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     panel.setOpaque(false);
 
     JLabel availableWeaponLabel = new JLabel("Weapons available in room:");
-    JTextArea availableWeaponInfo = new JTextArea(
-            String.join("\n", model.getCurrentPlayerRoomWeapons(true)));
+    List<String> weapons = model.getCurrentPlayerRoomWeapons(true);
+    JTextArea availableWeaponInfo = new JTextArea(weapons.size() > 0 ? String.join("\n", weapons) : "No weapons available!");
 
     availableWeaponLabel.setFont(availableWeaponInfo.getFont().deriveFont(Font.BOLD));
     availableWeaponInfo.setForeground(Color.WHITE);
@@ -261,7 +262,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
             null);
 
     if (result == JOptionPane.OK_OPTION) {
-      return weaponList[weaponField.getSelectedIndex()];
+      return weaponList.length > 0 ? weaponList[weaponField.getSelectedIndex()] : "";
     } else {
       return null;
     }
@@ -313,8 +314,8 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     JPanel panel = new JPanel(new GridLayout(0, 1));
 
     JLabel availableWeaponLabel = new JLabel("Weapons available with player:");
-    JTextArea availableWeaponInfo = new JTextArea(
-            String.join("\n", model.getCurrentPlayerWeapons(true)));
+    List<String> weapons = model.getCurrentPlayerWeapons(true);
+    JTextArea availableWeaponInfo = new JTextArea(weapons.size() > 0 ? String.join("\n", weapons) : "No weapons available!");
 
     availableWeaponLabel.setFont(availableWeaponLabel.getFont().deriveFont(Font.BOLD));
     availableWeaponInfo.setForeground(Color.WHITE);
@@ -350,7 +351,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
             null);
 
     if (result == JOptionPane.OK_OPTION) {
-      return weaponList[weaponField.getSelectedIndex()];
+      return weaponList.length > 0 ? weaponList[weaponField.getSelectedIndex()] : "";
     } else {
       return null;
     }

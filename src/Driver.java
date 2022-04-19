@@ -11,7 +11,6 @@ public class Driver {
     Readable input = new InputStreamReader(System.in);
     Appendable output = System.out;
 
-
     try {
 
       if (args.length != 2) {

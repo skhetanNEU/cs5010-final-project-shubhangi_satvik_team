@@ -64,7 +64,6 @@ public class WorldBuilder {
     int lineNumber = 1;
 
     while (scanner.hasNext()) {
-
       if (lineNumber == 1) {
         try {
           worldCoordinates.add(scanner.nextInt());
