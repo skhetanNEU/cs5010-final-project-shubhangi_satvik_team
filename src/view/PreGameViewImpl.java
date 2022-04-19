@@ -13,7 +13,9 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -22,6 +24,7 @@ public class PreGameViewImpl extends JFrame implements PreGameViewInterface {
   private JMenuItem currentConfiguration;
   private JMenuItem newConfiguration;
   private JMenuItem quitGame;
+  private JMenuItem helperItem;
 
   public PreGameViewImpl() {
 
@@ -37,7 +40,6 @@ public class PreGameViewImpl extends JFrame implements PreGameViewInterface {
     JPanel container = new JPanel();
     container.setLayout(new GridLayout(2, 1));
     container.setBackground(Color.decode("#D7CCC8"));
-
 
     JPanel welcome = new JPanel();
     welcome.setLayout(new GridLayout(0, 1));
@@ -68,19 +70,20 @@ public class PreGameViewImpl extends JFrame implements PreGameViewInterface {
 
   }
 
-  /**
-   * Creates a menu bar for the game.
-   */
   private void setMenuBar() {
     JMenuBar menuBar = new JMenuBar();
     JMenu startMenu = new JMenu("Start");
+    JMenu helpMenu = new JMenu("Help");
     currentConfiguration = new JMenuItem("With current configuration");
     newConfiguration = new JMenuItem("Select new configuration");
     quitGame = new JMenuItem("Quit");
+    helperItem = new JMenuItem("How to play game");
     startMenu.add(currentConfiguration);
     startMenu.add(newConfiguration);
     startMenu.add(quitGame);
+    helpMenu.add(helperItem);
     menuBar.add(startMenu);
+    menuBar.add(helpMenu);
     setJMenuBar(menuBar);
   }
 
@@ -96,6 +99,31 @@ public class PreGameViewImpl extends JFrame implements PreGameViewInterface {
     return file;
   }
 
+  private void showHelperMenu() {
+
+    UIManager.put("OptionPane.background", Color.decode("#E8F6F3"));
+    UIManager.put("Panel.background", Color.TRANSLUCENT);
+    UIManager.put("Label.background", Color.TRANSLUCENT);
+
+    JPanel panel = new JPanel(new GridLayout(0, 2));
+
+    panel.add(new JLabel("View Player Details"));
+    panel.add(new JLabel(": Click on current player icon"));
+    panel.add(new JLabel("Move Player"));
+    panel.add(new JLabel(": Click on game board"));
+    panel.add(new JLabel("Pick Weapon"));
+    panel.add(new JLabel(": Press P"));
+    panel.add(new JLabel("Look Around"));
+    panel.add(new JLabel(": Press L"));
+    panel.add(new JLabel("Attack Target"));
+    panel.add(new JLabel(": Press A"));
+    panel.add(new JLabel("Move Pet"));
+    panel.add(new JLabel(": Press M"));
+
+    JOptionPane.showMessageDialog(this, panel, "How to play game", JOptionPane.PLAIN_MESSAGE, null);
+
+  }
+
   @Override
   public void addFeatures(FeatureInterface features) {
     currentConfiguration.addActionListener(l -> features.playGame(null));
@@ -106,6 +134,7 @@ public class PreGameViewImpl extends JFrame implements PreGameViewInterface {
       }
     });
     quitGame.addActionListener(l -> features.quitGame());
+    helperItem.addActionListener(l -> showHelperMenu());
   }
 
   @Override

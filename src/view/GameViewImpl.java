@@ -40,6 +40,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
   private JMenuItem currentConfiguration;
   private JMenuItem newConfiguration;
   private JMenuItem quitGame;
+  private JMenuItem helperItem;
   private final GameBoard gameBoard;
   private final GameMessages messages;
   private final AddPlayersPopup addPlayerPopup;
@@ -97,19 +98,20 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     pack();
   }
 
-  /**
-   * Creates a menu bar for the game.
-   */
   private void setMenuBar() {
     JMenuBar menuBar = new JMenuBar();
     JMenu startMenu = new JMenu("Start");
+    JMenu helpMenu = new JMenu("Help");
     currentConfiguration = new JMenuItem("With current configuration");
     newConfiguration = new JMenuItem("Select new configuration");
     quitGame = new JMenuItem("Quit");
+    helperItem = new JMenuItem("How to play game");
     startMenu.add(currentConfiguration);
     startMenu.add(newConfiguration);
     startMenu.add(quitGame);
+    helpMenu.add(helperItem);
     menuBar.add(startMenu);
+    menuBar.add(helpMenu);
     setJMenuBar(menuBar);
   }
 
@@ -125,6 +127,31 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     return file;
   }
 
+  private void showHelperMenu() {
+
+    UIManager.put("OptionPane.background", Color.decode("#E8F6F3"));
+    UIManager.put("Panel.background", Color.TRANSLUCENT);
+    UIManager.put("Label.background", Color.TRANSLUCENT);
+
+    JPanel panel = new JPanel(new GridLayout(0, 2));
+
+    panel.add(new JLabel("View Player Details"));
+    panel.add(new JLabel(": Click on current player icon"));
+    panel.add(new JLabel("Move Player"));
+    panel.add(new JLabel(": Click on game board"));
+    panel.add(new JLabel("Pick Weapon"));
+    panel.add(new JLabel(": Press P"));
+    panel.add(new JLabel("Look Around"));
+    panel.add(new JLabel(": Press L"));
+    panel.add(new JLabel("Attack Target"));
+    panel.add(new JLabel(": Press A"));
+    panel.add(new JLabel("Move Pet"));
+    panel.add(new JLabel(": Press M"));
+
+    JOptionPane.showMessageDialog(this, panel, "How to play game", JOptionPane.PLAIN_MESSAGE, null);
+
+  }
+
   @Override
   public void addFeatures(FeatureInterface features) {
 
@@ -136,6 +163,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
       }
     });
     quitGame.addActionListener(l -> features.quitGame());
+    helperItem.addActionListener(l -> showHelperMenu());
 
     this.addKeyListener(
       new KeyAdapter() {
@@ -363,12 +391,13 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     JLabel playerNameLabel;
     JTextField playerNameField;
     JLabel playerStartRoomLabel;
-    JTextField playerStartRoomField;
+    String[] roomList = model.getListOfRooms().toArray(new String[0]);
+    JComboBox<String> playerStartRoomField;
     JLabel playerWeaponLimitLabel;
     JTextField playerWeaponLimitField;
     JLabel playerTypeLabel;
-    JComboBox<String> playerTypeOptions;
     String[] items = {"Human", "Computer"};
+    JComboBox<String> playerTypeOptions;
 
     JLabel errorMessage;
 
@@ -399,8 +428,9 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
       panel.add(playerNameLabel);
       panel.add(playerNameField);
 
-      playerStartRoomLabel = new JLabel("Enter starting room name");
-      playerStartRoomField = new JTextField();
+      playerStartRoomLabel = new JLabel("Select starting room");
+      playerStartRoomField = new JComboBox<>(roomList);
+
       playerStartRoomLabel.setForeground(Color.WHITE);
       panel.add(playerStartRoomLabel);
       panel.add(playerStartRoomField);
@@ -446,14 +476,13 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
 
     private void clearForm() {
       playerNameField.setText(null);
-      playerStartRoomField.setText(null);
       playerWeaponLimitField.setText(null);
       errorMessage.setText(null);
     }
 
     private boolean addPlayer(FeatureInterface listener) {
       String outcome = listener.addPlayer(playerNameField.getText(),
-              playerStartRoomField.getText(),
+              roomList[playerStartRoomField.getSelectedIndex()],
               playerWeaponLimitField.getText(),
               playerTypeOptions.getSelectedIndex() == 1);
       if (!"".equalsIgnoreCase(outcome)) {
@@ -491,8 +520,6 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
             getParent().setEnabled(true);
             addPlayerPopup.setVisible(false);
             listener.checkAndPlayTurnForComputerPlayer();
-            // TODO
-            // listener.startPlaying();
           }
         }
       });
