@@ -51,7 +51,7 @@ public class Controller implements FeatureInterface {
     Readable chosen = defaultConfiguration;
     try {
       if (file != null) {
-        chosen = new FileReader("res/FriendsWorld.txt");
+        chosen = new FileReader(file);
       }
       RandomGenerator rand = new RandomClass(true);
       model = WorldImpl.getBuilder()
