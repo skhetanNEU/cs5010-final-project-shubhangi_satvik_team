@@ -491,6 +491,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
             clearForm();
             getParent().setEnabled(true);
             addPlayerPopup.setVisible(false);
+            listener.checkAndPlayTurnForComputerPlayer();
             // TODO
             // listener.startPlaying();
           }

@@ -124,7 +124,7 @@ public class Controller implements FeatureInterface {
     gameView.showCommandOutcome("Look Around Details", lookAround.getCommandResult(), true);
     model.updateWorldView(false);
     gameView.refresh();
-
+    checkAndPlayTurnForComputerPlayer();
   }
 
   @Override
@@ -144,6 +144,7 @@ public class Controller implements FeatureInterface {
     }
     model.updateWorldView(false);
     gameView.refresh();
+    checkAndPlayTurnForComputerPlayer();
   }
 
   @Override
@@ -160,6 +161,7 @@ public class Controller implements FeatureInterface {
     }
     model.updateWorldView(false);
     gameView.refresh();
+    checkAndPlayTurnForComputerPlayer();
   }
 
   @Override
@@ -176,6 +178,7 @@ public class Controller implements FeatureInterface {
     }
     model.updateWorldView(false);
     gameView.refresh();
+    checkAndPlayTurnForComputerPlayer();
   }
 
   @Override
@@ -192,5 +195,19 @@ public class Controller implements FeatureInterface {
     }
     model.updateWorldView(false);
     gameView.refresh();
+    checkAndPlayTurnForComputerPlayer();
+  }
+
+  @Override
+  public void checkAndPlayTurnForComputerPlayer(){
+    if (model.isCurrentPlayerComputer()) {
+      String result = model.takeTurnForComputerPlayer();
+      gameView.showCommandOutcome("Computer Player Turn Details", result, false);
+      model.updateWorldView(false);
+      gameView.refresh();
+    }
+    if(model.isCurrentPlayerComputer()){
+      checkAndPlayTurnForComputerPlayer();
+    }
   }
 }

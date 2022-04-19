@@ -22,4 +22,5 @@ public interface FeatureInterface{
   void attackTarget();
 
   void movePet();
+  void checkAndPlayTurnForComputerPlayer();
 }
