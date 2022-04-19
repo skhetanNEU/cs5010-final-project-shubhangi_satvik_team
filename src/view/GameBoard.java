@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
@@ -23,6 +24,7 @@ public class GameBoard extends JPanel {
     super.paintComponent(g);
     BufferedImage img = model.getWorldView();
     g.drawImage(img, 0, 0, null);
+    this.setPreferredSize(new Dimension(img.getWidth(),img.getHeight()));
   }
 
 }

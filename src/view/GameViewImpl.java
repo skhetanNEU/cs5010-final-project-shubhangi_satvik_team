@@ -63,17 +63,15 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     container.setLayout(new BorderLayout());
 
     this.gameBoard = new GameBoard(model);
-    this.gameBoard.setMinimumSize(new Dimension(400, 900));
-    this.gameBoard.setPreferredSize(new Dimension(600, 900));
+    // this.gameBoard.setPreferredSize(new Dimension(600, 900));
 
-    JScrollPane scrollPane1 = new JScrollPane(this.gameBoard,
-            JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-            JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-    scrollPane1.setEnabled(true);
-    scrollPane1.setPreferredSize(new Dimension(600, 900));
-    add(scrollPane1);
-
-    container.add(scrollPane1, BorderLayout.CENTER);
+    // JScrollPane scrollPane1 = new JScrollPane(this.gameBoard,
+    //         JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+    //         JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    // scrollPane1.setEnabled(true);
+    // scrollPane1.setPreferredSize(new Dimension(600, 900));
+    // add(scrollPane1)
+    container.add(gameBoard, BorderLayout.CENTER);
 
     this.messages = new GameMessages(model);
     this.messages.setMinimumSize(new Dimension(400, 900));
