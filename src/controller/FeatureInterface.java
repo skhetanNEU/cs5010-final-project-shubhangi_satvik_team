@@ -6,8 +6,6 @@ public interface FeatureInterface {
 
   void playGame(File file);
 
-  void startPlaying();
-
   void quitGame();
 
   String addPlayer(String playerName, String roomName, String maxNumberOfWeapons,
@@ -23,4 +21,5 @@ public interface FeatureInterface {
 
   void movePet();
   void checkAndPlayTurnForComputerPlayer();
+  int getTurnNumber();
 }

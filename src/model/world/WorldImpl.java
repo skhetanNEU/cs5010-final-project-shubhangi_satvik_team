@@ -866,9 +866,11 @@ public class WorldImpl implements WorldInterface {
   }
 
   @Override
-  public int getTurnNumber() {
-    return this.currentTurnNumber;
+  public String getWinner(){
+    checkIfPlayersExistToPlayGame();
+    if(this.targetPlayer.getTargetPlayerHealth() == 0){
+      return "Player "+this.getCurrentPlayerName()+" has killed the target and won the game";
+    }
+    return "";
   }
-
-
 }

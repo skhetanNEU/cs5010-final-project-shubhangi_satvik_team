@@ -77,5 +77,5 @@ public interface ReadOnlyWorldInterface {
 
   boolean isPlayerIconClicked(int r, int c);
 
-  int getTurnNumber();
+  String getWinner();
 }
