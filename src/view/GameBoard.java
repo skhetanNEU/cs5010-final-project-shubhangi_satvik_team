@@ -1,20 +1,21 @@
 package view;
 
-import java.awt.*;
+import controller.FeatureInterface;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-
-import controller.FeatureInterface;
 import model.world.ReadOnlyWorldInterface;
 
 public class GameBoard extends JPanel {
 
   private final ReadOnlyWorldInterface model;
-  FeatureInterface listener;
+  private FeatureInterface listener;
 
   public GameBoard(ReadOnlyWorldInterface model, FeatureInterface listener) {
     if (model == null) {

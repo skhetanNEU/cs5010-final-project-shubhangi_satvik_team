@@ -1,8 +1,8 @@
 import controller.Controller;
-
 import java.io.InputStreamReader;
-import view.PreGameView;
 import view.DefaultGameViewInterface;
+import view.PreGameView;
+
 
 public class Driver {
   public static void main(String[] args) {

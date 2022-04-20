@@ -9,18 +9,17 @@ import controller.commands.MovePet;
 import controller.commands.MovePlayer;
 import controller.commands.PickWeapon;
 import controller.commands.PlayTurnForComputerPlayer;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-
 import model.random.RandomClass;
 import model.random.RandomGenerator;
 import model.world.WorldImpl;
 import model.world.WorldInterface;
+import view.DefaultGameViewInterface;
 import view.MainGameView;
 import view.MainGameViewInterface;
-import view.DefaultGameViewInterface;
+
 
 public class Controller implements FeatureInterface {
 
