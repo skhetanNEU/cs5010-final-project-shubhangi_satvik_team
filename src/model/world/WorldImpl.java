@@ -523,6 +523,28 @@ public class WorldImpl implements WorldInterface {
             BufferedImage.TYPE_INT_ARGB);
     Graphics g = playersView.getGraphics();
 
+    // Show all players at all times
+    Set<String> roomsWithPlayers = new HashSet<>();
+    try {
+      BufferedImage others = ImageIO.read(new File("res/images/OtherPlayers.png"));
+      Image scaledOther = others.getScaledInstance(30, 20, Image.SCALE_SMOOTH);
+
+      for (PlayerInterface p : this.players) {
+        if (p != currentTurn) {
+          RoomInterface playerRoom = getRoomByRoomName(p.getPlayerRoomName());
+          if (!roomsWithPlayers.contains(playerRoom.getRoomName()) && !playerRoom.isPetInRoom()) {
+            List<Integer> playerRoomCoordinates = getRoomViewCoordinates(playerRoom);
+            g.drawImage(scaledOther,
+                    playerRoomCoordinates.get(2) + 5,
+                    playerRoomCoordinates.get(1) - 25, null);
+            roomsWithPlayers.add(playerRoom.getRoomName());
+          }
+        }
+      }
+    } catch (IOException e) {
+      // Do Nothing
+    }
+
     // Show current player and lookAround to world
     if (currentTurn != null) {
 
@@ -531,20 +553,15 @@ public class WorldImpl implements WorldInterface {
 
       try {
         BufferedImage player = ImageIO.read(new File("res/images/CurrentPlayer.png"));
-        BufferedImage others = ImageIO.read(new File("res/images/OtherPlayers.png"));
         BufferedImage weapons = ImageIO.read(new File("res/images/Weapons.png"));
 
         Image scaledPlayer = player.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-        Image scaledOther = others.getScaledInstance(30, 20, Image.SCALE_SMOOTH);
         Image scaledWeapon = weapons.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 
         g.drawImage(scaledPlayer, roomCoordinates.get(3) - 25, roomCoordinates.get(1) - 25, null);
 
         if (currentPlayerRoom.getAvailableWeapons(false).size() > 0) {
           g.drawImage(scaledWeapon, roomCoordinates.get(2) + 5, roomCoordinates.get(1) - 50, null);
-        }
-        if (currentPlayerRoom.getNumberOfPlayersInRoom() - 1 > 0) {
-          g.drawImage(scaledOther, roomCoordinates.get(2) + 5, roomCoordinates.get(1) - 25, null);
         }
 
         if (isLookAround) {
@@ -556,9 +573,6 @@ public class WorldImpl implements WorldInterface {
               int r2 = neiRoomCoordinates.get(1);
               int c1 = neiRoomCoordinates.get(2);
               if (!nei.isPetInRoom()) {
-                if (nei.getNumberOfPlayersInRoom() > 0) {
-                  g.drawImage(scaledOther, c1 + 5, r2 - 25, null);
-                }
                 if (nei.getAvailableWeapons(false).size() > 0) {
                   g.drawImage(scaledWeapon, c1 + 5, r2 - 50, null);
                 }
@@ -682,6 +696,7 @@ public class WorldImpl implements WorldInterface {
     PlayerInterface newPlayer = new PlayerImpl(playerName,
             weaponLimit, isComputerPlayer, startRoom);
     this.players.add(newPlayer);
+    startRoom.addPlayerToRoom(newPlayer);
     if (currentTurn == null) {
       currentTurn = newPlayer;
     }
