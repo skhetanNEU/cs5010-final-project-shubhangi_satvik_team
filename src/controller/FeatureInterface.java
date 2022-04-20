@@ -23,5 +23,7 @@ public interface FeatureInterface {
 
   void checkAndPlayTurnForComputerPlayer();
 
+  boolean checkIfGameIsOver();
+
   int getNumTurnsRemaining();
 }

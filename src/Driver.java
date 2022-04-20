@@ -1,9 +1,8 @@
 import controller.Controller;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+
 import java.io.InputStreamReader;
-import view.PreGameViewImpl;
-import view.PreGameViewInterface;
+import view.PreGameView;
+import view.DefaultGameViewInterface;
 
 public class Driver {
   public static void main(String[] args) {
@@ -22,7 +21,7 @@ public class Driver {
 
       int maxNumberOfTurns = Integer.parseInt(numberOfTurns);
 
-      PreGameViewInterface preGameView = new PreGameViewImpl();
+      DefaultGameViewInterface preGameView = new PreGameView();
       new Controller(preGameView, filePath, maxNumberOfTurns);
 
     } catch (IllegalStateException ise) {

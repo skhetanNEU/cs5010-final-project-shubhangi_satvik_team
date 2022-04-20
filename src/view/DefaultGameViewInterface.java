@@ -2,7 +2,7 @@ package view;
 
 import controller.FeatureInterface;
 
-public interface PreGameViewInterface {
+public interface DefaultGameViewInterface {
 
   void addFeatures(FeatureInterface features);
 

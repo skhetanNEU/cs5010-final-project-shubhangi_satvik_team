@@ -1,22 +1,31 @@
 package view;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+
+import controller.FeatureInterface;
 import model.world.ReadOnlyWorldInterface;
 
 public class GameBoard extends JPanel {
 
   private final ReadOnlyWorldInterface model;
+  FeatureInterface listener;
 
-  public GameBoard(ReadOnlyWorldInterface model) {
+  public GameBoard(ReadOnlyWorldInterface model, FeatureInterface listener) {
     if (model == null) {
       throw new IllegalArgumentException("Model cannot be null");
     }
+    if (listener == null) {
+      throw new IllegalArgumentException("Controller cannot be null");
+    }
     this.model = model;
-    setBackground(Color.WHITE);
+    this.listener = listener;
+    setBackground(Color.BLACK);
   }
 
   @Override
@@ -24,6 +33,18 @@ public class GameBoard extends JPanel {
     super.paintComponent(g);
     BufferedImage img = model.getWorldView();
     g.drawImage(img, 0, 0, null);
+    if (listener.checkIfGameIsOver()) {
+      int width = img.getWidth() / 2;
+      int height = img.getHeight() / 2;
+      try {
+        BufferedImage gameOver = ImageIO.read(new File("res/images/GameOver.png"));
+        Image scaledGameOver = gameOver.getScaledInstance(400, 400, Image.SCALE_SMOOTH);
+        g.drawImage(scaledGameOver, width - 200, height - 200, null);
+      } catch (IOException e) {
+        // TODO
+        // Do nothing?
+      }
+    }
     this.setPreferredSize(new Dimension(img.getWidth(), img.getHeight()));
   }
 

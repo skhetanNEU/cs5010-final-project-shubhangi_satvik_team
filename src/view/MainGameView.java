@@ -1,6 +1,7 @@
 package view;
 
 import controller.FeatureInterface;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,6 +13,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.List;
+
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -32,9 +34,10 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 import model.world.ReadOnlyWorldInterface;
 
-public class GameViewImpl extends JFrame implements GameViewInterface {
+public class MainGameView extends JFrame implements MainGameViewInterface {
 
   private final ReadOnlyWorldInterface model;
   private JMenuItem currentConfiguration;
@@ -45,7 +48,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
   private final GameMessages messages;
   private final AddPlayersPopup addPlayerPopup;
 
-  public GameViewImpl(ReadOnlyWorldInterface model, FeatureInterface listener) {
+  public MainGameView(ReadOnlyWorldInterface model, FeatureInterface listener) {
 
     super("Game Started");
 
@@ -64,7 +67,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     JPanel container = new JPanel();
     container.setLayout(new BorderLayout());
 
-    this.gameBoard = new GameBoard(model);
+    this.gameBoard = new GameBoard(model, listener);
     // this.gameBoard.setPreferredSize(new Dimension(600, 900));
 
     // JScrollPane scrollPane1 = new JScrollPane(this.gameBoard,
@@ -167,38 +170,38 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     helperItem.addActionListener(l -> showHelperMenu());
 
     this.addKeyListener(
-      new KeyAdapter() {
-        @Override
-        public void keyReleased(KeyEvent e) {
-          switch (e.getKeyCode()) {
-            case KeyEvent.VK_P:
-              features.pickWeapon();
-              break;
-            case KeyEvent.VK_A:
-              features.attackTarget();
-              break;
-            case KeyEvent.VK_M:
-              features.movePet();
-              break;
-            case KeyEvent.VK_L:
-              features.lookAround();
-              break;
-            default:
-              break;
-          }
-        }
-      }
+            new KeyAdapter() {
+              @Override
+              public void keyReleased(KeyEvent e) {
+                switch (e.getKeyCode()) {
+                  case KeyEvent.VK_P:
+                    features.pickWeapon();
+                    break;
+                  case KeyEvent.VK_A:
+                    features.attackTarget();
+                    break;
+                  case KeyEvent.VK_M:
+                    features.movePet();
+                    break;
+                  case KeyEvent.VK_L:
+                    features.lookAround();
+                    break;
+                  default:
+                    break;
+                }
+              }
+            }
     );
     gameBoard.addMouseListener(
-      new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent event) {
-          super.mouseClicked(event);
-          int row = event.getY();
-          int column = event.getX();
-          features.handleRoomClick(row, column);
-        }
-      }
+            new MouseAdapter() {
+              @Override
+              public void mouseClicked(MouseEvent event) {
+                super.mouseClicked(event);
+                int row = event.getY();
+                int column = event.getX();
+                features.handleRoomClick(row, column);
+              }
+            }
     );
 
     this.addPlayerPopup.addClickListener(features);
@@ -410,7 +413,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     JButton addNext;
     JButton startGame;
 
-    public AddPlayersPopup(GameViewImpl frame) {
+    public AddPlayersPopup(MainGameView frame) {
 
       super(frame, "Add Players to Game");
 

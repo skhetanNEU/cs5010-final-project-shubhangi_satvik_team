@@ -1,8 +1,6 @@
 package view;
 
-import java.util.List;
-
-public interface GameViewInterface extends PreGameViewInterface {
+public interface MainGameViewInterface extends DefaultGameViewInterface {
 
   void refresh();
 

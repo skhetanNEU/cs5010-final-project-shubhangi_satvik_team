@@ -471,21 +471,18 @@ public class WorldImpl implements WorldInterface {
   }
 
   private void drawWorld() {
-
     Graphics g = worldView.getGraphics();
     g.setFont(g.getFont().deriveFont(10f));
-    g.setColor(Color.WHITE);
+    g.setColor(Color.BLACK);
     g.fillRect(0, 0, worldView.getWidth(), worldView.getHeight());
-
     for (RoomInterface room : this.rooms) {
       List<Integer> roomCoordinates = getRoomViewCoordinates(room);
-      g.setColor(Color.BLACK);
+      g.setColor(Color.WHITE);
       g.drawRect(roomCoordinates.get(2), roomCoordinates.get(0),
               roomCoordinates.get(3) - roomCoordinates.get(2),
               roomCoordinates.get(1) - roomCoordinates.get(0));
       g.drawString(room.getRoomName(), roomCoordinates.get(2) + 5, roomCoordinates.get(0) + 15);
     }
-
   }
 
   private List<Integer> getRoomViewCoordinates(RoomInterface room) {
@@ -542,7 +539,8 @@ public class WorldImpl implements WorldInterface {
         }
       }
     } catch (IOException e) {
-      // Do Nothing
+      // TODO
+      // Do nothing?
     }
 
     // Show current player and lookAround to world
@@ -582,7 +580,8 @@ public class WorldImpl implements WorldInterface {
         }
 
       } catch (IOException e) {
-        // Do Nothing
+        // TODO
+        // Do nothing?
       }
     }
 
@@ -597,7 +596,8 @@ public class WorldImpl implements WorldInterface {
               targetRoomCoordinates.get(1) - 50,
               null);
     } catch (IOException e) {
-      // Do Nothing
+      // TODO
+      // Do nothing?
     }
 
   }
@@ -853,9 +853,8 @@ public class WorldImpl implements WorldInterface {
   public String getWinner() {
     checkIfPlayersExistToPlayGame();
     if (this.targetPlayer.getTargetPlayerHealth() == 0) {
-      return String.format("Player %s has killed the target and won the game",
-              getCurrentPlayerName());
+      return getCurrentPlayerName();
     }
-    return "No winner yet";
+    return null;
   }
 }

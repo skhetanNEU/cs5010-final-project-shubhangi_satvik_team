@@ -19,14 +19,14 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class PreGameViewImpl extends JFrame implements PreGameViewInterface {
+public class PreGameView extends JFrame implements DefaultGameViewInterface {
 
   private JMenuItem currentConfiguration;
   private JMenuItem newConfiguration;
   private JMenuItem quitGame;
   private JMenuItem helperItem;
 
-  public PreGameViewImpl() {
+  public PreGameView() {
 
     super("Welcome to Milestone 4");
     this.setLayout(new BorderLayout());

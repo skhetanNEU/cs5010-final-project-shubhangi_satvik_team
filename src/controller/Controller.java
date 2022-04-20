@@ -9,27 +9,29 @@ import controller.commands.MovePet;
 import controller.commands.MovePlayer;
 import controller.commands.PickWeapon;
 import controller.commands.PlayTurnForComputerPlayer;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+
 import model.random.RandomClass;
 import model.random.RandomGenerator;
 import model.world.WorldImpl;
 import model.world.WorldInterface;
-import view.GameViewImpl;
-import view.GameViewInterface;
-import view.PreGameViewInterface;
+import view.MainGameView;
+import view.MainGameViewInterface;
+import view.DefaultGameViewInterface;
 
 public class Controller implements FeatureInterface {
 
   private WorldInterface model;
-  private GameViewInterface gameView;
-  private final PreGameViewInterface preGameView;
+  private MainGameViewInterface gameView;
+  private final DefaultGameViewInterface preGameView;
   private final int maxNumberOfTurns;
   private String defaultConfigurationFilePath;
   private int currentTurnNumber;
 
-  public Controller(PreGameViewInterface preGameView,
+  public Controller(DefaultGameViewInterface preGameView,
                     String worldConfigurationPath, int maxNumberOfTurns) {
     if (preGameView == null) {
       throw new IllegalArgumentException("View cannot be null");
@@ -49,13 +51,16 @@ public class Controller implements FeatureInterface {
     this.currentTurnNumber = 0;
   }
 
-  private boolean checkIfGameIsOver() {
+  @Override
+  public boolean checkIfGameIsOver() {
     return model.isGameOver() || this.currentTurnNumber >= this.maxNumberOfTurns;
   }
 
   private void showGameOverMessage() {
     if (checkIfGameIsOver()) {
-      String message = model.isGameOver() ? model.getWinner() : "Target has escaped alive!";
+      String message = model.isGameOver()
+              ? String.format("Player %s has killed the target and won the game", model.getWinner())
+              : "Target has escaped alive!";
       gameView.refresh();
       gameView.showCommandOutcome("Game Over!", message, false);
     }
@@ -81,7 +86,7 @@ public class Controller implements FeatureInterface {
               .setRandomGenerator(rand)
               .build();
       quitGame();
-      gameView = new GameViewImpl(model, this);
+      gameView = new MainGameView(model, this);
       gameView.makeVisible();
       gameView.addFeatures(this);
       currentTurnNumber = 0;

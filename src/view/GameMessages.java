@@ -152,7 +152,8 @@ public class GameMessages extends JPanel {
       content.add(otherKey, c);
 
     } catch (IOException e) {
-      // Do nothing
+      // TODO
+      // Do nothing?
     }
 
     JLabel numTurnLabel = new JLabel("Number of Turns Remaining");
