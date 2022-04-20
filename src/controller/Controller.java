@@ -26,22 +26,22 @@ public class Controller implements FeatureInterface {
   private GameViewInterface gameView;
   private final PreGameViewInterface preGameView;
   private final int maxNumberOfTurns;
-  private Readable defaultConfiguration;
+  private String defaultConfigurationFilePath;
   private int currentTurnNumber;
 
   public Controller(PreGameViewInterface preGameView,
-                    Readable worldConfiguration, int maxNumberOfTurns) {
+                    String worldConfigurationPath, int maxNumberOfTurns) {
     if (preGameView == null) {
       throw new IllegalArgumentException("View cannot be null");
     }
-    if (worldConfiguration == null) {
+    if (worldConfigurationPath == null || "".equals(worldConfigurationPath)) {
       throw new IllegalArgumentException("Invalid configuration file");
     }
     if (maxNumberOfTurns <= 0) {
       throw new IllegalArgumentException("Number of turns cannot be non-positive");
     }
 
-    this.defaultConfiguration = worldConfiguration;
+    this.defaultConfigurationFilePath = worldConfigurationPath;
     this.maxNumberOfTurns = maxNumberOfTurns;
     this.preGameView = preGameView;
     this.preGameView.addFeatures(this);
@@ -63,10 +63,13 @@ public class Controller implements FeatureInterface {
 
   @Override
   public void playGame(File file) {
-    Readable chosen = defaultConfiguration;
+    Readable chosen = null;
     try {
       if (file != null) {
         chosen = new FileReader(file);
+      }
+      else{
+        chosen = new FileReader(defaultConfigurationFilePath);
       }
       RandomGenerator rand = new RandomClass(true);
       model = WorldImpl.getBuilder()

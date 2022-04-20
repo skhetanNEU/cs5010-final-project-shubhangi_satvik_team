@@ -21,15 +21,12 @@ public class Driver {
       String numberOfTurns = args[1];
 
       int maxNumberOfTurns = Integer.parseInt(numberOfTurns);
-      FileReader worldConfiguration = new FileReader(filePath);
 
       PreGameViewInterface preGameView = new PreGameViewImpl();
-      new Controller(preGameView, worldConfiguration, maxNumberOfTurns);
+      new Controller(preGameView, filePath, maxNumberOfTurns);
 
     } catch (IllegalStateException ise) {
       System.out.println("ERROR: Cannot create the world due to incorrect file.");
-    } catch (FileNotFoundException fnf) {
-      System.out.println("ERROR: Specified world configuration file not found.");
     } catch (NumberFormatException nfe) {
       System.out.println("ERROR: Number of turns must be a number.");
     } catch (IllegalArgumentException iae) {
