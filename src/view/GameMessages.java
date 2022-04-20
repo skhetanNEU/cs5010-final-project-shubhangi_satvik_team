@@ -22,22 +22,16 @@ import model.world.ReadOnlyWorldInterface;
 public class GameMessages extends JPanel {
 
   ReadOnlyWorldInterface model;
-  FeatureInterface listener;
-  JLabel numTurns;
   JLabel currentTurnName;
   JTextArea targetPlayerInfo;
   JTextArea currentPlayerRoomInfo;
 
 
-  public GameMessages(ReadOnlyWorldInterface model, FeatureInterface listener) {
+  public GameMessages(ReadOnlyWorldInterface model) {
     if (model == null) {
       throw new IllegalArgumentException("Model cannot be null");
     }
-    if (listener == null) {
-      throw new IllegalArgumentException("Controller cannot be null");
-    }
     this.model = model;
-    this.listener = listener;
     initialize();
   }
 
@@ -156,18 +150,6 @@ public class GameMessages extends JPanel {
       // Do nothing?
     }
 
-    JLabel numTurnLabel = new JLabel("Number of Turns Remaining");
-    numTurnLabel.setOpaque(true);
-    numTurnLabel.setForeground(Color.decode("#512DA8"));
-    numTurnLabel.setBackground(Color.decode("#EDE7F6"));
-    numTurnLabel.setFont(numTurnLabel.getFont().deriveFont(Font.BOLD, 14));
-    numTurnLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-    numTurns = new JLabel("TODO");
-    numTurns.setForeground(Color.WHITE);
-    numTurns.setFont(numTurns.getFont().deriveFont(Font.BOLD, 12));
-    numTurns.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
     JLabel currentTurnLabel = new JLabel("Current Turn");
     currentTurnLabel.setOpaque(true);
     currentTurnLabel.setForeground(Color.decode("#B9770E"));
@@ -218,28 +200,23 @@ public class GameMessages extends JPanel {
 
     c.insets = new Insets(10, 0, 5, 0);
     c.gridy = 5;
-    content.add(numTurnLabel, c);
+    content.add(currentTurnLabel, c);
     c.insets = new Insets(5, 0, 5, 0);
     c.gridy = 6;
-    content.add(numTurns, c);
-    c.gridy = 7;
-    content.add(currentTurnLabel, c);
-    c.gridy = 8;
     content.add(currentTurnName, c);
-    c.gridy = 9;
+    c.gridy = 7;
     content.add(targetPlayerLabel, c);
-    c.gridy = 10;
+    c.gridy = 8;
     content.add(targetPlayerInfo, c);
-    c.gridy = 11;
+    c.gridy = 9;
     content.add(currentPlayerRoomLabel, c);
-    c.gridy = 12;
+    c.gridy = 10;
     content.add(currentPlayerRoomInfo, c);
 
     add(content, BorderLayout.NORTH);
   }
 
   public void updateGameDetails() {
-    numTurns.setText(String.valueOf(listener.getNumTurnsRemaining()));
     currentTurnName.setText(model.getCurrentPlayerName());
     targetPlayerInfo.setText(model.getTargetPlayerDetails());
     currentPlayerRoomInfo.setText(model.getCurrentPlayerRoomInformation());

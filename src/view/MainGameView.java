@@ -75,7 +75,7 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
     // add(scrollPane1)
     container.add(gameBoard, BorderLayout.CENTER);
 
-    this.messages = new GameMessages(model, listener);
+    this.messages = new GameMessages(model);
     this.messages.setMinimumSize(new Dimension(400, 900));
     container.add(messages, BorderLayout.EAST);
 

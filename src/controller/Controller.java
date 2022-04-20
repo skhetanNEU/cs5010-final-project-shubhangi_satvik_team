@@ -66,11 +66,6 @@ public class Controller implements FeatureInterface {
   }
 
   @Override
-  public int getNumTurnsRemaining() {
-    return maxNumberOfTurns - currentTurnNumber;
-  }
-
-  @Override
   public void playGame(File file) {
     try {
       Readable chosen;

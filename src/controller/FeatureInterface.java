@@ -25,5 +25,4 @@ public interface FeatureInterface {
 
   boolean checkIfGameIsOver();
 
-  int getNumTurnsRemaining();
 }
