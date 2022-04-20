@@ -5,7 +5,6 @@ import model.room.RoomInterface;
 /**
  * PetImpl represents the target pet in the world.
  * It consists of target pet name and current location.
- *
  */
 public class PetImpl implements PetInterface {
 
@@ -23,10 +22,10 @@ public class PetImpl implements PetInterface {
           throws IllegalArgumentException {
 
     if (petName == null || ("").equals(petName)) {
-      throw new IllegalArgumentException("ERROR: Target pet name cannot be empty");
+      throw new IllegalArgumentException("Pet name cannot be null/empty.");
     }
     if (petRoom == null || petRoom.getRoomId() != 0) {
-      throw new IllegalArgumentException("ERROR: Target pet cannot be in a room with id not 0");
+      throw new IllegalArgumentException("Pet cannot be in a room with id not 0.");
     }
     petRoom.updatePetPresence(true);
     this.petName = petName;
@@ -46,7 +45,7 @@ public class PetImpl implements PetInterface {
   @Override
   public void setPetRoom(RoomInterface newRoom) {
     if (newRoom == null) {
-      throw new IllegalArgumentException("ERROR: Room cannot be null");
+      throw new IllegalArgumentException("Room cannot be null.");
     }
     this.petRoom.updatePetPresence(false);
     newRoom.updatePetPresence(true);
@@ -55,10 +54,7 @@ public class PetImpl implements PetInterface {
 
   @Override
   public String toString() {
-    return String.format("---------- Target Pet Details ----------\n"
-            + "Name: %s\nCurrent Room: %s",
-            petName,
-            this.getPetRoomName());
+    return String.format("Pet Name: %s\nPet Current Room: %s", petName, this.getPetRoomName());
   }
 
 }

@@ -34,10 +34,10 @@ public class RoomImpl implements RoomInterface {
   public RoomImpl(int roomId, String roomName, List<Integer> roomCoordinates)
           throws IllegalArgumentException {
     if (roomId < 0) {
-      throw new IllegalArgumentException("ERROR: Room Id cannot be negative");
+      throw new IllegalArgumentException("Room id cannot be negative");
     }
     if (roomName == null || "".equals(roomName)) {
-      throw new IllegalArgumentException("ERROR: Room name cannot be empty");
+      throw new IllegalArgumentException("Room name cannot be null/empty");
     }
     validateRoomCoordinates(roomCoordinates);
     this.roomId = roomId;
@@ -62,12 +62,12 @@ public class RoomImpl implements RoomInterface {
           throws IllegalArgumentException {
     for (int c : roomCoordinates) {
       if (c < 0) {
-        throw new IllegalArgumentException("ERROR: Room coordinates cannot be negative");
+        throw new IllegalArgumentException("Room coordinates cannot be negative.");
       }
     }
     if (roomCoordinates.get(2) <= roomCoordinates.get(0)
             || roomCoordinates.get(3) <= roomCoordinates.get(1)) {
-      throw new IllegalArgumentException("ERROR: Room coordinates are not in order");
+      throw new IllegalArgumentException("Room coordinates are out of order.");
     }
   }
 
@@ -77,12 +77,11 @@ public class RoomImpl implements RoomInterface {
    * @return list of players in the room.
    */
   private String getPlayersInRoom() {
-    if (playersInSpace == null || playersInSpace.size() == 0) {
-      return "No players";
-    }
     List<String> players = new ArrayList<>();
-    for (PlayerInterface p : playersInSpace) {
-      players.add(p.getPlayerName());
+    if (playersInSpace != null && playersInSpace.size() != 0) {
+      for (PlayerInterface p : playersInSpace) {
+        players.add(p.getPlayerName());
+      }
     }
     return String.join(", ", players);
   }
@@ -123,21 +122,17 @@ public class RoomImpl implements RoomInterface {
   }
 
   @Override
-  public String getRoomNeighbours(boolean includeInvisibleRooms) {
-    if (roomNeighbours == null || roomNeighbours.size() == 0) {
-      return "No neighbours";
-    }
-    Collections.sort(roomNeighbours);
+  public List<String> getRoomNeighbours(boolean includeInvisibleRooms) {
     List<String> neighbours = new ArrayList<>();
-    for (RoomInterface nei : roomNeighbours) {
-      if ((includeInvisibleRooms) || (!includeInvisibleRooms && !nei.isPetInRoom())) {
-        neighbours.add(nei.getRoomName());
+    if (roomNeighbours != null && roomNeighbours.size() != 0) {
+      Collections.sort(roomNeighbours);
+      for (RoomInterface nei : roomNeighbours) {
+        if ((includeInvisibleRooms) || (!includeInvisibleRooms && !nei.isPetInRoom())) {
+          neighbours.add(nei.getRoomName());
+        }
       }
     }
-    if (neighbours.size() == 0) {
-      return "No neighbours";
-    }
-    return String.join(", ", neighbours);
+    return neighbours;
   }
 
   @Override
@@ -159,8 +154,7 @@ public class RoomImpl implements RoomInterface {
       }
     }
     if (!flag) {
-      throw new IllegalArgumentException(
-              "Error: Unable to move. Destination Room is not a neighbour of current room.");
+      throw new IllegalArgumentException("Desired room is not a neighbour of current room.");
     }
   }
 
@@ -180,8 +174,7 @@ public class RoomImpl implements RoomInterface {
   @Override
   public WeaponInterface getWeaponByWeaponName(String weaponName) {
     if (weaponName == null || "".equals(weaponName)) {
-      throw new IllegalArgumentException(
-              "ERROR: Unable to get weapon from room. Weapon name cannot be empty.");
+      throw new IllegalArgumentException("Weapon name cannot be empty.");
     }
     WeaponInterface weapon = null;
     for (WeaponInterface w : weaponsInSpace) {
@@ -191,8 +184,7 @@ public class RoomImpl implements RoomInterface {
       }
     }
     if (weapon == null) {
-      throw new IllegalArgumentException(
-              "ERROR: Unable to get weapon from room. Weapon does not exist in room");
+      throw new IllegalArgumentException("Weapon does not exist in room.");
     }
 
     return new WeaponImpl(weapon.getWeaponId(), weapon.getWeaponName(), weapon.getWeaponValue());
@@ -201,14 +193,11 @@ public class RoomImpl implements RoomInterface {
   @Override
   public void addWeaponToRoom(int weaponId, String weaponName, int weaponDamageValue) {
     if (weaponName == null || "".equals(weaponName)) {
-      throw new IllegalArgumentException(
-              "ERROR: Unable to add weapon to room. Weapon name cannot be empty.");
+      throw new IllegalArgumentException("Weapon name cannot be empty.");
     } else if (weaponId < 0) {
-      throw new IllegalArgumentException(
-              "ERROR: Unable to add weapon to room. Weapon id cannot be negative.");
+      throw new IllegalArgumentException("Weapon id cannot be negative.");
     } else if (weaponDamageValue <= 0) {
-      throw new IllegalArgumentException(
-              "ERROR: Unable to add weapon to room. Weapon details have invalid values.");
+      throw new IllegalArgumentException("Weapon damage value cannot be non-positive.");
     }
     WeaponInterface newWeapon = new WeaponImpl(weaponId, weaponName, weaponDamageValue);
     if (!weaponsInSpace.contains((newWeapon))) {
@@ -219,12 +208,10 @@ public class RoomImpl implements RoomInterface {
   @Override
   public void removeWeaponFromRoom(WeaponInterface weapon) {
     if (weapon == null) {
-      throw new IllegalArgumentException(
-              "ERROR: Unable to remove weapon from room. Weapon cannot be null.");
+      throw new IllegalArgumentException("Weapon cannot be null.");
     }
     if (!weaponsInSpace.contains(weapon)) {
-      throw new IllegalArgumentException(
-              "ERROR: Unable to remove weapon from room. Weapon does not exist in room");
+      throw new IllegalArgumentException("Weapon does not exist in room.");
     } else {
       weaponsInSpace.remove(weapon);
     }
@@ -241,8 +228,7 @@ public class RoomImpl implements RoomInterface {
   @Override
   public void addPlayerToRoom(PlayerInterface player) {
     if (player == null) {
-      throw new IllegalArgumentException(
-              "ERROR: Unable to add player to room. Player cannot be null.");
+      throw new IllegalArgumentException("Player cannot be null.");
     }
     if (!playersInSpace.contains((player))) {
       playersInSpace.add(player);
@@ -252,14 +238,12 @@ public class RoomImpl implements RoomInterface {
   @Override
   public void removePlayerFromRoom(PlayerInterface player) {
     if (player == null) {
-      throw new IllegalArgumentException(
-              "ERROR: Unable to remove player from room. Player cannot be null.");
+      throw new IllegalArgumentException("Player cannot be null.");
     }
     if (playersInSpace.contains((player))) {
       playersInSpace.remove(player);
     } else {
-      throw new IllegalArgumentException(
-              "ERROR: Unable to remove player from room. Player does not exist in room.");
+      throw new IllegalArgumentException("Player does not exist in room.");
     }
   }
 
@@ -268,7 +252,9 @@ public class RoomImpl implements RoomInterface {
     return String.format("Name: %s\nNeighbours: %s\nWeapons: %s"
                     + "\nPlayers: %s\nIs Target Present: %s\nIs Pet Present: %s",
             roomName,
-            getRoomNeighbours(false),
+            getRoomNeighbours(false).size() > 0
+                    ? String.join(", ", getRoomNeighbours(false))
+                    : '-',
             weaponsInSpace.size() > 0
                     ? String.join(", ", getAvailableWeapons(true))
                     : '-',

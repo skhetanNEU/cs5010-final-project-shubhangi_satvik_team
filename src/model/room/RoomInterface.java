@@ -58,13 +58,7 @@ public interface RoomInterface extends Comparable<RoomInterface> {
    */
   void updatePetPresence(boolean isPresent);
 
-  /**
-   * Gets the neighbours of the room.
-   *
-   * @param includeInvisibleRooms represents if neighbours should include rooms with pets
-   * @return list of neighbours of the room
-   */
-  String getRoomNeighbours(boolean includeInvisibleRooms);
+  List<String> getRoomNeighbours(boolean includeInvisibleRooms);
 
   /**
    * Sets the neighbours of the room.

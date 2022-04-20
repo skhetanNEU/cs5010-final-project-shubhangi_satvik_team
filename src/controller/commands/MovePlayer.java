@@ -24,7 +24,7 @@ public class MovePlayer extends AbstractCommands {
       commandResult.append(model.handleRoomClick(row, col));
       isCommandSuccessful = true;
     } catch (IllegalArgumentException exception) {
-      commandResult.append(exception.getMessage());
+      commandResult.append("Unable to move player. ").append(exception.getMessage());
     }
   }
 }

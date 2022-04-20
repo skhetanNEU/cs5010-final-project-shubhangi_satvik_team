@@ -22,7 +22,7 @@ public class AttackTarget extends AbstractCommands {
       commandResult.append(model.attackTargetPlayer(this.weaponName));
       isCommandSuccessful = true;
     } catch (IllegalArgumentException exception) {
-      commandResult.append(exception.getMessage());
+      commandResult.append("Unable to attack target. ").append(exception.getMessage());
     }
   }
 }

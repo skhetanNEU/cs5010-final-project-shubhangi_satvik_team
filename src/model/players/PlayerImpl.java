@@ -16,7 +16,6 @@ public class PlayerImpl implements PlayerInterface {
 
   private static final WeaponInterface weaponPoke = new WeaponImpl(99999, "Poke", 1);
 
-  private final int playerId;
   private final String playerName;
   private final int weaponLimit;
   private final PlayerType playerType;
@@ -27,25 +26,21 @@ public class PlayerImpl implements PlayerInterface {
   /**
    * Constructs a Player object that represents the normal player.
    *
-   * @param playerId    represents the id of the player
    * @param playerName  represents the name of the player
    * @param weaponLimit represents the max limit on number of weapons a player can pick
    * @param isComputer  represents if the player is a computer player or not
    * @param currentRoom represents the current room in which the player is
    * @throws IllegalArgumentException if parameters are not valid
    */
-  public PlayerImpl(int playerId, String playerName, int weaponLimit,
+  public PlayerImpl(String playerName, int weaponLimit,
                     boolean isComputer, RoomInterface currentRoom) {
-    if (playerId < 0) {
-      throw new IllegalArgumentException("ERROR: Player id cannot be negative");
-    } else if (playerName == null || "".equals(playerName)) {
-      throw new IllegalArgumentException("ERROR: Player name cannot be empty");
+    if (playerName == null || "".equals(playerName)) {
+      throw new IllegalArgumentException("Player name cannot be null/empty.");
     } else if (weaponLimit < 0 && weaponLimit != -1) {
-      throw new IllegalArgumentException("ERROR: Player weapon limit cannot be negative");
+      throw new IllegalArgumentException("Player weapon limit cannot be negative.");
     } else if (currentRoom == null) {
-      throw new IllegalArgumentException("ERROR: Player current room cannot be null");
+      throw new IllegalArgumentException("Player current room cannot be null.");
     }
-    this.playerId = playerId;
     this.playerName = playerName;
     this.weaponLimit = weaponLimit;
     this.playerType = isComputer ? PlayerType.COMPUTER : PlayerType.HUMAN;
@@ -71,18 +66,20 @@ public class PlayerImpl implements PlayerInterface {
   @Override
   public void setPlayerRoom(RoomInterface room) {
     if (room == null) {
-      throw new IllegalArgumentException(
-              "ERROR: Room cannot be null.");
+      throw new IllegalArgumentException("Room cannot be null.");
     }
-    this.currentRoom = room;
+    currentRoom.checkIfRoomNeighbour(room.getRoomName(), false);
+    currentRoom.removePlayerFromRoom(this);
+    room.addPlayerToRoom(this);
+    currentRoom = room;
   }
 
   @Override
   public void addWeaponToPlayer(WeaponInterface weapon) {
     if (weapon == null) {
-      throw new IllegalArgumentException("ERROR: Unable to pick weapon. Weapon cannot be null.");
+      throw new IllegalArgumentException("Weapon cannot be null.");
     } else if (weaponLimit != -1 && playerWeapons != null && playerWeapons.size() == weaponLimit) {
-      throw new IllegalArgumentException("ERROR: Unable to pick weapon. Max weapon limit reached.");
+      throw new IllegalArgumentException("Max weapon limit reached.");
     } else if (playerWeapons != null && !playerWeapons.contains(weapon)) {
       playerWeapons.add(weapon);
     }
@@ -91,7 +88,7 @@ public class PlayerImpl implements PlayerInterface {
   @Override
   public WeaponInterface removeWeaponFromPlayer(String weaponName) {
     if (weaponName == null || "".equals(weaponName)) {
-      throw new IllegalArgumentException("ERROR: Weapon cannot be null or empty.");
+      throw new IllegalArgumentException("Weapon name cannot be null/empty.");
     } else if (
             ((isComputerPlayer() && (playerWeapons == null || playerWeapons.size() == 0))
                     || (!isComputerPlayer())
@@ -108,7 +105,7 @@ public class PlayerImpl implements PlayerInterface {
         }
       }
     }
-    throw new IllegalArgumentException("ERROR: Player does not have the weapon.");
+    throw new IllegalArgumentException("Player does not have the weapon.");
   }
 
   @Override

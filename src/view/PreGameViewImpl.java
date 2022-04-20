@@ -104,6 +104,7 @@ public class PreGameViewImpl extends JFrame implements PreGameViewInterface {
     UIManager.put("OptionPane.background", Color.decode("#E8F6F3"));
     UIManager.put("Panel.background", Color.TRANSLUCENT);
     UIManager.put("Label.background", Color.TRANSLUCENT);
+    UIManager.put("Label.foreground", Color.BLACK);
 
     JPanel panel = new JPanel(new GridLayout(0, 2));
 

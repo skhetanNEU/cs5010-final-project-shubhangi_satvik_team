@@ -25,14 +25,13 @@ public class TargetPlayerImpl implements TargetPlayerInterface {
   public TargetPlayerImpl(String playerName, int playerHealth, RoomInterface playerLocation)
           throws IllegalArgumentException {
     if (playerName == null || ("").equals(playerName)) {
-      throw new IllegalArgumentException("ERROR: Target player name cannot be empty");
+      throw new IllegalArgumentException("Target player name cannot be null/empty.");
     }
     if (playerHealth <= 0) {
-      throw new IllegalArgumentException(
-              "ERROR: Target player health cannot have non positive health");
+      throw new IllegalArgumentException("Target player cannot have non positive health.");
     }
     if (playerLocation == null || playerLocation.getRoomId() != 0) {
-      throw new IllegalArgumentException("ERROR: Target player cannot be in a room with id not 0");
+      throw new IllegalArgumentException("Target player cannot be in a room with id not 0.");
     }
     playerLocation.updateTargetPlayerPresence(true);
     this.playerName = playerName;
@@ -53,8 +52,7 @@ public class TargetPlayerImpl implements TargetPlayerInterface {
   @Override
   public void reduceTargetPlayerHealth(int damageDone) {
     if (damageDone < 0) {
-      throw new IllegalArgumentException(
-              "ERROR: Target player health damage value cannot be negative");
+      throw new IllegalArgumentException("Target player health damage cannot be non-positive.");
     }
     this.playerHealth -= (Math.min(damageDone, this.playerHealth));
   }
@@ -71,7 +69,7 @@ public class TargetPlayerImpl implements TargetPlayerInterface {
   public void setTargetPlayerRoom(RoomInterface newRoom) {
     if (newRoom == null) {
       throw new IllegalArgumentException(
-              "ERROR: Unable to update target player location. Room cannot be null.");
+              "Unable to update location of target player. Room cannot be null.");
     }
     this.playerLocation.updateTargetPlayerPresence(false);
     newRoom.updateTargetPlayerPresence(true);

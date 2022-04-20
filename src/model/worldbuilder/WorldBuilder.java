@@ -56,7 +56,7 @@ public class WorldBuilder {
   public WorldBuilder parseInputFile(Readable file) throws IllegalArgumentException {
 
     if (file == null) {
-      throw new IllegalArgumentException("ERROR: Cannot find file.");
+      throw new IllegalArgumentException("ERROR PARSING: Cannot find file.");
     }
 
     Scanner scanner = new Scanner(file);
@@ -74,7 +74,7 @@ public class WorldBuilder {
           }
           lineNumber += 1;
         } catch (IllegalArgumentException | NoSuchElementException | IllegalStateException e) {
-          throw new IllegalArgumentException("ERROR: Error in world description");
+          throw new IllegalArgumentException("ERROR PARSING: Error in world description.");
         }
       } else if (lineNumber == 2) {
         try {
@@ -86,7 +86,7 @@ public class WorldBuilder {
           lineNumber += 1;
         } catch (IllegalArgumentException | NoSuchElementException | IllegalStateException e) {
           throw new IllegalArgumentException(
-                  "ERROR: Error in target player description");
+                  "ERROR PARSING: Error in target player description.");
         }
       } else if (lineNumber == 3) {
         try {
@@ -97,7 +97,7 @@ public class WorldBuilder {
           lineNumber += 1;
         } catch (IllegalArgumentException | NoSuchElementException | IllegalStateException e) {
           throw new IllegalArgumentException(
-                  "ERROR: Error in target pet description");
+                  "ERROR PARSING: Error in target pet description.");
         }
       } else if (lineNumber == 4 && currentIteration == CurrentIteration.NONE) {
         try {
@@ -107,7 +107,7 @@ public class WorldBuilder {
           lineNumber += 1;
         } catch (IllegalArgumentException | NoSuchElementException | IllegalStateException e) {
           throw new IllegalArgumentException(
-                  "ERROR: Error in reading number of rooms");
+                  "ERROR PARSING: Error in reading number of rooms.");
         }
       } else {
         if (currentIteration == CurrentIteration.ROOMS) {
@@ -130,16 +130,16 @@ public class WorldBuilder {
             }
             currentIteration = CurrentIteration.WEAPONS;
           } catch (IllegalArgumentException | NoSuchElementException | IllegalStateException e) {
-            throw new IllegalArgumentException("ERROR: Error in reading room data");
+            throw new IllegalArgumentException("ERROR PARSING: Error in reading room data.");
           }
           try {
             numWeapons = scanner.nextInt();
           } catch (IllegalArgumentException | NoSuchElementException | IllegalStateException e) {
             throw new IllegalArgumentException(
-                    "ERROR: Error in reading number of weapons");
+                    "ERROR PARSING: Error in reading number of weapons.");
           }
           if (!"".equals(scanner.nextLine())) {
-            throw new IllegalArgumentException("ERROR: Error in reading weapon data");
+            throw new IllegalArgumentException("ERROR PARSING: Error in reading weapon data.");
           }
           lineNumber += 1;
         } else if (currentIteration == CurrentIteration.WEAPONS) {
@@ -158,10 +158,10 @@ public class WorldBuilder {
               n -= 1;
             }
             if (n != 0) {
-              throw new IllegalArgumentException("ERROR: Error reading weapon data.");
+              throw new IllegalArgumentException("ERROR PARSING: Error reading weapon data.");
             }
           } catch (IllegalArgumentException | NoSuchElementException | IllegalStateException e) {
-            throw new IllegalArgumentException("ERROR: Error in reading weapon data");
+            throw new IllegalArgumentException("ERROR PARSING: Error in reading weapon data.");
           }
         }
       }
@@ -179,7 +179,7 @@ public class WorldBuilder {
    */
   public WorldBuilder setRandomGenerator(RandomGenerator rand) throws IllegalArgumentException {
     if (rand == null) {
-      throw new IllegalArgumentException("ERROR: Random number generator cannot be null");
+      throw new IllegalArgumentException("Random number generator cannot be null.");
     }
     this.random = rand;
     return this;

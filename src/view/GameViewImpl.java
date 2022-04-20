@@ -132,6 +132,7 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
     UIManager.put("OptionPane.background", Color.decode("#E8F6F3"));
     UIManager.put("Panel.background", Color.TRANSLUCENT);
     UIManager.put("Label.background", Color.TRANSLUCENT);
+    UIManager.put("Label.foreground", Color.BLACK);
 
     JPanel panel = new JPanel(new GridLayout(0, 2));
 
@@ -255,7 +256,9 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
 
     JLabel availableWeaponLabel = new JLabel("Weapons available in room:");
     List<String> weapons = model.getCurrentPlayerRoomWeapons(true);
-    JTextArea availableWeaponInfo = new JTextArea(weapons.size() > 0 ? String.join("\n", weapons) : "No weapons available!");
+    JTextArea availableWeaponInfo = new JTextArea(weapons.size() > 0
+            ? String.join("\n", weapons)
+            : "No weapons available!");
 
     availableWeaponLabel.setFont(availableWeaponInfo.getFont().deriveFont(Font.BOLD));
     availableWeaponInfo.setForeground(Color.WHITE);
@@ -343,7 +346,9 @@ public class GameViewImpl extends JFrame implements GameViewInterface {
 
     JLabel availableWeaponLabel = new JLabel("Weapons available with player:");
     List<String> weapons = model.getCurrentPlayerWeapons(true);
-    JTextArea availableWeaponInfo = new JTextArea(weapons.size() > 0 ? String.join("\n", weapons) : "No weapons available!");
+    JTextArea availableWeaponInfo = new JTextArea(weapons.size() > 0
+            ? String.join("\n", weapons)
+            : "No weapons available!");
 
     availableWeaponLabel.setFont(availableWeaponLabel.getFont().deriveFont(Font.BOLD));
     availableWeaponInfo.setForeground(Color.WHITE);

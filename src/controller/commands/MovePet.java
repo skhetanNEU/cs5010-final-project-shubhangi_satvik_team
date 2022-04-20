@@ -22,7 +22,7 @@ public class MovePet extends AbstractCommands {
       commandResult.append(model.movePet(this.roomName));
       isCommandSuccessful = true;
     } catch (IllegalArgumentException exception) {
-      commandResult.append(exception.getMessage());
+      commandResult.append("Unable to move pet. ").append(exception.getMessage());
     }
   }
 }

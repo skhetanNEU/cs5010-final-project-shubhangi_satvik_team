@@ -22,7 +22,7 @@ public class PickWeapon extends AbstractCommands {
       commandResult.append(model.pickWeapon(this.weaponName));
       isCommandSuccessful = true;
     } catch (IllegalArgumentException exception) {
-      commandResult.append(exception.getMessage());
+      commandResult.append("Unable to pick weapon. ").append(exception.getMessage());
     }
   }
 }

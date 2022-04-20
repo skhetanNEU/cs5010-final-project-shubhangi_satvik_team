@@ -26,13 +26,13 @@ public class WeaponImpl implements WeaponInterface {
   public WeaponImpl(int weaponId, String weaponName, int weaponDamageValue)
           throws IllegalArgumentException {
     if (weaponId < 0) {
-      throw new IllegalArgumentException("ERROR: Weapon Id cannot be negative");
+      throw new IllegalArgumentException("Weapon id cannot be negative.");
     }
     if (weaponDamageValue <= 0) {
-      throw new IllegalArgumentException("ERROR: Weapon damage value cannot be non-positive");
+      throw new IllegalArgumentException("Weapon damage value cannot be non-positive.");
     }
     if (weaponName == null || ("").equals(weaponName)) {
-      throw new IllegalArgumentException("ERROR: Weapon name cannot be empty");
+      throw new IllegalArgumentException("Weapon name cannot be null/empty.");
     }
     this.weaponId = weaponId;
     this.weaponName = weaponName;

@@ -35,7 +35,7 @@ public class Controller implements FeatureInterface {
       throw new IllegalArgumentException("View cannot be null");
     }
     if (worldConfigurationPath == null || "".equals(worldConfigurationPath)) {
-      throw new IllegalArgumentException("Invalid configuration file");
+      throw new IllegalArgumentException("Configuration file path is null/empty.");
     }
     if (maxNumberOfTurns <= 0) {
       throw new IllegalArgumentException("Number of turns cannot be non-positive");
@@ -62,13 +62,17 @@ public class Controller implements FeatureInterface {
   }
 
   @Override
+  public int getNumTurnsRemaining() {
+    return maxNumberOfTurns - currentTurnNumber;
+  }
+
+  @Override
   public void playGame(File file) {
-    Readable chosen = null;
     try {
+      Readable chosen;
       if (file != null) {
         chosen = new FileReader(file);
-      }
-      else{
+      } else {
         chosen = new FileReader(defaultConfigurationFilePath);
       }
       RandomGenerator rand = new RandomClass(true);
@@ -82,16 +86,10 @@ public class Controller implements FeatureInterface {
       gameView.addFeatures(this);
       currentTurnNumber = 0;
     } catch (FileNotFoundException e) {
-      throw new IllegalArgumentException("ERROR: File not found.");
-    }
-  }
-
-  @Override
-  public void quitGame() {
-    if (gameView != null) {
-      gameView.close();
-    } else {
-      preGameView.close();
+      // TODO
+      // throw new IllegalArgumentException("ERROR: File not found.");
+    } catch (IllegalArgumentException iae) {
+      // TODO
     }
   }
 
@@ -273,8 +271,12 @@ public class Controller implements FeatureInterface {
   }
 
   @Override
-  public int getNumTurnsRemaining() {
-    return maxNumberOfTurns - currentTurnNumber;
+  public void quitGame() {
+    if (gameView != null) {
+      gameView.close();
+    } else {
+      preGameView.close();
+    }
   }
 
 }

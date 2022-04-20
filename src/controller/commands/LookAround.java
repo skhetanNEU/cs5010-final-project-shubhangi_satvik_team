@@ -13,7 +13,7 @@ public class LookAround extends AbstractCommands {
       commandResult.append(model.lookAroundSpace());
       isCommandSuccessful = true;
     } catch (IllegalArgumentException exception) {
-      commandResult.append(exception.getMessage());
+      commandResult.append("Unable to look around. ").append(exception.getMessage());
     }
   }
 }
