@@ -322,7 +322,6 @@ public class WorldImpl implements WorldInterface {
    * Checks if there are any players in the world with same name.
    *
    * @param playerName name of the player
-   * @return if the player exists with same name
    */
   private void checkIfPlayerAlreadyExistsWithSameName(String playerName) {
     for (PlayerInterface player : this.players) {

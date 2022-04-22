@@ -1,7 +1,6 @@
 package model.world;
 
 import java.awt.image.BufferedImage;
-import java.util.List;
 
 /**
  * An interface class for representing the World for Kill Doctor Lucky.

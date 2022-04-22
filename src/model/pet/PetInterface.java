@@ -8,13 +8,6 @@ import model.room.RoomInterface;
 public interface PetInterface {
 
   /**
-   * Gets the name of the target pet.
-   *
-   * @return the name of the target pet
-   */
-  String getPetName();
-
-  /**
    * Gets the name of the current location/room of the target pet.
    *
    * @return name of current room

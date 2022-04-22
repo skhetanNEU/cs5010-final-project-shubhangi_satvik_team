@@ -40,11 +40,6 @@ public class TargetPlayerImpl implements TargetPlayerInterface {
   }
 
   @Override
-  public String getTargetPlayerName() {
-    return playerName;
-  }
-
-  @Override
   public int getTargetPlayerHealth() {
     return this.playerHealth;
   }

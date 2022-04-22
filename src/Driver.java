@@ -1,14 +1,10 @@
 import controller.Controller;
-import java.io.InputStreamReader;
 import view.DefaultGameViewInterface;
 import view.PreGameView;
 
 
 public class Driver {
   public static void main(String[] args) {
-
-    Readable input = new InputStreamReader(System.in);
-    Appendable output = System.out;
 
     try {
 

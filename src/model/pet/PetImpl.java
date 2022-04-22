@@ -33,11 +33,6 @@ public class PetImpl implements PetInterface {
   }
 
   @Override
-  public String getPetName() {
-    return petName;
-  }
-
-  @Override
   public String getPetRoomName() {
     return this.petRoom.getRoomName();
   }

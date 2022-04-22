@@ -7,12 +7,6 @@ import model.room.RoomInterface;
  *
  */
 public interface TargetPlayerInterface {
-  /**
-   * Gets the name of the target player.
-   *
-   * @return the name of the target player
-   */
-  String getTargetPlayerName();
 
   /**
    * Gets the health of the target player.

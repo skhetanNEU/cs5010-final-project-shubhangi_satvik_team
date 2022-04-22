@@ -1,8 +1,6 @@
 package model.players;
 
 import java.util.List;
-import model.room.RoomInterface;
-import model.weapon.WeaponInterface;
 
 /**
  * An interface class for representing normal players in the world for Kill Doctor Lucky.

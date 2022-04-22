@@ -36,7 +36,6 @@ import model.world.ReadOnlyWorldInterface;
 
 public class MainGameView extends JFrame implements MainGameViewInterface {
 
-  private final ReadOnlyWorldInterface model;
   private JMenuItem currentConfiguration;
   private JMenuItem newConfiguration;
   private JMenuItem quitGame;
@@ -60,8 +59,6 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
     if (roomList == null) {
       throw new IllegalArgumentException("Room list cannot be null.");
     }
-
-    this.model = model;
 
     setLayout(new BorderLayout());
     setMenuBar();

@@ -15,7 +15,7 @@ import model.world.ReadOnlyWorldInterface;
 public class GameBoard extends JPanel {
 
   private final ReadOnlyWorldInterface model;
-  private FeatureInterface listener;
+  private final FeatureInterface listener;
 
   public GameBoard(ReadOnlyWorldInterface model, FeatureInterface listener) {
     if (model == null) {
