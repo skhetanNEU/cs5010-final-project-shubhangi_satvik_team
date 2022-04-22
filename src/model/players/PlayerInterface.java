@@ -18,13 +18,6 @@ public interface PlayerInterface {
   String getPlayerName();
 
   /**
-   * Returns if player is computer player.
-   *
-   * @return if player is computer player
-   */
-  boolean isComputerPlayer();
-
-  /**
    * Gets the current location of the player.
    *
    * @return name of the current location of player
@@ -34,9 +27,9 @@ public interface PlayerInterface {
   /**
    * Updates the current location of the player.
    *
-   * @param room represents the new location/room of the player
+   * @param roomName represents the new location/room of the player
    */
-  void setPlayerRoom(RoomInterface room);
+  String setPlayerRoom(String roomName);
 
   /**
    * Adds a new weapon to the player.
@@ -45,20 +38,9 @@ public interface PlayerInterface {
    */
   void addWeaponToPlayer(WeaponInterface weapon);
 
-  /**
-   * Removes the weapon from the player.
-   *
-   * @param weaponName represents the name of the weapon to be removed
-   * @return weapon object that is removed
-   */
-  WeaponInterface removeWeaponFromPlayer(String weaponName);
+  List<String> getPlayerWeapons(boolean includeDamageValue);
 
-  List<String> getPlayerWeapons(boolean includePoke, boolean includeDamageValue);
+  String pickWeapon(String weaponName);
 
-  /**
-   * Gives the weapon that has maximum damage value.
-   *
-   * @return the name of the weapon with maximum damage value
-   */
-  String getPlayerMaxDamageWeapon();
+  int attackTarget(String weaponName);
 }

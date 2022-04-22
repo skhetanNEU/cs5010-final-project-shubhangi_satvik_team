@@ -15,9 +15,8 @@ public class RandomClass implements RandomGenerator {
   /**
    * Constructor for a true random class.
    *
-   * @param isTrueRandom represents if the class is a true or false random
    */
-  public RandomClass(boolean isTrueRandom) {
+  public RandomClass() {
     this.isTrueRandom = true;
     this.randomNumber = 0;
   }
@@ -25,10 +24,9 @@ public class RandomClass implements RandomGenerator {
   /**
    * Constructor for a false random class.
    *
-   * @param isTrueRandom      represents if the class is a true or false random
    * @param falseRandomNumber represents the false random option chosen
    */
-  public RandomClass(boolean isTrueRandom, int falseRandomNumber) {
+  public RandomClass(int falseRandomNumber) {
     this.isTrueRandom = false;
     this.randomNumber = falseRandomNumber;
   }

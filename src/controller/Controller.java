@@ -74,7 +74,7 @@ public class Controller implements FeatureInterface {
       } else {
         chosen = new FileReader(defaultConfigurationFilePath);
       }
-      RandomGenerator rand = new RandomClass(true);
+      RandomGenerator rand = new RandomClass();
       model = WorldImpl.getBuilder()
               .parseInputFile(chosen)
               .setRandomGenerator(rand)

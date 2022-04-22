@@ -248,6 +248,20 @@ public class RoomImpl implements RoomInterface {
   }
 
   @Override
+  public RoomInterface getNeighboringRoom(String neighboringRoomName){
+    if(neighboringRoomName == null || "".equals(neighboringRoomName)){
+      throw new IllegalArgumentException("Invalid room name");
+    }
+    for(RoomInterface neighboringRoom : roomNeighbours){
+      if(neighboringRoom.getRoomName().equals(neighboringRoomName)){
+        return neighboringRoom;
+      }
+    }
+
+    return null;
+  }
+
+  @Override
   public String toString() {
     return String.format("Name: %s\nNeighbours: %s\nWeapons: %s"
                     + "\nPlayers: %s\nIs Target Present: %s\nIs Pet Present: %s",

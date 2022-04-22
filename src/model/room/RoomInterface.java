@@ -122,4 +122,6 @@ public interface RoomInterface extends Comparable<RoomInterface> {
    */
   void removePlayerFromRoom(PlayerInterface player);
 
+  RoomInterface getNeighboringRoom(String neighboringRoomName);
+
 }

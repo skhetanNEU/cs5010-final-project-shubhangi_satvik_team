@@ -17,7 +17,8 @@ import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import model.pet.PetImpl;
 import model.pet.PetInterface;
-import model.players.PlayerImpl;
+import model.players.ComputerPlayer;
+import model.players.HumanPlayer;
 import model.players.PlayerInterface;
 import model.random.RandomGenerator;
 import model.room.RoomImpl;
@@ -459,15 +460,14 @@ public class WorldImpl implements WorldInterface {
   }
 
   private String movePlayer(String roomName) {
-    if (roomName == null || "".equals(roomName)) {
+    if (!isCurrentPlayerComputer() && (roomName == null || "".equals(roomName))) {
       throw new IllegalArgumentException("Room name is null/empty.");
     }
-    RoomInterface destinationRoom = getRoomByRoomName(roomName);
-    currentTurn.setPlayerRoom(destinationRoom);
+    String playerNewRoomName = currentTurn.setPlayerRoom(roomName);
     moveTargetPlayer();
     movePetAfterTurnDfs();
     currentTurn = getNextTurnPlayer();
-    return String.format("Player has successfully moved to room %s.", roomName);
+    return String.format("Player has successfully moved to room %s.", playerNewRoomName);
   }
 
   private void drawWorld() {
@@ -627,7 +627,7 @@ public class WorldImpl implements WorldInterface {
   @Override
   public boolean isCurrentPlayerComputer() {
     checkIfPlayersExistToPlayGame();
-    return currentTurn.isComputerPlayer();
+    return currentTurn instanceof ComputerPlayer;
   }
 
   @Override
@@ -639,7 +639,7 @@ public class WorldImpl implements WorldInterface {
   public List<String> getCurrentPlayerWeapons(boolean includeDamage) {
     return currentTurn == null
             ? new ArrayList<>()
-            : currentTurn.getPlayerWeapons(true, includeDamage);
+            : currentTurn.getPlayerWeapons(includeDamage);
   }
 
   @Override
@@ -693,8 +693,16 @@ public class WorldImpl implements WorldInterface {
     }
     checkIfPlayerAlreadyExistsWithSameName(playerName);
     RoomInterface startRoom = getRoomByRoomName(startingRoomName);
-    PlayerInterface newPlayer = new PlayerImpl(playerName,
-            weaponLimit, isComputerPlayer, startRoom);
+    PlayerInterface newPlayer;
+    if(isComputerPlayer){
+      newPlayer = new ComputerPlayer(playerName,
+              weaponLimit, startRoom);
+    }
+    else{
+      newPlayer = new HumanPlayer(playerName,
+              weaponLimit, startRoom);
+    }
+
     this.players.add(newPlayer);
     startRoom.addPlayerToRoom(newPlayer);
     if (currentTurn == null) {
@@ -737,17 +745,14 @@ public class WorldImpl implements WorldInterface {
   @Override
   public String pickWeapon(String weaponName) {
     checkIfPlayersExistToPlayGame();
-    if (weaponName == null || "".equals(weaponName)) {
+    if (!isCurrentPlayerComputer() && (weaponName == null || "".equals(weaponName))) {
       throw new IllegalArgumentException("Weapon name cannot be null/empty.");
     }
-    RoomInterface currentPlayerRoom = getRoomByRoomName(currentTurn.getPlayerRoomName());
-    WeaponInterface weapon = currentPlayerRoom.getWeaponByWeaponName(weaponName);
-    currentTurn.addWeaponToPlayer(weapon);
-    currentPlayerRoom.removeWeaponFromRoom(weapon);
+    String pickedWeapon = currentTurn.pickWeapon(weaponName);
     moveTargetPlayer();
     movePetAfterTurnDfs();
     currentTurn = getNextTurnPlayer();
-    return String.format("Player has successfully picked up %s.", weaponName);
+    return String.format("Player has successfully picked up %s.", pickedWeapon);
   }
 
   @Override
@@ -774,40 +779,19 @@ public class WorldImpl implements WorldInterface {
   @Override
   public String attackTargetPlayer(String weaponName) {
     checkIfPlayersExistToPlayGame();
-    if (weaponName == null || "".equals(weaponName)) {
+    if (!isCurrentPlayerComputer() && (weaponName == null || "".equals(weaponName))) {
       throw new IllegalArgumentException("Weapon name is null/empty.");
     }
+    int damageOnTarget = currentTurn.attackTarget(weaponName);
 
-    RoomInterface currentPlayerRoom = getRoomByRoomName(currentTurn.getPlayerRoomName());
-    boolean isAttackSuccessful = true;
-
-    // Target not in same room || Room has more players
-    if (!currentPlayerRoom.isTargetPlayerInRoom()
-            || currentPlayerRoom.getNumberOfPlayersInRoom() - 1 > 0) {
-      isAttackSuccessful = false;
-    } else {
-      // Neighbouring rooms have players
-      List<String> neighbours = currentPlayerRoom.getRoomNeighbours(true);
-      if (neighbours.size() > 0) {
-        int numPlayersInNeighbours = 0;
-        for (String n : neighbours) {
-          numPlayersInNeighbours += getRoomByRoomName(n).getNumberOfPlayersInRoom();
-        }
-        if (numPlayersInNeighbours > 0 && !currentPlayerRoom.isPetInRoom()) {
-          isAttackSuccessful = false;
-        }
-      }
-    }
-
-    WeaponInterface w = currentTurn.removeWeaponFromPlayer(weaponName);
-    if (isAttackSuccessful) {
-      targetPlayer.reduceTargetPlayerHealth(w.getWeaponValue());
+    if (damageOnTarget!=-1) {
+      targetPlayer.reduceTargetPlayerHealth(damageOnTarget);
     }
 
     moveTargetPlayer();
     movePetAfterTurnDfs();
     currentTurn = getNextTurnPlayer();
-    return isAttackSuccessful
+    return damageOnTarget!=-1
             ? "Attack on target was successful."
             : "Attack on target was not successful.";
   }
@@ -821,26 +805,13 @@ public class WorldImpl implements WorldInterface {
 
     if (currentPlayerRoom.isTargetPlayerInRoom()
             && !isCurrentPlayerSeenByPlayersInVisibleRooms()) {
-      String maxDamageWeaponChosen = currentTurn.getPlayerMaxDamageWeapon();
-      result.append(attackTargetPlayer(maxDamageWeaponChosen));
+      result.append(attackTargetPlayer(null));
     } else if (actionNumber == 0) {
       result.append(lookAroundSpace());
     } else if (actionNumber == 1) {
-      List<String> neighbours = currentPlayerRoom.getRoomNeighbours(false);
-      if (neighbours.size() == 0) {
-        throw new IllegalArgumentException("Current room does not have any neighbours to move to.");
-      } else {
-        String chosenRoomName = neighbours.get(neighbours.size() - 1);
-        result.append(movePlayer(chosenRoomName));
-      }
+      result.append(movePlayer(null));
     } else if (actionNumber == 2) {
-      List<String> weaponList = getCurrentPlayerRoomWeapons(false);
-      if (weaponList.size() < 1) {
-        throw new IllegalArgumentException("Current room does not have any weapons to pick.");
-      } else {
-        String chosenWeaponName = weaponList.get(weaponList.size() - 1).trim();
-        result.append(pickWeapon(chosenWeaponName));
-      }
+      result.append(pickWeapon(null));
     } else if (actionNumber == 3) {
       String randomRoomChosen = this.rooms.get(random.getRandomWithinBound(this.rooms.size()))
               .getRoomName();
