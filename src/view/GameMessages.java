@@ -146,8 +146,7 @@ public class GameMessages extends JPanel {
       content.add(otherKey, c);
 
     } catch (IOException e) {
-      // TODO
-      // Do nothing?
+      // TODO: Do nothing?
     }
 
     JLabel currentTurnLabel = new JLabel("Current Turn");

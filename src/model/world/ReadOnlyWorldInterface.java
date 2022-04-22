@@ -16,32 +16,12 @@ public interface ReadOnlyWorldInterface {
    */
   String getWorldName();
 
-  List<String> getListOfRooms();
-
-  /**
-   * Checks if the current player is a computer player.
-   *
-   * @return if the current player is a computer player
-   */
-  boolean isCurrentPlayerComputer();
-
   /**
    * Returns the name of the current player.
    *
    * @return the name of the current player
    */
   String getCurrentPlayerName();
-
-  List<String> getCurrentPlayerWeapons(boolean includeDamage);
-
-  /**
-   * Gives the room that the current player is in.
-   *
-   * @return the name of the current player's room.
-   */
-  String getCurrentPlayerRoomName();
-
-  List<String> getCurrentPlayerRoomWeapons(boolean includeDamageValues);
 
   /**
    * Gets the details of the target player.
@@ -51,20 +31,14 @@ public interface ReadOnlyWorldInterface {
   String getTargetPlayerDetails();
 
   /**
-   * Retrieves the details of the player which includes the name, list of available weapons
-   * and the current location of the player.
-   *
-   * @return details of the player
-   */
-  String getCurrentPlayerInformation();
-
-  /**
    * Retrieves the details of the current player's room which includes the room id, name,
    * list of available weapons and the neighbours of the room.
    *
    * @return details of the room
    */
   String getCurrentPlayerRoomInformation();
+
+  BufferedImage getWorldView();
 
   /**
    * Checks if the game is over.
@@ -73,9 +47,4 @@ public interface ReadOnlyWorldInterface {
    */
   boolean isGameOver();
 
-  BufferedImage getWorldView();
-
-  boolean isPlayerIconClicked(int r, int c);
-
-  String getWinner();
 }

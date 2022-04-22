@@ -143,19 +143,16 @@ public class RoomImpl implements RoomInterface {
   }
 
   @Override
-  public void checkIfRoomNeighbour(String roomName, boolean includeInvisibleRooms) {
-    boolean flag = false;
-    for (RoomInterface r : roomNeighbours) {
-      if (r.getRoomName().equalsIgnoreCase(roomName)) {
-        if ((includeInvisibleRooms) || (!includeInvisibleRooms && !r.isPetInRoom())) {
-          return;
-        }
-        break;
+  public RoomInterface getNeighboringRoom(String neighboringRoomName) {
+    if (neighboringRoomName == null || "".equals(neighboringRoomName)) {
+      throw new IllegalArgumentException("Desired room name cannot be null/empty.");
+    }
+    for (RoomInterface neighboringRoom : roomNeighbours) {
+      if (neighboringRoom.getRoomName().equals(neighboringRoomName)) {
+        return neighboringRoom;
       }
     }
-    if (!flag) {
-      throw new IllegalArgumentException("Desired room is not a neighbour of current room.");
-    }
+    throw new IllegalArgumentException("Desired room is not a neighbour of current room.");
   }
 
   @Override
@@ -226,6 +223,19 @@ public class RoomImpl implements RoomInterface {
   }
 
   @Override
+  public int getNumberOfPlayersInNeighbouringRoom(boolean includeHiddenRooms) {
+    int neighbourRoomPlayerCount = 0;
+    if (roomNeighbours.size() > 0) {
+      for (RoomInterface n : roomNeighbours) {
+        if (!n.isPetInRoom() || (n.isPetInRoom() && includeHiddenRooms)) {
+          neighbourRoomPlayerCount += n.getNumberOfPlayersInRoom();
+        }
+      }
+    }
+    return neighbourRoomPlayerCount;
+  }
+
+  @Override
   public void addPlayerToRoom(PlayerInterface player) {
     if (player == null) {
       throw new IllegalArgumentException("Player cannot be null.");
@@ -245,20 +255,6 @@ public class RoomImpl implements RoomInterface {
     } else {
       throw new IllegalArgumentException("Player does not exist in room.");
     }
-  }
-
-  @Override
-  public RoomInterface getNeighboringRoom(String neighboringRoomName){
-    if(neighboringRoomName == null || "".equals(neighboringRoomName)){
-      throw new IllegalArgumentException("Invalid room name");
-    }
-    for(RoomInterface neighboringRoom : roomNeighbours){
-      if(neighboringRoom.getRoomName().equals(neighboringRoomName)){
-        return neighboringRoom;
-      }
-    }
-
-    return null;
   }
 
   @Override

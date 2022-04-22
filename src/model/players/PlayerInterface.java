@@ -24,21 +24,14 @@ public interface PlayerInterface {
    */
   String getPlayerRoomName();
 
+  List<String> getPlayerWeapons(boolean includeDamageValue);
+
   /**
    * Updates the current location of the player.
    *
    * @param roomName represents the new location/room of the player
    */
   String setPlayerRoom(String roomName);
-
-  /**
-   * Adds a new weapon to the player.
-   *
-   * @param weapon represents the weapon object to be added
-   */
-  void addWeaponToPlayer(WeaponInterface weapon);
-
-  List<String> getPlayerWeapons(boolean includeDamageValue);
 
   String pickWeapon(String weaponName);
 

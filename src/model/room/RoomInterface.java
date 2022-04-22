@@ -67,14 +67,6 @@ public interface RoomInterface extends Comparable<RoomInterface> {
    */
   void setRoomNeighbours(List<RoomInterface> neighbours);
 
-  /**
-   * Checks if a room is a neighbour of the current room.
-   *
-   * @param roomName represents the name of the other room
-   * @param includeInvisibleRooms represents if valid neighbours should include rooms with pets
-   */
-  void checkIfRoomNeighbour(String roomName, boolean includeInvisibleRooms);
-
   List<String> getAvailableWeapons(boolean includeDamageValues);
 
   /**
@@ -107,6 +99,13 @@ public interface RoomInterface extends Comparable<RoomInterface> {
    * @return the number of players in room
    */
   int getNumberOfPlayersInRoom();
+
+  /**
+   * Gets the number of players in the room.
+   *
+   * @return the number of players in room
+   */
+  int getNumberOfPlayersInNeighbouringRoom(boolean includeHiddenRooms);
 
   /**
    * Adds a player to the room.

@@ -20,14 +20,13 @@ import view.DefaultGameViewInterface;
 import view.MainGameView;
 import view.MainGameViewInterface;
 
-
 public class Controller implements FeatureInterface {
 
   private WorldInterface model;
   private MainGameViewInterface gameView;
   private final DefaultGameViewInterface preGameView;
   private final int maxNumberOfTurns;
-  private String defaultConfigurationFilePath;
+  private final String defaultConfigurationFilePath;
   private int currentTurnNumber;
 
   public Controller(DefaultGameViewInterface preGameView,
@@ -80,15 +79,14 @@ public class Controller implements FeatureInterface {
               .setRandomGenerator(rand)
               .build();
       quitGame();
-      gameView = new MainGameView(model, this);
+      gameView = new MainGameView(model, this, model.getListOfRooms());
       gameView.makeVisible();
       gameView.addFeatures(this);
       currentTurnNumber = 0;
     } catch (FileNotFoundException e) {
-      // TODO
-      // throw new IllegalArgumentException("ERROR: File not found.");
+      // TODO: throw new IllegalArgumentException("ERROR: File not found.");
     } catch (IllegalArgumentException iae) {
-      // TODO
+      // TODO: Do nothing?
     }
   }
 
@@ -173,7 +171,7 @@ public class Controller implements FeatureInterface {
   public void pickWeapon() {
     if (!checkIfGameIsOver()) {
       CommandsInterface pickWeapon = null;
-      String weaponName = gameView.showPickWeaponDialog();
+      String weaponName = gameView.showPickWeaponDialog(model.getCurrentPlayerRoomWeapons());
       if (weaponName == null) {
         gameView.showCommandOutcome("CANCELLED", "Pick weapon cancelled", false);
       } else if ("".equals(weaponName)) {
@@ -199,7 +197,7 @@ public class Controller implements FeatureInterface {
   public void attackTarget() {
     if (!checkIfGameIsOver()) {
       CommandsInterface attackTarget = null;
-      String weaponName = gameView.showAttackTargetDialog();
+      String weaponName = gameView.showAttackTargetDialog(model.getCurrentPlayerWeapons());
       if (weaponName == null) {
         gameView.showCommandOutcome("CANCELLED", "Attack target cancelled", false);
       } else if ("".equals(weaponName)) {
@@ -225,7 +223,7 @@ public class Controller implements FeatureInterface {
   public void movePet() {
     if (!checkIfGameIsOver()) {
       CommandsInterface movePet = null;
-      String roomName = gameView.showMovePetDialog();
+      String roomName = gameView.showMovePetDialog(model.getListOfRooms());
       if (roomName == null) {
         gameView.showCommandOutcome("CANCELLED", "Move pet cancelled", false);
       } else if ("".equals(roomName)) {

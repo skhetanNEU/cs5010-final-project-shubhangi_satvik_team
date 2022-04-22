@@ -45,7 +45,9 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
   private final GameMessages messages;
   private final AddPlayersPopup addPlayerPopup;
 
-  public MainGameView(ReadOnlyWorldInterface model, FeatureInterface listener) {
+  public MainGameView(ReadOnlyWorldInterface model,
+                      FeatureInterface listener,
+                      List<String> roomList) {
 
     super("Game Started");
 
@@ -54,6 +56,9 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
     }
     if (listener == null) {
       throw new IllegalArgumentException("Controller cannot be null");
+    }
+    if (roomList == null) {
+      throw new IllegalArgumentException("Room list cannot be null.");
     }
 
     this.model = model;
@@ -65,14 +70,6 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
     container.setLayout(new BorderLayout());
 
     this.gameBoard = new GameBoard(model, listener);
-    // this.gameBoard.setPreferredSize(new Dimension(600, 900));
-
-    // JScrollPane scrollPane1 = new JScrollPane(this.gameBoard,
-    //         JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-    //         JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-    // scrollPane1.setEnabled(true);
-    // scrollPane1.setPreferredSize(new Dimension(600, 900));
-    // add(scrollPane1)
     container.add(gameBoard, BorderLayout.CENTER);
 
     this.messages = new GameMessages(model);
@@ -91,7 +88,7 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
     this.setLocation(150, 100);
     this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-    this.addPlayerPopup = new AddPlayersPopup(this);
+    this.addPlayerPopup = new AddPlayersPopup(this, roomList);
     this.addPlayerPopup.setVisible(true);
     this.setEnabled(false);
 
@@ -245,7 +242,11 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
   }
 
   @Override
-  public String showPickWeaponDialog() {
+  public String showPickWeaponDialog(List<String> roomWeapons) {
+
+    if (roomWeapons == null) {
+      throw new IllegalArgumentException("Room weapons cannot be null.");
+    }
 
     UIManager.put("OptionPane.background", Color.decode("#512E5F"));
     UIManager.put("Panel.background", Color.decode("#512E5F"));
@@ -255,9 +256,8 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
     panel.setOpaque(false);
 
     JLabel availableWeaponLabel = new JLabel("Weapons available in room:");
-    List<String> weapons = model.getCurrentPlayerRoomWeapons(true);
-    JTextArea availableWeaponInfo = new JTextArea(weapons.size() > 0
-            ? String.join("\n", weapons)
+    JTextArea availableWeaponInfo = new JTextArea(roomWeapons.size() > 0
+            ? String.join("\n", roomWeapons)
             : "No weapons available!");
 
     availableWeaponLabel.setFont(availableWeaponInfo.getFont().deriveFont(Font.BOLD));
@@ -273,7 +273,10 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
     panel.add(availableWeaponInfo);
 
     JLabel pickWeaponLabel = new JLabel("Select weapon to pick:");
-    String[] weaponList = model.getCurrentPlayerRoomWeapons(false).toArray(new String[0]);
+    String[] weaponList = roomWeapons.stream()
+            .map(w -> w.split("(?=\\s\\(Damage)"))
+            .map(parts -> parts[0].trim())
+            .toArray(String[]::new);
     JComboBox<String> weaponField = new JComboBox<>(weaponList);
     pickWeaponLabel.setFont(pickWeaponLabel.getFont().deriveFont(Font.BOLD));
     panel.add(pickWeaponLabel);
@@ -301,7 +304,10 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
   }
 
   @Override
-  public String showMovePetDialog() {
+  public String showMovePetDialog(List<String> roomList) {
+    if (roomList == null) {
+      throw new IllegalArgumentException("Room list cannot be null.");
+    }
 
     UIManager.put("OptionPane.background", Color.decode("#006064"));
     UIManager.put("Panel.background", Color.decode("#006064"));
@@ -311,8 +317,7 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
 
     JLabel movePetLabel = new JLabel("Select room to move pet to:");
     movePetLabel.setFont(movePetLabel.getFont().deriveFont(Font.BOLD));
-    String[] roomList = model.getListOfRooms().toArray(new String[0]);
-    JComboBox<String> roomNameField = new JComboBox<>(roomList);
+    JComboBox<String> roomNameField = new JComboBox<>(roomList.toArray(new String[0]));
 
     panel.add(movePetLabel);
     panel.add(roomNameField);
@@ -328,15 +333,21 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
             options,
             null);
 
+    String res;
     if (result == JOptionPane.OK_OPTION) {
-      return roomList[roomNameField.getSelectedIndex()];
+      res = roomList.get(roomNameField.getSelectedIndex());
     } else {
-      return null;
+      res = null;
     }
+    return res;
   }
 
   @Override
-  public String showAttackTargetDialog() {
+  public String showAttackTargetDialog(List<String> playerWeapons) {
+
+    if (playerWeapons == null) {
+      throw new IllegalArgumentException("Player weapons cannot be null.");
+    }
 
     UIManager.put("OptionPane.background", Color.decode("#AF601A"));
     UIManager.put("Panel.background", Color.decode("#AF601A"));
@@ -345,9 +356,8 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
     JPanel panel = new JPanel(new GridLayout(0, 1));
 
     JLabel availableWeaponLabel = new JLabel("Weapons available with player:");
-    List<String> weapons = model.getCurrentPlayerWeapons(true);
-    JTextArea availableWeaponInfo = new JTextArea(weapons.size() > 0
-            ? String.join("\n", weapons)
+    JTextArea availableWeaponInfo = new JTextArea(playerWeapons.size() > 0
+            ? String.join("\n", playerWeapons)
             : "No weapons available!");
 
     availableWeaponLabel.setFont(availableWeaponLabel.getFont().deriveFont(Font.BOLD));
@@ -363,7 +373,10 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
     panel.add(availableWeaponInfo);
 
     JLabel attackWeaponLabel = new JLabel("Select weapon to attack with: ");
-    String[] weaponList = model.getCurrentPlayerWeapons(false).toArray(new String[0]);
+    String[] weaponList = playerWeapons.stream()
+            .map(w -> w.split("(?=\\s\\(Damage)"))
+            .map(parts -> parts[0].trim())
+            .toArray(String[]::new);
     JComboBox<String> weaponField = new JComboBox<>(weaponList);
 
     attackWeaponLabel.setFont(attackWeaponLabel.getFont().deriveFont(Font.BOLD));
@@ -396,7 +409,7 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
     JLabel playerNameLabel;
     JTextField playerNameField;
     JLabel playerStartRoomLabel;
-    String[] roomList = model.getListOfRooms().toArray(new String[0]);
+    String[] roomList;
     JComboBox<String> playerStartRoomField;
     JLabel playerWeaponLimitLabel;
     JTextField playerWeaponLimitField;
@@ -410,9 +423,13 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
     JButton addNext;
     JButton startGame;
 
-    public AddPlayersPopup(MainGameView frame) {
+    public AddPlayersPopup(MainGameView frame, List<String> rooms) {
 
       super(frame, "Add Players to Game");
+
+      if (rooms == null) {
+        throw new IllegalArgumentException("Room list cannot be null.");
+      }
 
       this.setResizable(false);
       this.setPreferredSize(new Dimension(500, 250));
@@ -434,6 +451,7 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
       panel.add(playerNameField);
 
       playerStartRoomLabel = new JLabel("Select starting room");
+      roomList = rooms.toArray(new String[0]);
       playerStartRoomField = new JComboBox<>(roomList);
 
       playerStartRoomLabel.setForeground(Color.WHITE);

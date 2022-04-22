@@ -1,10 +1,22 @@
 package model.world;
 
+import java.util.List;
+
 /**
  * An interface class for representing the World for Kill Doctor Lucky.
  *
  */
 public interface WorldInterface extends ReadOnlyWorldInterface {
+
+  List<String> getListOfRooms();
+
+  List<String> getCurrentPlayerWeapons();
+
+  List<String> getCurrentPlayerRoomWeapons();
+
+  boolean isPlayerIconClicked(int r, int c);
+
+  void updateWorldView(boolean isLookAround);
 
   /**
    * Adds a player to the world.
@@ -26,6 +38,14 @@ public interface WorldInterface extends ReadOnlyWorldInterface {
   String lookAroundSpace();
 
   String handleRoomClick(int x, int y);
+
+  /**
+   * Retrieves the details of the player which includes the name, list of available weapons
+   * and the current location of the player.
+   *
+   * @return details of the player
+   */
+  String getCurrentPlayerInformation();
 
   /**
    * Picks the weapon for the current player.
@@ -57,6 +77,13 @@ public interface WorldInterface extends ReadOnlyWorldInterface {
    */
   String takeTurnForComputerPlayer();
 
-  void updateWorldView(boolean isLookAround);
+  String getWinner();
 
+  // TODO: Remove if possible
+  /**
+   * Checks if the current player is a computer player.
+   *
+   * @return if the current player is a computer player
+   */
+  boolean isCurrentPlayerComputer();
 }

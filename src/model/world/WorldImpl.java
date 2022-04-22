@@ -8,8 +8,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Stack;
@@ -25,7 +27,6 @@ import model.room.RoomImpl;
 import model.room.RoomInterface;
 import model.target.TargetPlayerImpl;
 import model.target.TargetPlayerInterface;
-import model.weapon.WeaponInterface;
 import model.worldbuilder.WorldBuilder;
 
 /**
@@ -40,17 +41,13 @@ public class WorldImpl implements WorldInterface {
   private PetInterface targetPet;
   private TargetPlayerInterface targetPlayer;
   private final List<PlayerInterface> players;
-
   private PlayerInterface currentTurn;
-
   private int dfsStartRoom;
   private final Stack<Integer> dfsStack;
   private final Set<Integer> dfsVisited;
-
   private BufferedImage worldView;
   private BufferedImage playersView;
   private final int zoomFactor;
-
   private final RandomGenerator random;
 
   /**
@@ -142,6 +139,13 @@ public class WorldImpl implements WorldInterface {
     return new WorldBuilder();
   }
 
+  /*
+   *************************
+   * HELPER METHODS TO
+   * INITIALIZE WORLD
+   *************************
+   */
+
   /**
    * Helper class that creates the rooms of the world.
    *
@@ -190,6 +194,7 @@ public class WorldImpl implements WorldInterface {
       weaponRoom.addWeaponToRoom(i, weaponName, weaponDamageValue);
     }
   }
+
 
   /**
    * Helper class that initializes the target pet.
@@ -327,22 +332,26 @@ public class WorldImpl implements WorldInterface {
     }
   }
 
-  /**
-   * Gets the room object based on the name of the room.
-   *
-   * @param roomName represents name of the room
-   * @return the room object
-   * @throws IllegalArgumentException if room does not exist with that name.
-   */
-  private RoomInterface getRoomByRoomName(String roomName) throws IllegalArgumentException {
+  private void drawWorld() {
+    Graphics g = worldView.getGraphics();
+    g.setFont(g.getFont().deriveFont(10f));
+    g.setColor(Color.BLACK);
+    g.fillRect(0, 0, worldView.getWidth(), worldView.getHeight());
     for (RoomInterface room : this.rooms) {
-      if (room.getRoomName().equalsIgnoreCase(roomName.trim())) {
-        return room;
-      }
+      List<Integer> roomCoordinates = getRoomViewCoordinates(room);
+      g.setColor(Color.WHITE);
+      g.drawRect(roomCoordinates.get(2), roomCoordinates.get(0),
+              roomCoordinates.get(3) - roomCoordinates.get(2),
+              roomCoordinates.get(1) - roomCoordinates.get(0));
+      g.drawString(room.getRoomName(), roomCoordinates.get(2) + 5, roomCoordinates.get(0) + 15);
     }
-    throw new IllegalArgumentException(String.format(
-            "Room with name '%s' does not exist.", roomName));
   }
+
+  /*
+   *************************
+   * OTHER HELPER METHODS
+   *************************
+   */
 
   /**
    * Checks if there is alteast one player to take a turn and play the game.
@@ -416,30 +425,18 @@ public class WorldImpl implements WorldInterface {
     }
   }
 
-  /**
-   * Checks if the player can be seen from current room & neighbouring rooms.
-   *
-   * @return true if the player cannot be seen
-   */
-  private boolean isCurrentPlayerSeenByPlayersInVisibleRooms() {
-    RoomInterface currentRoom = getRoomByRoomName(currentTurn.getPlayerRoomName());
-    int currentRoomPlayerCount = currentRoom.getNumberOfPlayersInRoom() - 1;
-    if (currentRoomPlayerCount > 0) {
-      return true;
-    } else if (currentRoomPlayerCount == 0 && currentRoom.isPetInRoom()) {
-      return false;
+  private List<Integer> getRoomViewCoordinates(RoomInterface room) {
+    if (room == null) {
+      throw new IllegalArgumentException("Unable to get coordinates. Room is null.");
     }
-    int neighbourRoomPlayerCount = 0;
-    List<String> neighbours = currentRoom.getRoomNeighbours(false);
-    if (neighbours.size() > 0) {
-      for (String n : neighbours) {
-        RoomInterface nei = getRoomByRoomName(n);
-        if (!nei.isPetInRoom()) {
-          neighbourRoomPlayerCount += nei.getNumberOfPlayersInRoom();
-        }
-      }
-    }
-    return neighbourRoomPlayerCount > 0;
+    List<Integer> roomCoordinates = room.getRoomCoordinates();
+    int r1 = (roomCoordinates.get(0) * zoomFactor) - zoomFactor / 2;
+    int r2 = (roomCoordinates.get(2) * zoomFactor) + zoomFactor / 2;
+    int c1 = (roomCoordinates.get(1) * zoomFactor) - zoomFactor / 2 + 30;
+    int c2 = (roomCoordinates.get(3) * zoomFactor) + zoomFactor / 2 + 30;
+
+    return new ArrayList<>(Arrays.asList(r1, r2, c1, c2));
+
   }
 
   private String getRoomCellClicked(int r, int c) {
@@ -470,33 +467,111 @@ public class WorldImpl implements WorldInterface {
     return String.format("Player has successfully moved to room %s.", playerNewRoomName);
   }
 
-  private void drawWorld() {
-    Graphics g = worldView.getGraphics();
-    g.setFont(g.getFont().deriveFont(10f));
-    g.setColor(Color.BLACK);
-    g.fillRect(0, 0, worldView.getWidth(), worldView.getHeight());
+  /**
+   * Gets the room object based on the name of the room.
+   *
+   * @param roomName represents name of the room
+   * @return the room object
+   * @throws IllegalArgumentException if room does not exist with that name.
+   */
+  private RoomInterface getRoomByRoomName(String roomName) throws IllegalArgumentException {
     for (RoomInterface room : this.rooms) {
-      List<Integer> roomCoordinates = getRoomViewCoordinates(room);
-      g.setColor(Color.WHITE);
-      g.drawRect(roomCoordinates.get(2), roomCoordinates.get(0),
-              roomCoordinates.get(3) - roomCoordinates.get(2),
-              roomCoordinates.get(1) - roomCoordinates.get(0));
-      g.drawString(room.getRoomName(), roomCoordinates.get(2) + 5, roomCoordinates.get(0) + 15);
+      if (room.getRoomName().equalsIgnoreCase(roomName.trim())) {
+        return room;
+      }
     }
+    throw new IllegalArgumentException(String.format(
+            "Room with name '%s' does not exist.", roomName));
   }
 
-  private List<Integer> getRoomViewCoordinates(RoomInterface room) {
-    if (room == null) {
-      throw new IllegalArgumentException("Unable to get coordinates. Room is null.");
+  /**
+   * Checks if the player can be seen from current room & neighbouring rooms.
+   *
+   * @return true if the player cannot be seen
+   */
+  private boolean isCurrentPlayerSeenByPlayersInVisibleRooms() {
+    RoomInterface currentRoom = getRoomByRoomName(currentTurn.getPlayerRoomName());
+    int currentRoomPlayerCount = currentRoom.getNumberOfPlayersInRoom() - 1;
+    if (currentRoomPlayerCount > 0) {
+      return true;
+    } else if (currentRoomPlayerCount == 0 && currentRoom.isPetInRoom()) {
+      return false;
     }
-    List<Integer> roomCoordinates = room.getRoomCoordinates();
-    int r1 = (roomCoordinates.get(0) * zoomFactor) - zoomFactor / 2;
-    int r2 = (roomCoordinates.get(2) * zoomFactor) + zoomFactor / 2;
-    int c1 = (roomCoordinates.get(1) * zoomFactor) - zoomFactor / 2 + 30;
-    int c2 = (roomCoordinates.get(3) * zoomFactor) + zoomFactor / 2 + 30;
+    return currentRoom.getNumberOfPlayersInNeighbouringRoom(false) > 0;
+  }
 
-    return new ArrayList<>(Arrays.asList(r1, r2, c1, c2));
+  /*
+   *************************
+   * READ ONLY INTERFACE
+   *************************
+   */
 
+  @Override
+  public String getWorldName() {
+    return this.worldName;
+  }
+
+  @Override
+  public String getCurrentPlayerName() {
+    return currentTurn == null ? "-" : currentTurn.getPlayerName();
+  }
+
+  @Override
+  public String getTargetPlayerDetails() {
+    return this.targetPlayer.toString();
+  }
+
+  @Override
+  public String getCurrentPlayerRoomInformation() {
+    if (currentTurn == null) {
+      return "";
+    }
+    RoomInterface currentRoom = getRoomByRoomName(currentTurn.getPlayerRoomName());
+    return currentRoom.toString();
+  }
+
+  @Override
+  public BufferedImage getWorldView() {
+
+    BufferedImage combinedView = new BufferedImage(worldView.getWidth(), worldView.getHeight(),
+            BufferedImage.TYPE_INT_ARGB);
+    Graphics g = combinedView.getGraphics();
+    g.drawImage(worldView, 0, 0, null);
+    g.drawImage(playersView, 0, 0, null);
+
+    return combinedView;
+  }
+
+  @Override
+  public boolean isGameOver() {
+    return targetPlayer.getTargetPlayerHealth() <= 0;
+  }
+
+  /*
+   *************************
+   * NORMAL INTERFACE
+   *************************
+   */
+
+  @Override
+  public List<String> getListOfRooms() {
+    return this.rooms.stream().map(RoomInterface::getRoomName).collect(Collectors.toList());
+  }
+
+  @Override
+  public List<String> getCurrentPlayerWeapons() {
+    return currentTurn == null
+            ? new ArrayList<>()
+            : currentTurn.getPlayerWeapons(true);
+  }
+
+  @Override
+  public List<String> getCurrentPlayerRoomWeapons() {
+    if (currentTurn == null) {
+      return new ArrayList<>();
+    }
+    RoomInterface currentRoom = getRoomByRoomName(currentTurn.getPlayerRoomName());
+    return currentRoom.getAvailableWeapons(true);
   }
 
   @Override
@@ -539,15 +614,14 @@ public class WorldImpl implements WorldInterface {
         }
       }
     } catch (IOException e) {
-      // TODO
-      // Do nothing?
+      // TODO: Do nothing?
     }
 
     // Show current player and lookAround to world
     if (currentTurn != null) {
 
-      RoomInterface currentPlayerRoom = getRoomByRoomName(getCurrentPlayerRoomName());
-      List<Integer> roomCoordinates = getRoomViewCoordinates(currentPlayerRoom);
+      RoomInterface currentRoom = getRoomByRoomName(currentTurn.getPlayerRoomName());
+      List<Integer> roomCoordinates = getRoomViewCoordinates(currentRoom);
 
       try {
         BufferedImage player = ImageIO.read(new File("res/images/CurrentPlayer.png"));
@@ -558,12 +632,12 @@ public class WorldImpl implements WorldInterface {
 
         g.drawImage(scaledPlayer, roomCoordinates.get(3) - 25, roomCoordinates.get(1) - 25, null);
 
-        if (currentPlayerRoom.getAvailableWeapons(false).size() > 0) {
+        if (currentRoom.getAvailableWeapons(false).size() > 0) {
           g.drawImage(scaledWeapon, roomCoordinates.get(2) + 5, roomCoordinates.get(1) - 50, null);
         }
 
         if (isLookAround) {
-          List<String> neighbours = currentPlayerRoom.getRoomNeighbours(false);
+          List<String> neighbours = currentRoom.getRoomNeighbours(false);
           if (neighbours.size() > 0) {
             for (String n : neighbours) {
               RoomInterface nei = getRoomByRoomName(n);
@@ -580,8 +654,7 @@ public class WorldImpl implements WorldInterface {
         }
 
       } catch (IOException e) {
-        // TODO
-        // Do nothing?
+        // TODO: Do nothing?
       }
     }
 
@@ -596,89 +669,9 @@ public class WorldImpl implements WorldInterface {
               targetRoomCoordinates.get(1) - 50,
               null);
     } catch (IOException e) {
-      // TODO
-      // Do nothing?
+      // TODO: Do nothing?
     }
 
-  }
-
-  @Override
-  public BufferedImage getWorldView() {
-
-    BufferedImage combinedView = new BufferedImage(worldView.getWidth(), worldView.getHeight(),
-            BufferedImage.TYPE_INT_ARGB);
-    Graphics g = combinedView.getGraphics();
-    g.drawImage(worldView, 0, 0, null);
-    g.drawImage(playersView, 0, 0, null);
-
-    return combinedView;
-  }
-
-  @Override
-  public String getWorldName() {
-    return this.worldName;
-  }
-
-  @Override
-  public List<String> getListOfRooms() {
-    return this.rooms.stream().map(RoomInterface::getRoomName).collect(Collectors.toList());
-  }
-
-  @Override
-  public boolean isCurrentPlayerComputer() {
-    checkIfPlayersExistToPlayGame();
-    return currentTurn instanceof ComputerPlayer;
-  }
-
-  @Override
-  public String getCurrentPlayerName() {
-    return currentTurn == null ? "-" : currentTurn.getPlayerName();
-  }
-
-  @Override
-  public List<String> getCurrentPlayerWeapons(boolean includeDamage) {
-    return currentTurn == null
-            ? new ArrayList<>()
-            : currentTurn.getPlayerWeapons(includeDamage);
-  }
-
-  @Override
-  public String getCurrentPlayerRoomName() {
-    return currentTurn == null ? "-" : currentTurn.getPlayerRoomName();
-  }
-
-  @Override
-  public List<String> getCurrentPlayerRoomWeapons(boolean includeDamageValues) {
-    if (currentTurn == null) {
-      return new ArrayList<>();
-    }
-    RoomInterface currentPlayerRoom = getRoomByRoomName(currentTurn.getPlayerRoomName());
-    return currentPlayerRoom.getAvailableWeapons(includeDamageValues);
-  }
-
-  @Override
-  public String getTargetPlayerDetails() {
-    return this.targetPlayer.toString();
-  }
-
-  @Override
-  public String getCurrentPlayerInformation() {
-    checkIfPlayersExistToPlayGame();
-    return currentTurn == null ? "-" : currentTurn.toString();
-  }
-
-  @Override
-  public String getCurrentPlayerRoomInformation() {
-    if (currentTurn == null) {
-      return "";
-    }
-    RoomInterface room = getRoomByRoomName(currentTurn.getPlayerRoomName());
-    return room.toString();
-  }
-
-  @Override
-  public boolean isGameOver() {
-    return targetPlayer.getTargetPlayerHealth() <= 0;
   }
 
   @Override
@@ -694,11 +687,10 @@ public class WorldImpl implements WorldInterface {
     checkIfPlayerAlreadyExistsWithSameName(playerName);
     RoomInterface startRoom = getRoomByRoomName(startingRoomName);
     PlayerInterface newPlayer;
-    if(isComputerPlayer){
+    if (isComputerPlayer) {
       newPlayer = new ComputerPlayer(playerName,
               weaponLimit, startRoom);
-    }
-    else{
+    } else {
       newPlayer = new HumanPlayer(playerName,
               weaponLimit, startRoom);
     }
@@ -713,16 +705,14 @@ public class WorldImpl implements WorldInterface {
   @Override
   public String lookAroundSpace() {
     checkIfPlayersExistToPlayGame();
-    StringBuilder result = new StringBuilder("------Current Room Details------").append("\n");
+    StringBuilder result = new StringBuilder("-----Look Around Details------").append("\n");
+    result.append("------Current Room Details------").append("\n");
     RoomInterface currentRoom = getRoomByRoomName(currentTurn.getPlayerRoomName());
     result.append(currentRoom).append("\n\n");
     List<String> neighbours = currentRoom.getRoomNeighbours(false);
     if (neighbours.size() > 0) {
       result.append("------Neighboring Room Details------").append("\n");
-      for (String n : neighbours) {
-        result.append("\n");
-        result.append(getRoomByRoomName(n)).append("\n");
-      }
+      neighbours.forEach(n -> result.append("\n").append(getRoomByRoomName(n)).append("\n"));
     }
     moveTargetPlayer();
     movePetAfterTurnDfs();
@@ -740,6 +730,12 @@ public class WorldImpl implements WorldInterface {
       throw new IllegalArgumentException("Invalid room selected.");
     }
     return movePlayer(roomName);
+  }
+
+  @Override
+  public String getCurrentPlayerInformation() {
+    checkIfPlayersExistToPlayGame();
+    return currentTurn == null ? "-" : currentTurn.toString();
   }
 
   @Override
@@ -784,14 +780,14 @@ public class WorldImpl implements WorldInterface {
     }
     int damageOnTarget = currentTurn.attackTarget(weaponName);
 
-    if (damageOnTarget!=-1) {
+    if (damageOnTarget != -1) {
       targetPlayer.reduceTargetPlayerHealth(damageOnTarget);
     }
 
     moveTargetPlayer();
     movePetAfterTurnDfs();
     currentTurn = getNextTurnPlayer();
-    return damageOnTarget!=-1
+    return damageOnTarget != -1
             ? "Attack on target was successful."
             : "Attack on target was not successful.";
   }
@@ -799,24 +795,27 @@ public class WorldImpl implements WorldInterface {
   @Override
   public String takeTurnForComputerPlayer() {
     checkIfPlayersExistToPlayGame();
+
     int actionNumber = random.getRandom();
-    RoomInterface currentPlayerRoom = getRoomByRoomName(currentTurn.getPlayerRoomName());
     StringBuilder result = new StringBuilder();
 
-    if (currentPlayerRoom.isTargetPlayerInRoom()
-            && !isCurrentPlayerSeenByPlayersInVisibleRooms()) {
-      result.append(attackTargetPlayer(null));
-    } else if (actionNumber == 0) {
-      result.append(lookAroundSpace());
-    } else if (actionNumber == 1) {
-      result.append(movePlayer(null));
-    } else if (actionNumber == 2) {
-      result.append(pickWeapon(null));
-    } else if (actionNumber == 3) {
+    Map<Integer, Runnable> randomActions = new HashMap<>();
+    randomActions.put(0, () -> result.append(lookAroundSpace()));
+    randomActions.put(1, () -> result.append(movePlayer(null)));
+    randomActions.put(2, () -> result.append(pickWeapon(null)));
+    randomActions.put(3, () -> {
       String randomRoomChosen = this.rooms.get(random.getRandomWithinBound(this.rooms.size()))
               .getRoomName();
       result.append(movePet(randomRoomChosen));
+    });
+
+    RoomInterface currentRoom = getRoomByRoomName(currentTurn.getPlayerRoomName());
+    if (currentRoom.isTargetPlayerInRoom() && !isCurrentPlayerSeenByPlayersInVisibleRooms()) {
+      result.append(attackTargetPlayer(null));
+    } else {
+      randomActions.get(actionNumber).run();
     }
+
     return result.toString();
   }
 
@@ -828,4 +827,11 @@ public class WorldImpl implements WorldInterface {
     }
     return null;
   }
+
+  @Override
+  public boolean isCurrentPlayerComputer() {
+    checkIfPlayersExistToPlayGame();
+    return currentTurn instanceof ComputerPlayer;
+  }
+
 }

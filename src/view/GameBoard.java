@@ -42,8 +42,7 @@ public class GameBoard extends JPanel {
         Image scaledGameOver = gameOver.getScaledInstance(400, 400, Image.SCALE_SMOOTH);
         g.drawImage(scaledGameOver, width - 200, height - 200, null);
       } catch (IOException e) {
-        // TODO
-        // Do nothing?
+        // TODO: Do nothing?
       }
     }
     this.setPreferredSize(new Dimension(img.getWidth(), img.getHeight()));
