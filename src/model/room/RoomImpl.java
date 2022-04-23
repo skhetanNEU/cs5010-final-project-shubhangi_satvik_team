@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-
 import model.players.PlayerInterface;
 import model.weapon.WeaponImpl;
 import model.weapon.WeaponInterface;

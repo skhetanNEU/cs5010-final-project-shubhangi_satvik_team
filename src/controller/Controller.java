@@ -27,7 +27,6 @@ public class Controller implements FeatureInterface {
   private final DefaultGameViewInterface preGameView;
   private final int maxNumberOfTurns;
   private final String defaultConfigurationFilePath;
-  private int currentTurnNumber;
 
   public Controller(DefaultGameViewInterface preGameView,
                     String worldConfigurationPath, int maxNumberOfTurns) {
@@ -38,7 +37,7 @@ public class Controller implements FeatureInterface {
       throw new IllegalArgumentException("Configuration file path is null/empty.");
     }
     if (maxNumberOfTurns <= 0) {
-      throw new IllegalArgumentException("Number of turns cannot be non-positive");
+      throw new IllegalArgumentException("Number of turns cannot be non-positive.");
     }
 
     this.defaultConfigurationFilePath = worldConfigurationPath;
@@ -46,17 +45,11 @@ public class Controller implements FeatureInterface {
     this.preGameView = preGameView;
     this.preGameView.addFeatures(this);
     this.preGameView.makeVisible();
-    this.currentTurnNumber = 0;
-  }
-
-  @Override
-  public boolean checkIfGameIsOver() {
-    return model.isGameOver() || this.currentTurnNumber >= this.maxNumberOfTurns;
   }
 
   private void showGameOverMessage() {
-    if (checkIfGameIsOver()) {
-      String message = model.isGameOver()
+    if (model.isGameOver()) {
+      String message = model.getWinner() != null
               ? String.format("Player %s has killed the target and won the game", model.getWinner())
               : "Target has escaped alive!";
       gameView.refresh();
@@ -77,16 +70,16 @@ public class Controller implements FeatureInterface {
       model = WorldImpl.getBuilder()
               .parseInputFile(chosen)
               .setRandomGenerator(rand)
+              .setMaxTurns(maxNumberOfTurns)
               .build();
       quitGame();
       gameView = new MainGameView(model, this, model.getListOfRooms());
       gameView.makeVisible();
       gameView.addFeatures(this);
-      currentTurnNumber = 0;
     } catch (FileNotFoundException e) {
       // TODO: throw new IllegalArgumentException("ERROR: File not found.");
     } catch (IllegalArgumentException iae) {
-      // TODO: Do nothing?
+      // TODO: Error can come from file parsing or model constructor
     }
   }
 
@@ -119,14 +112,13 @@ public class Controller implements FeatureInterface {
 
   @Override
   public void lookAround() {
-    if (!checkIfGameIsOver()) {
+    if (!model.isGameOver()) {
       CommandsInterface lookAround = new LookAround();
       model.updateWorldView(true);
       gameView.refresh();
       lookAround.execute(model);
       gameView.showCommandOutcome("Look Around Details", lookAround.getCommandResult(), true);
       if (lookAround.isCommandSuccessful()) {
-        this.currentTurnNumber++;
         checkAndPlayTurnForComputerPlayer();
         showGameOverMessage();
       }
@@ -139,7 +131,7 @@ public class Controller implements FeatureInterface {
 
   @Override
   public void handleRoomClick(int row, int col) {
-    if (!checkIfGameIsOver()) {
+    if (!model.isGameOver()) {
       CommandsInterface cellClick = null;
       if (row < 0 || col < 0) {
         gameView.showCommandOutcome("ERROR", "Coordinates cannot be negative", false);
@@ -156,7 +148,6 @@ public class Controller implements FeatureInterface {
         }
       }
       if (cellClick != null && cellClick.isCommandSuccessful()) {
-        this.currentTurnNumber++;
         checkAndPlayTurnForComputerPlayer();
         showGameOverMessage();
       }
@@ -169,7 +160,7 @@ public class Controller implements FeatureInterface {
 
   @Override
   public void pickWeapon() {
-    if (!checkIfGameIsOver()) {
+    if (!model.isGameOver()) {
       CommandsInterface pickWeapon = null;
       String weaponName = gameView.showPickWeaponDialog(model.getCurrentPlayerRoomWeapons());
       if (weaponName == null) {
@@ -182,7 +173,6 @@ public class Controller implements FeatureInterface {
         gameView.showCommandOutcome("Pick Weapon Result", pickWeapon.getCommandResult(), false);
       }
       if (pickWeapon != null && pickWeapon.isCommandSuccessful()) {
-        this.currentTurnNumber++;
         checkAndPlayTurnForComputerPlayer();
         showGameOverMessage();
       }
@@ -195,7 +185,7 @@ public class Controller implements FeatureInterface {
 
   @Override
   public void attackTarget() {
-    if (!checkIfGameIsOver()) {
+    if (!model.isGameOver()) {
       CommandsInterface attackTarget = null;
       String weaponName = gameView.showAttackTargetDialog(model.getCurrentPlayerWeapons());
       if (weaponName == null) {
@@ -208,7 +198,6 @@ public class Controller implements FeatureInterface {
         gameView.showCommandOutcome("Attack Target Result", attackTarget.getCommandResult(), false);
       }
       if (attackTarget != null && attackTarget.isCommandSuccessful()) {
-        this.currentTurnNumber++;
         checkAndPlayTurnForComputerPlayer();
         showGameOverMessage();
       }
@@ -221,7 +210,7 @@ public class Controller implements FeatureInterface {
 
   @Override
   public void movePet() {
-    if (!checkIfGameIsOver()) {
+    if (!model.isGameOver()) {
       CommandsInterface movePet = null;
       String roomName = gameView.showMovePetDialog(model.getListOfRooms());
       if (roomName == null) {
@@ -234,7 +223,6 @@ public class Controller implements FeatureInterface {
         gameView.showCommandOutcome("Move Pet Result", movePet.getCommandResult(), false);
       }
       if (movePet != null && movePet.isCommandSuccessful()) {
-        this.currentTurnNumber++;
         checkAndPlayTurnForComputerPlayer();
         showGameOverMessage();
       }
@@ -247,7 +235,7 @@ public class Controller implements FeatureInterface {
 
   @Override
   public void checkAndPlayTurnForComputerPlayer() {
-    if (!checkIfGameIsOver()) {
+    if (!model.isGameOver()) {
       if (model.isCurrentPlayerComputer()) {
         CommandsInterface playTurnForComputerPlayer = new PlayTurnForComputerPlayer();
         playTurnForComputerPlayer.execute(model);
@@ -255,7 +243,6 @@ public class Controller implements FeatureInterface {
                 playTurnForComputerPlayer.getCommandResult(),
                 false);
         if (playTurnForComputerPlayer.isCommandSuccessful()) {
-          this.currentTurnNumber++;
           showGameOverMessage();
         }
         model.updateWorldView(false);

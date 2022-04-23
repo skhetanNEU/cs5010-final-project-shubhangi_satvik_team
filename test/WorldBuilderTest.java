@@ -2,7 +2,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
 import java.io.StringReader;
-
 import model.random.RandomClass;
 import model.random.RandomGenerator;
 import model.world.WorldImpl;
@@ -10,7 +9,6 @@ import org.junit.Test;
 
 /**
  * A JUnit test class for the WorldBuilder class.
- *
  */
 public class WorldBuilderTest {
 
@@ -353,6 +351,26 @@ public class WorldBuilderTest {
   }
 
   @Test
+  public void testSetMaxTurns_Negative() {
+    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            () -> WorldImpl.getBuilder().setMaxTurns(-2));
+    assertEquals("Number of turns cannot be non-positive.", exception.getMessage());
+    ;
+  }
+
+  @Test
+  public void testSetMaxTurns_Zero() {
+    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            () -> WorldImpl.getBuilder().setMaxTurns(0));
+    assertEquals("Number of turns cannot be non-positive.", exception.getMessage());
+  }
+
+  @Test
+  public void testSetMaxTurns_Positive() {
+    WorldImpl.getBuilder().setMaxTurns(2);
+  }
+
+  @Test
   public void build() {
     Readable validFile = new StringReader("40 40 Test Mansion\n"
             + "10 Dr. Lucky\n"
@@ -369,7 +387,7 @@ public class WorldBuilderTest {
             + "1 1 Lamp\n"
             + "4 2 Wine Bottle");
     RandomGenerator r = new RandomClass();
-    WorldImpl.getBuilder().parseInputFile(validFile).setRandomGenerator(r).build();
+    WorldImpl.getBuilder().parseInputFile(validFile).setRandomGenerator(r).setMaxTurns(2).build();
   }
 
 }

@@ -25,6 +25,7 @@ public class WorldBuilder {
   private final List<Integer> weaponDamageValues;
   private final List<String> weaponNames;
   private RandomGenerator random;
+  private int maxTurns;
 
   /**
    * Construct a WorldBuilder object used to initialize the values
@@ -43,6 +44,7 @@ public class WorldBuilder {
     weaponRoomIds = new ArrayList<>();
     weaponDamageValues = new ArrayList<>();
     weaponNames = new ArrayList<>();
+    maxTurns = 0;
   }
 
   /**
@@ -185,6 +187,14 @@ public class WorldBuilder {
     return this;
   }
 
+  public WorldBuilder setMaxTurns(int maxTurns) throws IllegalArgumentException {
+    if (maxTurns <= 0) {
+      throw new IllegalArgumentException("Number of turns cannot be non-positive.");
+    }
+    this.maxTurns = maxTurns;
+    return this;
+  }
+
   /**
    * A method used to create an instance of WorldInterface based on the variables of WorldBuilder.
    *
@@ -194,7 +204,8 @@ public class WorldBuilder {
     return new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random);
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames,
+            targetPetName, random, maxTurns);
   }
 
 }

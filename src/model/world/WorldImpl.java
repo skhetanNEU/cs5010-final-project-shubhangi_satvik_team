@@ -49,6 +49,7 @@ public class WorldImpl implements WorldInterface {
   private BufferedImage playersView;
   private final int zoomFactor;
   private final RandomGenerator random;
+  private int remainingTurns;
 
   /**
    * Construct a WorldImpl object that represents the world.
@@ -69,7 +70,8 @@ public class WorldImpl implements WorldInterface {
                    int targetPlayerHealth, String targetPlayerName,
                    int numRooms, List<List<Integer>> roomCoordinates, List<String> roomNames,
                    int numWeapons, List<Integer> weaponRoomIds, List<Integer> weaponDamageValues,
-                   List<String> weaponNames, String targetPetName, RandomGenerator random) {
+                   List<String> weaponNames, String targetPetName, RandomGenerator random,
+                   int maxTurns) {
     if (worldCoordinates == null || worldCoordinates.size() == 0) {
       throw new IllegalArgumentException("World coordinates cannot be null/empty.");
     } else if (worldName == null || ("").equals(worldName)) {
@@ -96,6 +98,8 @@ public class WorldImpl implements WorldInterface {
       throw new IllegalArgumentException("Target pet name cannot be null/empty.");
     } else if (random == null) {
       throw new IllegalArgumentException("Random cannot be null.");
+    } else if (maxTurns <= 0) {
+      throw new IllegalArgumentException("Number of turns cannot be non-positive.");
     }
 
     this.worldName = worldName;
@@ -104,6 +108,7 @@ public class WorldImpl implements WorldInterface {
     this.players = new ArrayList<>();
     this.currentTurn = null;
     this.random = random;
+    this.remainingTurns = maxTurns;
 
     initializeRooms(roomCoordinates, roomNames, worldCoordinates);
     initializeWeapons(numRooms, weaponNames, weaponDamageValues, weaponRoomIds);
@@ -463,6 +468,7 @@ public class WorldImpl implements WorldInterface {
     moveTargetPlayer();
     movePetAfterTurnDfs();
     currentTurn = getNextTurnPlayer();
+    remainingTurns -= 1;
     return String.format("Player has successfully moved to room %s.", playerNewRoomName);
   }
 
@@ -543,7 +549,7 @@ public class WorldImpl implements WorldInterface {
 
   @Override
   public boolean isGameOver() {
-    return targetPlayer.getTargetPlayerHealth() <= 0;
+    return targetPlayer.getTargetPlayerHealth() <= 0 || remainingTurns == 0;
   }
 
   /*
@@ -716,6 +722,7 @@ public class WorldImpl implements WorldInterface {
     moveTargetPlayer();
     movePetAfterTurnDfs();
     currentTurn = getNextTurnPlayer();
+    remainingTurns -= 1;
     return result.toString();
   }
 
@@ -747,6 +754,7 @@ public class WorldImpl implements WorldInterface {
     moveTargetPlayer();
     movePetAfterTurnDfs();
     currentTurn = getNextTurnPlayer();
+    remainingTurns -= 1;
     return String.format("Player has successfully picked up %s.", pickedWeapon);
   }
 
@@ -768,6 +776,7 @@ public class WorldImpl implements WorldInterface {
     moveTargetPlayer();
     movePetAfterTurnDfs();
     currentTurn = getNextTurnPlayer();
+    remainingTurns -= 1;
     return String.format("Player has successfully moved the pet to %s.", roomName);
   }
 
@@ -786,6 +795,7 @@ public class WorldImpl implements WorldInterface {
     moveTargetPlayer();
     movePetAfterTurnDfs();
     currentTurn = getNextTurnPlayer();
+    remainingTurns -= 1;
     return damageOnTarget != -1
             ? "Attack on target was successful."
             : "Attack on target was not successful.";
@@ -821,7 +831,7 @@ public class WorldImpl implements WorldInterface {
   @Override
   public String getWinner() {
     checkIfPlayersExistToPlayGame();
-    if (this.targetPlayer.getTargetPlayerHealth() == 0) {
+    if (isGameOver()) {
       return getCurrentPlayerName();
     }
     return null;

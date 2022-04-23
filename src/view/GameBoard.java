@@ -34,7 +34,7 @@ public class GameBoard extends JPanel {
     super.paintComponent(g);
     BufferedImage img = model.getWorldView();
     g.drawImage(img, 0, 0, null);
-    if (listener.checkIfGameIsOver()) {
+    if (model.isGameOver()) {
       int width = img.getWidth() / 2;
       int height = img.getHeight() / 2;
       try {
