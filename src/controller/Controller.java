@@ -25,13 +25,13 @@ public class Controller implements FeatureInterface {
   private WorldInterface model;
   private MainGameViewInterface gameView;
   private final DefaultGameViewInterface preGameView;
-  private final int maxNumberOfTurns;
   private final String defaultConfigurationFilePath;
+  private final int maxNumberOfTurns;
 
   public Controller(DefaultGameViewInterface preGameView,
                     String worldConfigurationPath, int maxNumberOfTurns) {
     if (preGameView == null) {
-      throw new IllegalArgumentException("View cannot be null");
+      throw new IllegalArgumentException("Pre Game View cannot be null");
     }
     if (worldConfigurationPath == null || "".equals(worldConfigurationPath)) {
       throw new IllegalArgumentException("Configuration file path is null/empty.");
@@ -45,6 +45,32 @@ public class Controller implements FeatureInterface {
     this.preGameView = preGameView;
     this.preGameView.addFeatures(this);
     this.preGameView.makeVisible();
+  }
+
+  public Controller(DefaultGameViewInterface preGameView,
+                    MainGameViewInterface gameView,
+                    WorldInterface model,
+                    String worldConfigurationPath) {
+    if (preGameView == null) {
+      throw new IllegalArgumentException("Pre Game View cannot be null.");
+    } else if (gameView == null) {
+      throw new IllegalArgumentException("Main Game View cannot be null.");
+    } else if (model == null) {
+      throw new IllegalArgumentException("Model cannot be null.");
+    } else if (worldConfigurationPath == null || "".equals(worldConfigurationPath)) {
+      throw new IllegalArgumentException("Configuration file path is null/empty.");
+    }
+
+    this.preGameView = preGameView;
+    quitGame();
+
+    this.defaultConfigurationFilePath = worldConfigurationPath;
+    this.maxNumberOfTurns = 0;
+    this.model = model;
+
+    this.gameView = gameView;
+    this.gameView.makeVisible();
+    this.gameView.addFeatures(this);
   }
 
   private void showGameOverMessage() {
@@ -72,10 +98,9 @@ public class Controller implements FeatureInterface {
               .setRandomGenerator(rand)
               .setMaxTurns(maxNumberOfTurns)
               .build();
-      quitGame();
       gameView = new MainGameView(model, this, model.getListOfRooms());
-      gameView.makeVisible();
-      gameView.addFeatures(this);
+      new Controller(this.preGameView, this.gameView, this.model,
+              this.defaultConfigurationFilePath);
     } catch (FileNotFoundException e) {
       // TODO: throw new IllegalArgumentException("ERROR: File not found.");
     } catch (IllegalArgumentException iae) {
