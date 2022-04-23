@@ -71,7 +71,7 @@ public class WeaponImpl implements WeaponInterface {
     if (this == o) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
+    if (! (o instanceof WeaponInterface)) {
       return false;
     }
     WeaponImpl weapon = (WeaponImpl) o;

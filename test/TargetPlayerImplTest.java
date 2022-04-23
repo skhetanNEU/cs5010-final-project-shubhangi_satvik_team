@@ -1,20 +1,17 @@
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import model.room.RoomImpl;
 import model.room.RoomInterface;
 import model.target.TargetPlayerImpl;
 import model.target.TargetPlayerInterface;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * A JUnit test class for the TargetPlayerImpl class.
- *
  */
 public class TargetPlayerImplTest {
 
@@ -35,8 +32,9 @@ public class TargetPlayerImplTest {
   @Test
   public void testTargetPlayerConstructor_Successful() {
     TargetPlayerInterface t = new TargetPlayerImpl("Dr. Lucky", 50, room0);
-    String expectedString = "---------- Target Player Details ----------\n"
-            + "Name: Dr. Lucky\nHealth: 50\nCurrent Room: Armory";
+    String expectedString = "Name: Dr. Lucky\n"
+            + "Health: 50\n"
+            + "Current Room: Armory";
     assertEquals(expectedString, t.toString());
   }
 
@@ -105,21 +103,21 @@ public class TargetPlayerImplTest {
   }
 
   @Test
-  public void testReduceTargetPlayerHealth_Successful_DamageDonePositive_Tc1() {
+  public void testReduceTargetPlayerHealth_Successful_DamageDonePositive_MoreThanTargetHealth() {
     TargetPlayerInterface t = new TargetPlayerImpl("doctor", 10, room0);
     t.reduceTargetPlayerHealth(100);
     assertEquals(0, t.getTargetPlayerHealth());
   }
 
   @Test
-  public void testReduceTargetPlayerHealth_Successful_DamageDonePositive_Tc2() {
+  public void testReduceTargetPlayerHealth_Successful_DamageDonePositive_EqualToTargetHealth() {
     TargetPlayerInterface t = new TargetPlayerImpl("doctor", 10, room0);
     t.reduceTargetPlayerHealth(10);
     assertEquals(0, t.getTargetPlayerHealth());
   }
 
   @Test
-  public void testReduceTargetPlayerHealth_Successful_DamageDonePositive_Tc3() {
+  public void testReduceTargetPlayerHealth_Successful_DamageDonePositive_LessThanTargetHealth() {
     TargetPlayerInterface t = new TargetPlayerImpl("doctor", 10, room0);
     t.reduceTargetPlayerHealth(2);
     assertEquals(8, t.getTargetPlayerHealth());
@@ -148,39 +146,44 @@ public class TargetPlayerImplTest {
   public void testSetTargetPlayerRoom_Successful_RoomIdNotZero() {
     TargetPlayerInterface t1 = new TargetPlayerImpl("Dr. Lucky", 50, room0);
     t1.setTargetPlayerRoom(room2);
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Dr. Lucky\nHealth: 50\nCurrent Room: Dining Hall", t1.toString());
+    assertEquals("Name: Dr. Lucky\n"
+            + "Health: 50\n"
+            + "Current Room: Dining Hall", t1.toString());
   }
 
   @Test
   public void testSetTargetPlayerRoom_Successful_RoomIdZero() {
     TargetPlayerInterface t1 = new TargetPlayerImpl("Dr. Lucky", 50, room0);
     t1.setTargetPlayerRoom(room0);
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Dr. Lucky\nHealth: 50\nCurrent Room: Armory", t1.toString());
+    assertEquals("Name: Dr. Lucky\n"
+            + "Health: 50\n"
+            + "Current Room: Armory", t1.toString());
   }
 
   @Test
   public void testToString_Tc1() {
     TargetPlayerInterface t1 = new TargetPlayerImpl("Dr. Lucky", 50, room0);
-    String expectedString1 = "---------- Target Player Details ----------\n"
-            + "Name: Dr. Lucky\nHealth: 50\nCurrent Room: Armory";
+    String expectedString1 = "Name: Dr. Lucky\n"
+            + "Health: 50\n"
+            + "Current Room: Armory";
     assertEquals(expectedString1, t1.toString());
   }
 
   @Test
   public void testToString_Tc2() {
     TargetPlayerInterface t2 = new TargetPlayerImpl("Doctor", 20, room0);
-    String expectedString2 = "---------- Target Player Details ----------\n"
-            + "Name: Doctor\nHealth: 20\nCurrent Room: Armory";
+    String expectedString2 = "Name: Doctor\n"
+            + "Health: 20\n"
+            + "Current Room: Armory";
     assertEquals(expectedString2, t2.toString());
   }
 
   @Test
   public void testToString_Tc3() {
     TargetPlayerInterface t3 = new TargetPlayerImpl("Lucky", 1, room0);
-    String expectedString3 = "---------- Target Player Details ----------\n"
-            + "Name: Lucky\nHealth: 1\nCurrent Room: Armory";
+    String expectedString3 = "Name: Lucky\n"
+            + "Health: 1\n"
+            + "Current Room: Armory";
     assertEquals(expectedString3, t3.toString());
   }
 

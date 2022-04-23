@@ -1,13 +1,16 @@
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import model.pet.PetImpl;
 import model.pet.PetInterface;
-import model.players.PlayerImpl;
+import model.players.ComputerPlayer;
+import model.players.HumanPlayer;
 import model.players.PlayerInterface;
 import model.room.RoomImpl;
 import model.room.RoomInterface;
@@ -15,24 +18,18 @@ import model.target.TargetPlayerImpl;
 import model.target.TargetPlayerInterface;
 import model.weapon.WeaponImpl;
 import model.weapon.WeaponInterface;
+import org.junit.Before;
+import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
 
 /**
  * A JUnit test class for the RoomImpl class.
- *
  */
 public class RoomImplTest {
 
   private RoomInterface room0;
   private RoomInterface room1;
   private RoomInterface room2;
-  private TargetPlayerInterface targetPlayer;
-  private PetInterface targetPet;
   private PlayerInterface humanPlayer1;
   private PlayerInterface humanPlayer2;
   private PlayerInterface computerPlayer1;
@@ -48,12 +45,12 @@ public class RoomImplTest {
     room0 = new RoomImpl(0, "Armory", new ArrayList<>(Arrays.asList(14, 14, 16, 20)));
     room1 = new RoomImpl(1, "Billiard Room", new ArrayList<>(Arrays.asList(17, 14, 20, 20)));
     room2 = new RoomImpl(2, "Dining Hall", new ArrayList<>(Arrays.asList(7, 6, 15, 13)));
-    targetPlayer = new TargetPlayerImpl("Dr. Lucky", 10, room0);
-    targetPet = new PetImpl("Fortune Cat", room0);
-    humanPlayer1 = new PlayerImpl(1, "humanPlayer1", true, 2, false, room0);
-    humanPlayer2 = new PlayerImpl(2, "humanPlayer2", true, 1, false, room1);
-    computerPlayer1 = new PlayerImpl(3, "computerPlayer1", false, 0, true, room0);
-    computerPlayer2 = new PlayerImpl(4, "computerPlayer2", false, 0, true, room2);
+    TargetPlayerInterface targetPlayer = new TargetPlayerImpl("Dr. Lucky", 10, room0);
+    PetInterface targetPet = new PetImpl("Fortune Cat", room0);
+    humanPlayer1 = new HumanPlayer("humanPlayer1", 2, room0);
+    humanPlayer2 = new HumanPlayer("humanPlayer2", -1, room1);
+    computerPlayer1 = new ComputerPlayer("computerPlayer1", 3, room0);
+    computerPlayer2 = new ComputerPlayer("computerPlayer2", -1, room2);
     weapon1 = new WeaponImpl(1, "Blade", 2);
     weapon3 = new WeaponImpl(3, "Rat Poison", 3);
   }
@@ -62,9 +59,9 @@ public class RoomImplTest {
   public void testRoomConstructor_Successful() {
     RoomInterface room = new RoomImpl(0, "Armory", new ArrayList<>(Arrays.asList(14, 14, 16, 20)));
     String expected = "Name: Armory\n"
-            + "Neighbours: No neighbours\n"
-            + "Weapons: No weapons\n"
-            + "Players: No players\n"
+            + "Neighbours: -\n"
+            + "Weapons: -\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No";
     assertEquals(expected, room.toString());
@@ -202,6 +199,172 @@ public class RoomImplTest {
   }
 
   @Test
+  public void testGetRoomNeighbours_AllNeighbours_ZeroNeighbours() {
+    assertEquals(List.of(), room0.getRoomNeighbours(true));
+  }
+
+  @Test
+  public void testGetRoomNeighbours_AllNeighbours_OneNeighbours() {
+    room1.setRoomNeighbours(new ArrayList<>(List.of(room0)));
+    assertEquals(List.of("Armory"), room1.getRoomNeighbours(true));
+  }
+
+  @Test
+  public void testGetRoomNeighbours_AllNeighbours_MoreThan1Neighbours() {
+    room2.setRoomNeighbours(new ArrayList<>(Arrays.asList(room0, room1)));
+    assertEquals(Arrays.asList("Armory", "Billiard Room"),
+            room2.getRoomNeighbours(true));
+  }
+
+  @Test
+  public void testGetRoomNeighbours_VisibleNeighbours() {
+    room2.setRoomNeighbours(new ArrayList<>(Arrays.asList(room0, room1)));
+    assertEquals(List.of("Billiard Room"), room2.getRoomNeighbours(false));
+  }
+
+  @Test
+  public void testGetNeighboringRoom_RoomNameEmpty() {
+    room2.setRoomNeighbours(new ArrayList<>(Arrays.asList(room0, room1)));
+    assertThrows(IllegalArgumentException.class, () -> room2.getNeighboringRoom(""));
+  }
+
+  @Test
+  public void testGetNeighboringRoom_RoomNameNull() {
+    room2.setRoomNeighbours(new ArrayList<>(Arrays.asList(room0, room1)));
+    assertThrows(IllegalArgumentException.class, () -> room2.getNeighboringRoom(null));
+  }
+
+  @Test
+  public void testGetNeighboringRoom_NotNeighbour() {
+    room2.setRoomNeighbours(new ArrayList<>(Arrays.asList(room0, room1)));
+    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            () -> room2.getNeighboringRoom("TestRoom"));
+    assertEquals("Desired room is not a neighbour of current room.", exception.getMessage());
+  }
+
+  @Test
+  public void testGetNeighboringRoom_ValidNeighbour() {
+    room2.setRoomNeighbours(new ArrayList<>(Arrays.asList(room0, room1)));
+    assertEquals("Armory", room2.getNeighboringRoom("Armory").getRoomName());
+  }
+
+  @Test
+  public void testGetAvailableWeapons_WithDamageValues_ZeroWeapons() {
+    assertEquals(List.of(), room0.getAvailableWeapons(true));
+  }
+
+  @Test
+  public void testGetAvailableWeapons_WithDamageValues_OneWeapon() {
+    room2.addWeaponToRoom(1, "Plate", 3);
+    assertEquals(List.of("Plate (Damage: 3)"),
+            room2.getAvailableWeapons(true));
+  }
+
+  @Test
+  public void testGetAvailableWeapons_WithDamageValues_MoreThanOneWeapon() {
+    room0.addWeaponToRoom(9, "Billiard Cue", 1);
+    room0.addWeaponToRoom(6, "Revolver", 4);
+    assertEquals(Arrays.asList("Revolver (Damage: 4)", "Billiard Cue (Damage: 1)"),
+            room0.getAvailableWeapons(true));
+  }
+
+  @Test
+  public void testGetAvailableWeapons_WithoutDamageValues_ZeroWeapons() {
+    assertEquals(List.of(), room0.getAvailableWeapons(false));
+  }
+
+  @Test
+  public void testGetAvailableWeapons_WithoutDamageValues_OneWeapon() {
+    room2.addWeaponToRoom(1, "Plate", 3);
+    assertEquals(List.of("Plate"), room2.getAvailableWeapons(false));
+  }
+
+  @Test
+  public void testGetAvailableWeapons_WithoutDamageValues_MoreThanOneWeapon() {
+    room0.addWeaponToRoom(9, "Billiard Cue", 1);
+    room0.addWeaponToRoom(6, "Revolver", 4);
+    assertEquals(Arrays.asList("Revolver", "Billiard Cue"), room0.getAvailableWeapons(false));
+  }
+
+  @Test
+  public void testGetWeaponByWeaponName_WeaponNameEmpty() {
+    room0.addWeaponToRoom(1, "Blade", 2);
+    assertThrows(IllegalArgumentException.class, () -> room0.getWeaponByWeaponName(""));
+  }
+
+  @Test
+  public void testGetWeaponByWeaponName_WeaponNameNull() {
+    room0.addWeaponToRoom(1, "Blade", 2);
+    assertThrows(IllegalArgumentException.class, () -> room0.getWeaponByWeaponName(null));
+  }
+
+  @Test
+  public void testGetWeaponByWeaponName_WeaponNotInSpace() {
+    room0.addWeaponToRoom(1, "Blade", 2);
+    assertThrows(IllegalArgumentException.class, () -> room0.getWeaponByWeaponName("Ball"));
+  }
+
+  @Test
+  public void testGetWeaponByWeaponName_WeaponInSpace() {
+    room0.addWeaponToRoom(1, "Blade", 2);
+    assertEquals(weapon1, room0.getWeaponByWeaponName("Blade"));
+  }
+
+  @Test
+  public void testGetNumberOfPlayersInRoom_ZeroPlayers() {
+    assertEquals(0, room0.getNumberOfPlayersInRoom());
+  }
+
+  @Test
+  public void testGetNumberOfPlayersInRoom_OnePlayer() {
+    room1.addPlayerToRoom(humanPlayer1);
+    assertEquals(1, room1.getNumberOfPlayersInRoom());
+  }
+
+  @Test
+  public void testGetNumberOfPlayersInRoom_MoreThan1Players() {
+    room2.addPlayerToRoom(humanPlayer2);
+    room2.addPlayerToRoom(computerPlayer2);
+    assertEquals(2, room2.getNumberOfPlayersInRoom());
+  }
+
+  @Test
+  public void testGetNumberOfPlayersInNeighbouringRoom_NoNeighbours() {
+    assertEquals(0, room0.getNumberOfPlayersInNeighbouringRoom(false));
+    assertEquals(0, room0.getNumberOfPlayersInNeighbouringRoom(true));
+  }
+
+  @Test
+  public void testGetNumberOfPlayersInNeighbouringRoom_RoomsHidden_Zero() {
+    room0.addPlayerToRoom(humanPlayer1);
+    room1.setRoomNeighbours(Arrays.asList(room0, room2));
+    assertEquals(0, room1.getNumberOfPlayersInNeighbouringRoom(false));
+  }
+
+  @Test
+  public void testGetNumberOfPlayersInNeighbouringRoom_RoomsHidden_MoreThanZero() {
+    room2.addPlayerToRoom(humanPlayer1);
+    room2.addPlayerToRoom(humanPlayer2);
+    room1.setRoomNeighbours(Arrays.asList(room0, room2));
+    assertEquals(2, room1.getNumberOfPlayersInNeighbouringRoom(false));
+  }
+
+  @Test
+  public void testGetNumberOfPlayersInNeighbouringRoom_RoomsVisible_Zero() {
+    room1.setRoomNeighbours(Arrays.asList(room0, room2));
+    assertEquals(0, room1.getNumberOfPlayersInNeighbouringRoom(true));
+  }
+
+  @Test
+  public void testGetNumberOfPlayersInNeighbouringRoom_RoomsVisible_MoreThanZero() {
+    room2.addPlayerToRoom(humanPlayer1);
+    room2.addPlayerToRoom(computerPlayer1);
+    room0.addPlayerToRoom(humanPlayer2);
+    room1.setRoomNeighbours(Arrays.asList(room0, room2));
+    assertEquals(3, room1.getNumberOfPlayersInNeighbouringRoom(true));
+  }
+
+  @Test
   public void testUpdateTargetPlayerPresence_SetToTrue() {
     assertFalse(room1.isTargetPlayerInRoom());
     room1.updateTargetPlayerPresence(true);
@@ -230,172 +393,30 @@ public class RoomImplTest {
   }
 
   @Test
-  public void testGetRoomNeighbours_AllNeighbours_ZeroNeighbours() {
-    assertEquals("No neighbours", room0.getRoomNeighbours(true));
-  }
-
-  @Test
-  public void testGetRoomNeighbours_AllNeighbours_OneNeighbours() {
-    room1.setRoomNeighbours(new ArrayList<>(List.of(room0)));
-    assertEquals("Armory", room1.getRoomNeighbours(true));
-  }
-
-  @Test
-  public void testGetRoomNeighbours_AllNeighbours_MoreThan1Neighbours() {
-    room2.setRoomNeighbours(new ArrayList<>(Arrays.asList(room0, room1)));
-    assertEquals("Armory, Billiard Room", room2.getRoomNeighbours(true));
-  }
-
-  @Test
-  public void testGetRoomNeighbours_VisibleNeighbours() {
-    room2.setRoomNeighbours(new ArrayList<>(Arrays.asList(room0, room1)));
-    assertEquals("Billiard Room", room2.getRoomNeighbours(false));
-  }
-
-  @Test
   public void testSetRoomNeighbours_NeighboursNull() {
     RoomInterface room0 = new RoomImpl(0, "Armory",
             new ArrayList<>(Arrays.asList(14, 14, 16, 20)));
     room0.setRoomNeighbours(null);
-    assertEquals("No neighbours", room0.getRoomNeighbours(true));
+    assertEquals(List.of(), room0.getRoomNeighbours(true));
   }
 
   @Test
   public void testSetRoomNeighbours_NeighboursEmpty() {
     room0.setRoomNeighbours(new ArrayList<>(0));
-    assertEquals("No neighbours", room0.getRoomNeighbours(true));
+    assertEquals(List.of(), room0.getRoomNeighbours(true));
   }
 
   @Test
   public void testSetRoomNeighbours_AddOneNeighbour() {
     room1.setRoomNeighbours(new ArrayList<>(List.of(room0)));
-    assertEquals("Armory", room1.getRoomNeighbours(true));
+    assertEquals(List.of("Armory"), room1.getRoomNeighbours(true));
   }
 
   @Test
   public void testSetRoomNeighbours_AddMoreThanOneNeighbour() {
     room2.setRoomNeighbours(new ArrayList<>(List.of(room0, room1)));
-    assertEquals("Armory, Billiard Room", room2.getRoomNeighbours(true));
-  }
-
-  @Test
-  public void testCheckIfRoomNeighbour_AllNeighbours_RoomNameEmpty() {
-    room0.setRoomNeighbours(new ArrayList<>(Arrays.asList(room2, room1)));
-    assertThrows(IllegalArgumentException.class, () -> room0.checkIfRoomNeighbour("", true));
-  }
-
-  @Test
-  public void testCheckIfRoomNeighbour_AllNeighbours_RoomNameNull() {
-    room0.setRoomNeighbours(new ArrayList<>(Arrays.asList(room2, room1)));
-    assertThrows(IllegalArgumentException.class, () -> room0.checkIfRoomNeighbour(null, true));
-  }
-
-  @Test
-  public void testCheckIfRoomNeighbour_AllNeighbours_RoomNotNeighbour() {
-    room1.setRoomNeighbours(new ArrayList<>(Arrays.asList(room2, room0)));
-    assertThrows(IllegalArgumentException.class,
-            () -> room1.checkIfRoomNeighbour("Game Room", true));
-  }
-
-  @Test
-  public void testCheckIfRoomNeighbour_AllNeighbours_RoomIsNeighbour() {
-    room1.setRoomNeighbours(new ArrayList<>(Arrays.asList(room2, room0)));
-    room1.checkIfRoomNeighbour("Armory", true);
-  }
-
-  @Test
-  public void testCheckIfRoomNeighbour_VisibleNeighbours_RoomNameEmpty() {
-    room0.setRoomNeighbours(new ArrayList<>(Arrays.asList(room2, room1)));
-    assertThrows(IllegalArgumentException.class,
-            () -> room0.checkIfRoomNeighbour("", false));
-  }
-
-  @Test
-  public void testCheckIfRoomNeighbour_VisibleNeighbours_RoomNameNull() {
-    room0.setRoomNeighbours(new ArrayList<>(Arrays.asList(room2, room1)));
-    assertThrows(IllegalArgumentException.class,
-            () -> room0.checkIfRoomNeighbour(null, false));
-  }
-
-  @Test
-  public void testCheckIfRoomNeighbour_VisibleNeighbours_RoomNotNeighbour() {
-    room1.setRoomNeighbours(new ArrayList<>(Arrays.asList(room2, room0)));
-    assertThrows(IllegalArgumentException.class,
-            () -> room1.checkIfRoomNeighbour("Game Room", false));
-  }
-
-  @Test
-  public void testCheckIfRoomNeighbour_VisibleNeighbours_RoomIsNeighbourButFalse() {
-    room1.setRoomNeighbours(new ArrayList<>(Arrays.asList(room2, room0)));
-    assertThrows(IllegalArgumentException.class,
-            () -> room1.checkIfRoomNeighbour("Armory", false));
-  }
-
-  @Test
-  public void testCheckIfRoomNeighbour_VisibleNeighbours_RoomIsNeighbourButTrue() {
-    room1.setRoomNeighbours(new ArrayList<>(Arrays.asList(room2, room0)));
-    room1.checkIfRoomNeighbour("Dining Hall", false);
-  }
-
-  @Test
-  public void testGetAvailableWeapons_WithDamageValues_ZeroWeapons() {
-    assertEquals("No weapons", room0.getAvailableWeapons(true));
-  }
-
-  @Test
-  public void testGetAvailableWeapons_WithDamageValues_OneWeapon() {
-    room2.addWeaponToRoom(1, "Plate", 3);
-    assertEquals("Plate with damage value 3", room2.getAvailableWeapons(true));
-  }
-
-  @Test
-  public void testGetAvailableWeapons_WithDamageValues_MoreThanOneWeapon() {
-    room0.addWeaponToRoom(9, "Billiard Cue", 1);
-    room0.addWeaponToRoom(6, "Revolver", 4);
-    assertEquals("Revolver with damage value 4, Billiard Cue with damage value 1",
-            room0.getAvailableWeapons(true));
-  }
-
-  @Test
-  public void testGetAvailableWeapons_WithoutDamageValues_ZeroWeapons() {
-    assertEquals("No weapons", room0.getAvailableWeapons(false));
-  }
-
-  @Test
-  public void testGetAvailableWeapons_WithoutDamageValues_OneWeapon() {
-    room2.addWeaponToRoom(1, "Plate", 3);
-    assertEquals("Plate", room2.getAvailableWeapons(false));
-  }
-
-  @Test
-  public void testGetAvailableWeapons_WithoutDamageValues_MoreThanOneWeapon() {
-    room0.addWeaponToRoom(9, "Billiard Cue", 1);
-    room0.addWeaponToRoom(6, "Revolver", 4);
-    assertEquals("Revolver, Billiard Cue", room0.getAvailableWeapons(false));
-  }
-
-  @Test
-  public void testGetWeaponByWeaponName_WeaponNameEmpty() {
-    room0.addWeaponToRoom(1, "Blade", 2);
-    assertThrows(IllegalArgumentException.class, () -> room0.getWeaponByWeaponName(""));
-  }
-
-  @Test
-  public void testGetWeaponByWeaponName_WeaponNameNull() {
-    room0.addWeaponToRoom(1, "Blade", 2);
-    assertThrows(IllegalArgumentException.class, () -> room0.getWeaponByWeaponName(null));
-  }
-
-  @Test
-  public void testGetWeaponByWeaponName_WeaponNotInSpace() {
-    room0.addWeaponToRoom(1, "Blade", 2);
-    assertThrows(IllegalArgumentException.class, () -> room0.getWeaponByWeaponName("Ball"));
-  }
-
-  @Test
-  public void testGetWeaponByWeaponName_WeaponInSpace() {
-    room0.addWeaponToRoom(1, "Blade", 2);
-    assertEquals(weapon1, room0.getWeaponByWeaponName("Blade"));
+    assertEquals(Arrays.asList("Armory", "Billiard Room"),
+            room2.getRoomNeighbours(true));
   }
 
   @Test
@@ -427,20 +448,20 @@ public class RoomImplTest {
   public void testAddRoomWeapon_Successful_WeaponExists() {
     room2.addWeaponToRoom(1, "Plate", 3);
     room2.addWeaponToRoom(1, "Plate", 3);
-    assertEquals("Plate with damage value 3", room2.getAvailableWeapons(true));
+    assertEquals("[Plate (Damage: 3)]", room2.getAvailableWeapons(true).toString());
   }
 
   @Test
   public void testAddRoomWeapon_Successful_OneWeapon() {
     room2.addWeaponToRoom(1, "Plate", 3);
-    assertEquals("Plate with damage value 3", room2.getAvailableWeapons(true));
+    assertEquals(List.of("Plate (Damage: 3)"), room2.getAvailableWeapons(true));
   }
 
   @Test
   public void testAddRoomWeapon_Successful_MoreThan1Weapon() {
     room0.addWeaponToRoom(9, "Billiard Cue", 1);
     room0.addWeaponToRoom(6, "Revolver", 4);
-    assertEquals("Revolver with damage value 4, Billiard Cue with damage value 1",
+    assertEquals(Arrays.asList("Revolver (Damage: 4)", "Billiard Cue (Damage: 1)"),
             room0.getAvailableWeapons(true));
   }
 
@@ -461,25 +482,7 @@ public class RoomImplTest {
     room0.addWeaponToRoom(3, "Rat Poison", 3);
     room0.addWeaponToRoom(10, "Ball", 8);
     room0.removeWeaponFromRoom(weapon3);
-    assertEquals("Ball", room0.getAvailableWeapons(false));
-  }
-
-  @Test
-  public void testGetNumberOfPlayersInRoom_ZeroPlayers() {
-    assertEquals(0, room0.getNumberOfPlayersInRoom());
-  }
-
-  @Test
-  public void testGetNumberOfPlayersInRoom_OnePlayer() {
-    room1.addPlayerToRoom(humanPlayer1);
-    assertEquals(1, room1.getNumberOfPlayersInRoom());
-  }
-
-  @Test
-  public void testGetNumberOfPlayersInRoom_MoreThan1Players() {
-    room2.addPlayerToRoom(humanPlayer2);
-    room2.addPlayerToRoom(computerPlayer2);
-    assertEquals(2, room2.getNumberOfPlayersInRoom());
+    assertEquals(List.of("Ball"), room0.getAvailableWeapons(false));
   }
 
   @Test
@@ -492,8 +495,8 @@ public class RoomImplTest {
     room1.addPlayerToRoom(computerPlayer2);
     room1.addPlayerToRoom(computerPlayer2);
     assertEquals("Name: Billiard Room\n"
-            + "Neighbours: No neighbours\n"
-            + "Weapons: No weapons\n"
+            + "Neighbours: -\n"
+            + "Weapons: -\n"
             + "Players: computerPlayer2\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No", room1.toString());
@@ -504,8 +507,8 @@ public class RoomImplTest {
     room2.addPlayerToRoom(humanPlayer1);
     room2.addPlayerToRoom(computerPlayer1);
     assertEquals("Name: Dining Hall\n"
-            + "Neighbours: No neighbours\n"
-            + "Weapons: No weapons\n"
+            + "Neighbours: -\n"
+            + "Weapons: -\n"
             + "Players: humanPlayer1, computerPlayer1\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No", room2.toString());
@@ -529,8 +532,8 @@ public class RoomImplTest {
     room2.addPlayerToRoom(computerPlayer2);
     room2.removePlayerFromRoom(computerPlayer1);
     assertEquals("Name: Dining Hall\n"
-            + "Neighbours: No neighbours\n"
-            + "Weapons: No weapons\n"
+            + "Neighbours: -\n"
+            + "Weapons: -\n"
             + "Players: humanPlayer1, computerPlayer2\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No", room2.toString());
@@ -539,9 +542,9 @@ public class RoomImplTest {
   @Test
   public void testToString_ZeroWeaponsNeighboursPlayers() {
     String expected = "Name: Armory\n"
-            + "Neighbours: No neighbours\n"
-            + "Weapons: No weapons\n"
-            + "Players: No players\n"
+            + "Neighbours: -\n"
+            + "Weapons: -\n"
+            + "Players: -\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes";
     assertEquals(expected, room0.toString());
@@ -554,7 +557,7 @@ public class RoomImplTest {
     room0.addPlayerToRoom(humanPlayer1);
     String expected = "Name: Armory\n"
             + "Neighbours: Billiard Room\n"
-            + "Weapons: Knife with damage value 5\n"
+            + "Weapons: Knife (Damage: 5)\n"
             + "Players: humanPlayer1\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes";
@@ -570,7 +573,7 @@ public class RoomImplTest {
     room1.addPlayerToRoom(computerPlayer2);
     String expected = "Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: Blade with damage value 2, Rope with damage value 1\n"
+            + "Weapons: Blade (Damage: 2), Rope (Damage: 1)\n"
             + "Players: humanPlayer2, computerPlayer2\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No";
@@ -587,7 +590,7 @@ public class RoomImplTest {
     room1.updateTargetPlayerPresence(true);
     String expected = "Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: Blade with damage value 2, Rope with damage value 1\n"
+            + "Weapons: Blade (Damage: 2), Rope (Damage: 1)\n"
             + "Players: humanPlayer2, computerPlayer2\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: No";
@@ -604,7 +607,7 @@ public class RoomImplTest {
     room1.updatePetPresence(true);
     String expected = "Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: Blade with damage value 2, Rope with damage value 1\n"
+            + "Weapons: Blade (Damage: 2), Rope (Damage: 1)\n"
             + "Players: humanPlayer2, computerPlayer2\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: Yes";
@@ -722,5 +725,5 @@ public class RoomImplTest {
             new ArrayList<>(Arrays.asList(14, 14, 16, 20)));
     assertNotEquals(-1, room.compareTo(room2));
   }
-  
+
 }

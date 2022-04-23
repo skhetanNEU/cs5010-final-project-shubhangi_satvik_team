@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+
 import model.players.PlayerInterface;
 import model.weapon.WeaponImpl;
 import model.weapon.WeaponInterface;
@@ -112,16 +113,6 @@ public class RoomImpl implements RoomInterface {
   }
 
   @Override
-  public void updateTargetPlayerPresence(boolean isPresent) {
-    this.isTargetPlayerInRoom = isPresent;
-  }
-
-  @Override
-  public void updatePetPresence(boolean isPresent) {
-    this.isPetInRoom = isPresent;
-  }
-
-  @Override
   public List<String> getRoomNeighbours(boolean includeInvisibleRooms) {
     List<String> neighbours = new ArrayList<>();
     if (roomNeighbours != null && roomNeighbours.size() != 0) {
@@ -133,13 +124,6 @@ public class RoomImpl implements RoomInterface {
       }
     }
     return neighbours;
-  }
-
-  @Override
-  public void setRoomNeighbours(List<RoomInterface> neighbours) {
-    if (neighbours != null && neighbours.size() > 0) {
-      this.roomNeighbours = neighbours;
-    }
   }
 
   @Override
@@ -188,6 +172,44 @@ public class RoomImpl implements RoomInterface {
   }
 
   @Override
+  public int getNumberOfPlayersInRoom() {
+    if (this.playersInSpace == null || this.playersInSpace.size() == 0) {
+      return 0;
+    }
+    return this.playersInSpace.size();
+  }
+
+  @Override
+  public int getNumberOfPlayersInNeighbouringRoom(boolean includeHiddenRooms) {
+    int neighbourRoomPlayerCount = 0;
+    if (roomNeighbours.size() > 0) {
+      for (RoomInterface n : roomNeighbours) {
+        if (!n.isPetInRoom() || (n.isPetInRoom() && includeHiddenRooms)) {
+          neighbourRoomPlayerCount += n.getNumberOfPlayersInRoom();
+        }
+      }
+    }
+    return neighbourRoomPlayerCount;
+  }
+
+  @Override
+  public void updateTargetPlayerPresence(boolean isPresent) {
+    this.isTargetPlayerInRoom = isPresent;
+  }
+
+  @Override
+  public void updatePetPresence(boolean isPresent) {
+    this.isPetInRoom = isPresent;
+  }
+
+  @Override
+  public void setRoomNeighbours(List<RoomInterface> neighbours) {
+    if (neighbours != null && neighbours.size() > 0) {
+      this.roomNeighbours = neighbours;
+    }
+  }
+
+  @Override
   public void addWeaponToRoom(int weaponId, String weaponName, int weaponDamageValue) {
     if (weaponName == null || "".equals(weaponName)) {
       throw new IllegalArgumentException("Weapon name cannot be empty.");
@@ -212,27 +234,6 @@ public class RoomImpl implements RoomInterface {
     } else {
       weaponsInSpace.remove(weapon);
     }
-  }
-
-  @Override
-  public int getNumberOfPlayersInRoom() {
-    if (this.playersInSpace == null || this.playersInSpace.size() == 0) {
-      return 0;
-    }
-    return this.playersInSpace.size();
-  }
-
-  @Override
-  public int getNumberOfPlayersInNeighbouringRoom(boolean includeHiddenRooms) {
-    int neighbourRoomPlayerCount = 0;
-    if (roomNeighbours.size() > 0) {
-      for (RoomInterface n : roomNeighbours) {
-        if (!n.isPetInRoom() || (n.isPetInRoom() && includeHiddenRooms)) {
-          neighbourRoomPlayerCount += n.getNumberOfPlayersInRoom();
-        }
-      }
-    }
-    return neighbourRoomPlayerCount;
   }
 
   @Override
@@ -268,7 +269,7 @@ public class RoomImpl implements RoomInterface {
             weaponsInSpace.size() > 0
                     ? String.join(", ", getAvailableWeapons(true))
                     : '-',
-            getPlayersInRoom(),
+            "".equalsIgnoreCase(getPlayersInRoom()) ? "-" : getPlayersInRoom(),
             isTargetPlayerInRoom ? "Yes" : "No",
             isPetInRoom ? "Yes" : "No"
     );
@@ -279,7 +280,7 @@ public class RoomImpl implements RoomInterface {
     if (this == o) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
+    if (!(o instanceof RoomInterface)) {
       return false;
     }
     RoomImpl room = (RoomImpl) o;

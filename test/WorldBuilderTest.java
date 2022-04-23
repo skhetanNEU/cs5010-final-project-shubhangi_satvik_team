@@ -1,11 +1,12 @@
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
 import java.io.StringReader;
 
+import model.random.RandomClass;
+import model.random.RandomGenerator;
 import model.world.WorldImpl;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import org.junit.Test;
 
 /**
  * A JUnit test class for the WorldBuilder class.
@@ -17,7 +18,7 @@ public class WorldBuilderTest {
   public void parseInputFileInvalid_FileNull() {
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
             () -> WorldImpl.getBuilder().parseInputFile(null));
-    assertEquals("ERROR: Cannot find file.", exception.getMessage());
+    assertEquals("ERROR PARSING: Cannot find file.", exception.getMessage());
   }
 
   @Test
@@ -57,7 +58,7 @@ public class WorldBuilderTest {
             + "4 2 Wine Bottle");
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
             () -> WorldImpl.getBuilder().parseInputFile(worldNameMissing));
-    assertEquals("ERROR: Error in world description", exception.getMessage());
+    assertEquals("ERROR PARSING: Error in world description.", exception.getMessage());
   }
 
   @Test
@@ -78,7 +79,7 @@ public class WorldBuilderTest {
             + "4 2 Wine Bottle");
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
             () -> WorldImpl.getBuilder().parseInputFile(worldCoordinatesMissing));
-    assertEquals("ERROR: Error in world description", exception.getMessage());
+    assertEquals("ERROR PARSING: Error in world description.", exception.getMessage());
   }
 
   @Test
@@ -99,7 +100,7 @@ public class WorldBuilderTest {
             + "4 2 Wine Bottle");
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
             () -> WorldImpl.getBuilder().parseInputFile(targetPlayerNameMissing));
-    assertEquals("ERROR: Error in target player description", exception.getMessage());
+    assertEquals("ERROR PARSING: Error in target player description.", exception.getMessage());
   }
 
   @Test
@@ -120,7 +121,7 @@ public class WorldBuilderTest {
             + "4 2 Wine Bottle");
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
             () -> WorldImpl.getBuilder().parseInputFile(targetPetNameMissing));
-    assertEquals("ERROR: Error in target pet description", exception.getMessage());
+    assertEquals("ERROR PARSING: Error in target pet description.", exception.getMessage());
   }
 
   @Test
@@ -141,7 +142,7 @@ public class WorldBuilderTest {
             + "4 2 Wine Bottle");
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
             () -> WorldImpl.getBuilder().parseInputFile(numRoomsNotInt));
-    assertEquals("ERROR: Error in reading number of rooms", exception.getMessage());
+    assertEquals("ERROR PARSING: Error in reading number of rooms.", exception.getMessage());
   }
 
   @Test
@@ -162,7 +163,7 @@ public class WorldBuilderTest {
             + "4 2 Wine Bottle");
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
             () -> WorldImpl.getBuilder().parseInputFile(roomNameMissing));
-    assertEquals("ERROR: Error in reading room data", exception.getMessage());
+    assertEquals("ERROR PARSING: Error in reading room data.", exception.getMessage());
   }
 
   @Test
@@ -183,7 +184,7 @@ public class WorldBuilderTest {
             + "4 2 Wine Bottle");
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
             () -> WorldImpl.getBuilder().parseInputFile(roomCoordinateMissing));
-    assertEquals("ERROR: Error in reading room data", exception.getMessage());
+    assertEquals("ERROR PARSING: Error in reading room data.", exception.getMessage());
   }
 
   @Test
@@ -203,7 +204,7 @@ public class WorldBuilderTest {
             + "4 2 Wine Bottle");
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
             () -> WorldImpl.getBuilder().parseInputFile(roomDataLessThanNum));
-    assertEquals("ERROR: Error in reading room data", exception.getMessage());
+    assertEquals("ERROR PARSING: Error in reading room data.", exception.getMessage());
   }
 
   @Test
@@ -225,7 +226,7 @@ public class WorldBuilderTest {
             + "4 2 Wine Bottle");
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
             () -> WorldImpl.getBuilder().parseInputFile(roomsMoreThanNum));
-    assertEquals("ERROR: Error in reading weapon data", exception.getMessage());
+    assertEquals("ERROR PARSING: Error in reading weapon data.", exception.getMessage());
   }
 
   @Test
@@ -246,7 +247,7 @@ public class WorldBuilderTest {
             + "4 2 Wine Bottle");
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
             () -> WorldImpl.getBuilder().parseInputFile(numWeaponsNotInt));
-    assertEquals("ERROR: Error in reading number of weapons", exception.getMessage());
+    assertEquals("ERROR PARSING: Error in reading number of weapons.", exception.getMessage());
   }
 
   @Test
@@ -267,7 +268,7 @@ public class WorldBuilderTest {
             + "4 2 Wine Bottle");
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
             () -> WorldImpl.getBuilder().parseInputFile(weaponNameMissing));
-    assertEquals("ERROR: Error in reading weapon data", exception.getMessage());
+    assertEquals("ERROR PARSING: Error in reading weapon data.", exception.getMessage());
   }
 
   @Test
@@ -288,7 +289,7 @@ public class WorldBuilderTest {
             + "4 2 Wine Bottle");
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
             () -> WorldImpl.getBuilder().parseInputFile(weaponDamageMissing));
-    assertEquals("ERROR: Error in reading weapon data", exception.getMessage());
+    assertEquals("ERROR PARSING: Error in reading weapon data.", exception.getMessage());
   }
 
   @Test
@@ -309,7 +310,7 @@ public class WorldBuilderTest {
             + "4 2 Wine Bottle");
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
             () -> WorldImpl.getBuilder().parseInputFile(weaponRoomIdMissing));
-    assertEquals("ERROR: Error in reading weapon data", exception.getMessage());
+    assertEquals("ERROR PARSING: Error in reading weapon data.", exception.getMessage());
   }
 
   @Test
@@ -329,7 +330,26 @@ public class WorldBuilderTest {
             + "1 1 Lamp");
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
             () -> WorldImpl.getBuilder().parseInputFile(weaponDataLessThanNum));
-    assertEquals("ERROR: Error in reading weapon data", exception.getMessage());
+    assertEquals("ERROR PARSING: Error in reading weapon data.", exception.getMessage());
+  }
+
+  @Test
+  public void setRandomGenerator_Null() {
+    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            () -> WorldImpl.getBuilder().setRandomGenerator(null));
+    assertEquals("Random number generator cannot be null.", exception.getMessage());
+  }
+
+  @Test
+  public void setRandomGenerator_TrueRandom() {
+    RandomGenerator r = new RandomClass();
+    WorldImpl.getBuilder().setRandomGenerator(r);
+  }
+
+  @Test
+  public void setRandomGenerator_FalseRandom() {
+    RandomGenerator r = new RandomClass(2);
+    WorldImpl.getBuilder().setRandomGenerator(r);
   }
 
   @Test
@@ -348,7 +368,8 @@ public class WorldBuilderTest {
             + "3 2 Dumbbells\n"
             + "1 1 Lamp\n"
             + "4 2 Wine Bottle");
-    WorldImpl.getBuilder().parseInputFile(validFile).build();
+    RandomGenerator r = new RandomClass();
+    WorldImpl.getBuilder().parseInputFile(validFile).setRandomGenerator(r).build();
   }
 
 }

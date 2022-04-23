@@ -1,11 +1,10 @@
-import org.junit.Test;
-
-import model.weapon.WeaponImpl;
-import model.weapon.WeaponInterface;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThrows;
+
+import model.weapon.WeaponImpl;
+import model.weapon.WeaponInterface;
+import org.junit.Test;
 
 /**
  * A JUnit test class for the WeaponImpl class.
@@ -16,7 +15,7 @@ public class WeaponImplTest {
   @Test
   public void testWeaponConstructor_Successful() {
     WeaponInterface w = new WeaponImpl(0, "Blade", 2);
-    String expectedString = "Blade with damage value 2";
+    String expectedString = "Blade (Damage: 2)";
     assertEquals(expectedString, w.toString());
   }
 
@@ -102,21 +101,21 @@ public class WeaponImplTest {
   @Test
   public void testToString_Tc1() {
     WeaponInterface w1 = new WeaponImpl(0, "Blade", 2);
-    String expectedString1 = "Blade with damage value 2";
+    String expectedString1 = "Blade (Damage: 2)";
     assertEquals(expectedString1, w1.toString());
   }
 
   @Test
   public void testToString_Tc2() {
     WeaponInterface w2 = new WeaponImpl(2, "Rope", 10);
-    String expectedString2 = "Rope with damage value 10";
+    String expectedString2 = "Rope (Damage: 10)";
     assertEquals(expectedString2, w2.toString());
   }
 
   @Test
   public void testToString_Tc3() {
     WeaponInterface w3 = new WeaponImpl(4, "Rat Poison", 20);
-    String expectedString3 = "Rat Poison with damage value 20";
+    String expectedString3 = "Rat Poison (Damage: 20)";
     assertEquals(expectedString3, w3.toString());
   }
 

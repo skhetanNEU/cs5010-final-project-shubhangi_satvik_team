@@ -1,20 +1,17 @@
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import model.pet.PetImpl;
 import model.pet.PetInterface;
 import model.room.RoomImpl;
 import model.room.RoomInterface;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * A JUnit test class for the PetImpl class.
- *
  */
 public class PetImplTest {
 
@@ -35,8 +32,7 @@ public class PetImplTest {
   @Test
   public void testPetConstructor_Successful() {
     PetInterface p = new PetImpl("Fortune Cat", room0);
-    String expectedString = "---------- Target Pet Details ----------\n"
-            + "Name: Fortune Cat\nCurrent Room: Armory";
+    String expectedString = "Pet Name: Fortune Cat\nPet Current Room: Armory";
     assertEquals(expectedString, p.toString());
   }
 
@@ -83,8 +79,7 @@ public class PetImplTest {
   public void testSetPetRoom_Successful_RoomIdNotZero() {
     PetInterface p = new PetImpl("Fortune Cat 2", room0);
     p.setPetRoom(room2);
-    assertEquals("---------- Target Pet Details ----------\n"
-            + "Name: Fortune Cat 2\nCurrent Room: Dining Hall", p.toString());
+    assertEquals("Pet Name: Fortune Cat 2\nPet Current Room: Dining Hall", p.toString());
   }
 
   @Test
@@ -93,23 +88,20 @@ public class PetImplTest {
     p.setPetRoom(room1);
     assertEquals("Billiard Room", p.getPetRoomName());
     p.setPetRoom(room0);
-    assertEquals("---------- Target Pet Details ----------\n"
-            + "Name: Fortune Cat 2\nCurrent Room: Armory", p.toString());
+    assertEquals("Pet Name: Fortune Cat 2\nPet Current Room: Armory", p.toString());
   }
 
   @Test
   public void testToString_Tc1() {
     PetInterface p = new PetImpl("Fortune Cat 2", room0);
-    assertEquals("---------- Target Pet Details ----------\n"
-            + "Name: Fortune Cat 2\nCurrent Room: Armory", p.toString());
+    assertEquals("Pet Name: Fortune Cat 2\nPet Current Room: Armory", p.toString());
   }
 
   @Test
   public void testToString_Tc2() {
     PetInterface p = new PetImpl("Fortune Cat", room0);
     p.setPetRoom(room1);
-    assertEquals("---------- Target Pet Details ----------\n"
-            + "Name: Fortune Cat\nCurrent Room: Billiard Room", p.toString());
+    assertEquals("Pet Name: Fortune Cat\nPet Current Room: Billiard Room", p.toString());
   }
 
   @Test
@@ -117,8 +109,7 @@ public class PetImplTest {
     PetInterface p = new PetImpl("Fortune", room0);
     p.setPetRoom(room1);
     p.setPetRoom(room2);
-    assertEquals("---------- Target Pet Details ----------\n"
-            + "Name: Fortune\nCurrent Room: Dining Hall", p.toString());
+    assertEquals("Pet Name: Fortune\nPet Current Room: Dining Hall", p.toString());
   }
 
 }
