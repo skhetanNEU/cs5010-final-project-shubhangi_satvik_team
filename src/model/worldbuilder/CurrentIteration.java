@@ -10,7 +10,7 @@ public enum CurrentIteration {
 
   private final String display;
 
-  private CurrentIteration(String disp) {
+  CurrentIteration(String disp) {
     this.display = disp;
   }
 

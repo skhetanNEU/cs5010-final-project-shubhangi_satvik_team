@@ -11,7 +11,7 @@ import model.world.WorldImpl;
 /**
  * Builder class used to build the world from the input text file.
  */
-public class WorldBuilder {
+public class WorldBuilder implements WorldBuilderInterface {
 
   private final List<Integer> worldCoordinates;
   private String worldName;
@@ -49,14 +49,7 @@ public class WorldBuilder {
     random = new RandomClass();
   }
 
-  /**
-   * A public method used to parse the input text file and
-   * set the variables required to instantiate the world.
-   *
-   * @param file Input text file as a Readable
-   * @return Reference of the WorldBuilder Class
-   * @throws IllegalArgumentException if there is an error in input file
-   */
+  @Override
   public WorldBuilder parseInputFile(Readable file) throws IllegalArgumentException {
 
     if (file == null) {
@@ -174,13 +167,7 @@ public class WorldBuilder {
     return this;
   }
 
-  /**
-   * A public method used to set the random number generator in the world.
-   *
-   * @param rand represents the random class
-   * @return Reference of the WorldBuilder Class
-   * @throws IllegalArgumentException if the random class is null
-   */
+  @Override
   public WorldBuilder setRandomGenerator(RandomGenerator rand) throws IllegalArgumentException {
     if (rand == null) {
       throw new IllegalArgumentException("Random number generator cannot be null.");
@@ -189,12 +176,7 @@ public class WorldBuilder {
     return this;
   }
 
-  /**
-   * Method to set the maximum number of turns in the game.
-   * @param maxTurns Maximum number of turns in the game.
-   * @return WorldBuilder object with max number of turns set accordingly.
-   * @throws IllegalArgumentException When max number of turns is zero or negative.
-   */
+  @Override
   public WorldBuilder setMaxTurns(int maxTurns) throws IllegalArgumentException {
     if (maxTurns <= 0) {
       throw new IllegalArgumentException("Number of turns cannot be non-positive.");
@@ -203,11 +185,7 @@ public class WorldBuilder {
     return this;
   }
 
-  /**
-   * A method used to create an instance of WorldInterface based on the variables of WorldBuilder.
-   *
-   * @return New instance of WorldImpl
-   */
+  @Override
   public WorldImpl build() {
     return new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
