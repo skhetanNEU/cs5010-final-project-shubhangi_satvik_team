@@ -1,4 +1,4 @@
-package mockView;
+package mockview;
 
 import controller.FeatureInterface;
 import view.DefaultGameViewInterface;

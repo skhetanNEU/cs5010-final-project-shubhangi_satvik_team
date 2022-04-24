@@ -81,7 +81,6 @@ public interface WorldInterface extends ReadOnlyWorldInterface {
 
   String getWinner();
 
-  // TODO: Remove if possible
   /**
    * Checks if the current player is a computer player.
    *

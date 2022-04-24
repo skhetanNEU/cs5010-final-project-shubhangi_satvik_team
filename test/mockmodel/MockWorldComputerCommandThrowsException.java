@@ -1,17 +1,16 @@
-package mockModel;
+package mockmodel;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-
 import model.world.WorldInterface;
 
-public class MockWorldComputer_GameOver implements WorldInterface {
+public class MockWorldComputerCommandThrowsException implements WorldInterface {
 
   private StringBuilder log;
   private final String uniqueCode;
 
-  public MockWorldComputer_GameOver(StringBuilder log, String uniqueCode) {
+  public MockWorldComputerCommandThrowsException(StringBuilder log, String uniqueCode) {
     this.log = log;
     this.uniqueCode = uniqueCode;
   }
@@ -49,7 +48,7 @@ public class MockWorldComputer_GameOver implements WorldInterface {
   @Override
   public boolean isGameOver() {
     log.append("Model isGameOver() called\n");
-    return true;
+    return false;
   }
 
   @Override
@@ -84,14 +83,15 @@ public class MockWorldComputer_GameOver implements WorldInterface {
   }
 
   @Override
-  public void addPlayerToGame(String playerName, int weaponLimit, boolean isComputerPlayer, String startingRoomName) {
+  public void addPlayerToGame(String playerName, int weaponLimit, boolean isComputerPlayer,
+                              String startingRoomName) {
     log.append("Model addPlayerToGame() called\n");
     log.append(String.format("Parameters: %s, %s, %s, %s\n", playerName, weaponLimit,
             isComputerPlayer, startingRoomName));
     if (playerName == null || "".equals(playerName)) {
       log.append("Exception thrown - Player name cannot be null/empty\n");
       throw new IllegalArgumentException("Player name cannot be null/empty.");
-    } else if ( weaponLimit < 0 && weaponLimit != -1) {
+    } else if (weaponLimit < 0 && weaponLimit != -1) {
       log.append("Exception thrown - Player weapon limit cannot be negative\n");
       throw new IllegalArgumentException("Player weapon limit cannot be negative.");
     } else if (startingRoomName == null || "".equals(startingRoomName)) {
@@ -159,7 +159,8 @@ public class MockWorldComputer_GameOver implements WorldInterface {
   @Override
   public String takeTurnForComputerPlayer() {
     log.append("Model takeTurnForComputerPlayer() called\n");
-    return uniqueCode;
+    log.append("Exception thrown from takeTurnForComputerPlayer\n");
+    throw new IllegalArgumentException("Exception thrown from takeTurnForComputerPlayer");
   }
 
   @Override
@@ -173,4 +174,11 @@ public class MockWorldComputer_GameOver implements WorldInterface {
     log.append("Model isCurrentPlayerComputer() called\n");
     return true;
   }
+
+  @Override
+  public String getRoomInformation(String roomName) {
+    log.append("Model getRoomInformation() called\n");
+    return uniqueCode;
+  }
+
 }

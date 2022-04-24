@@ -1,14 +1,14 @@
-package mockView;
+package mockview;
 
 import controller.FeatureInterface;
 import java.util.List;
 import view.MainGameViewInterface;
 
-public class MockMainGameView implements MainGameViewInterface {
+public class MockMainGameViewCommandReturnEmpty implements MainGameViewInterface {
 
   private StringBuilder out;
 
-  public MockMainGameView(StringBuilder out) {
+  public MockMainGameViewCommandReturnEmpty(StringBuilder out) {
     this.out = out;
     this.out.append("MainGameView constructor called\n");
   }
@@ -46,20 +46,20 @@ public class MockMainGameView implements MainGameViewInterface {
   public String showPickWeaponDialog(List<String> roomWeapons) {
     this.out.append("MainGameView showPickWeaponDialog() called\n");
     this.out.append("Parameters: ").append(roomWeapons).append("\n");
-    return "1234";
+    return "";
   }
 
   @Override
   public String showMovePetDialog(List<String> roomList) {
     this.out.append("MainGameView showMovePetDialog() called\n");
     this.out.append("Parameters: ").append(roomList).append("\n");
-    return "1234";
+    return "";
   }
 
   @Override
   public String showAttackTargetDialog(List<String> playerWeapons) {
     this.out.append("MainGameView showAttackTargetDialog() called\n");
     this.out.append("Parameters: ").append(playerWeapons).append("\n");
-    return "1234";
+    return "";
   }
 }

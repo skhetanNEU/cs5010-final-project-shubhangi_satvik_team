@@ -9,11 +9,9 @@ import controller.commands.MovePet;
 import controller.commands.MovePlayer;
 import controller.commands.PickWeapon;
 import controller.commands.PlayTurnForComputerPlayer;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-
 import model.random.RandomClass;
 import model.random.RandomGenerator;
 import model.world.WorldImpl;

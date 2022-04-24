@@ -564,7 +564,7 @@ public class WorldImpl implements WorldInterface {
   }
 
   @Override
-  public String getRoomInformation(String roomName){
+  public String getRoomInformation(String roomName) {
     if (roomName == null || "".equals(roomName)) {
       throw new IllegalArgumentException("ERROR: Room name cannot be null/empty");
     }
@@ -590,6 +590,9 @@ public class WorldImpl implements WorldInterface {
 
   @Override
   public boolean isPlayerIconClicked(int r, int c) {
+    if (r < 0 || c < 0) {
+      throw new IllegalArgumentException("Clicked coordinates cannot be negative.");
+    }
     checkIfPlayersExistToPlayGame();
     String roomName = this.getRoomCellClicked(r, c);
     if (roomName != null && roomName.equalsIgnoreCase(currentTurn.getPlayerRoomName())) {
@@ -628,7 +631,7 @@ public class WorldImpl implements WorldInterface {
         }
       }
     } catch (IOException e) {
-      // TODO: Do nothing?
+      throw new IllegalArgumentException("Unable to read image file.");
     }
 
     // Show current player and lookAround to world
@@ -668,7 +671,7 @@ public class WorldImpl implements WorldInterface {
         }
 
       } catch (IOException e) {
-        // TODO: Do nothing?
+        throw new IllegalArgumentException("Unable to read image file.");
       }
     }
 
@@ -683,7 +686,7 @@ public class WorldImpl implements WorldInterface {
               targetRoomCoordinates.get(1) - 50,
               null);
     } catch (IOException e) {
-      // TODO: Do nothing?
+      throw new IllegalArgumentException("Unable to read image file.");
     }
 
   }
@@ -801,7 +804,7 @@ public class WorldImpl implements WorldInterface {
       targetPlayer.reduceTargetPlayerHealth(damageOnTarget);
     }
 
-    if(!isGameOver()){
+    if (!isGameOver()) {
       moveTargetPlayer();
       movePetAfterTurnDfs();
       currentTurn = getNextTurnPlayer();

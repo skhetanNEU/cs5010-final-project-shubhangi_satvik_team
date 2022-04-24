@@ -1,24 +1,22 @@
-import model.random.RandomClass;
-import model.random.RandomGenerator;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import model.world.WorldImpl;
-import model.world.WorldInterface;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import model.random.RandomClass;
+import model.random.RandomGenerator;
+import model.world.WorldImpl;
+import model.world.WorldInterface;
+import org.junit.Before;
+import org.junit.Test;
+
+
 /**
  * A JUnit test class for the WorldImpl class.
- *
  */
 public class WorldImplTest {
 
@@ -124,7 +122,8 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(null, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName,
+            random, maxNumberOfTurns));
   }
 
   @Test
@@ -141,7 +140,8 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             0, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName,
+            random, maxNumberOfTurns));
   }
 
   @Test
@@ -149,7 +149,8 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             -10, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName,
+            random, maxNumberOfTurns));
   }
 
   @Test
@@ -157,7 +158,8 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, null,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName,
+            random, maxNumberOfTurns));
   }
 
   @Test
@@ -165,7 +167,8 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, "",
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName,
+            random, maxNumberOfTurns));
   }
 
   @Test
@@ -173,7 +176,8 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             0, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName,
+            random, maxNumberOfTurns));
   }
 
   @Test
@@ -181,7 +185,8 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             -10, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName,
+            random, maxNumberOfTurns));
   }
 
   @Test
@@ -189,7 +194,8 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, null, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName,
+            random, maxNumberOfTurns));
   }
 
   @Test
@@ -197,7 +203,8 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, null,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName,
+            random, maxNumberOfTurns));
   }
 
   @Test
@@ -205,7 +212,8 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            0, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
+            0, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName,
+            random, maxNumberOfTurns));
   }
 
   @Test
@@ -213,7 +221,8 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            -20, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
+            -20, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName,
+            random, maxNumberOfTurns));
   }
 
   @Test
@@ -221,7 +230,8 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, null, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
+            numWeapons, null, weaponDamageValues, weaponNames, targetPetName,
+            random, maxNumberOfTurns));
   }
 
   @Test
@@ -237,7 +247,8 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, null, targetPetName, random, maxNumberOfTurns));
+            numWeapons, weaponRoomIds, weaponDamageValues, null, targetPetName,
+            random, maxNumberOfTurns));
   }
 
   @Test
@@ -245,7 +256,8 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, "", random, maxNumberOfTurns));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, "",
+            random, maxNumberOfTurns));
   }
 
   @Test
@@ -253,35 +265,36 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, null, random, maxNumberOfTurns));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, null,
+            random, maxNumberOfTurns));
   }
 
-    @Test
-    public void testWorldConstructor_Unsuccessful_RandomNull() {
-        assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
-                targetPlayerHealth, targetPlayerName,
-                numRooms, roomCoordinates, roomNames,
-                numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, null,
-                maxNumberOfTurns));
-    }
+  @Test
+  public void testWorldConstructor_Unsuccessful_RandomNull() {
+    assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
+            targetPlayerHealth, targetPlayerName,
+            numRooms, roomCoordinates, roomNames,
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, null,
+            maxNumberOfTurns));
+  }
 
-    @Test
-    public void testWorldConstructor_Unsuccessful_InvalidMaxNumberOfTurns() {
-        assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
-                targetPlayerHealth, targetPlayerName,
-                numRooms, roomCoordinates, roomNames,
-                numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random,
-                -1));
-    }
+  @Test
+  public void testWorldConstructor_Unsuccessful_InvalidMaxNumberOfTurns() {
+    assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
+            targetPlayerHealth, targetPlayerName,
+            numRooms, roomCoordinates, roomNames,
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random,
+            -1));
+  }
 
-    @Test
-    public void testWorldConstructor_Unsuccessful_ZeroMaxNumberOfTurns() {
-        assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
-                targetPlayerHealth, targetPlayerName,
-                numRooms, roomCoordinates, roomNames,
-                numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random,
-                0));
-    }
+  @Test
+  public void testWorldConstructor_Unsuccessful_ZeroMaxNumberOfTurns() {
+    assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
+            targetPlayerHealth, targetPlayerName,
+            numRooms, roomCoordinates, roomNames,
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random,
+            0));
+  }
 
   @Test
   public void testWorldConstructor_Unsuccessful_SameNameRooms() {
@@ -305,8 +318,8 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, sameWeaponNames, targetPetName, random
-            , maxNumberOfTurns));
+            numWeapons, weaponRoomIds, weaponDamageValues, sameWeaponNames, targetPetName, random,
+            maxNumberOfTurns));
   }
 
   @Test
@@ -338,7 +351,8 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinatesIncorrect, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random,
+            maxNumberOfTurns));
   }
 
   @Test
@@ -407,43 +421,43 @@ public class WorldImplTest {
   @Test
   public void testGetCurrentPlayerWeapons_ZeroWeapons_Computer() {
     testWorld.addPlayerToGame("Computer", 2, true, "Nursery");
-    assertEquals("Poke (Damage: 1)", String.join("",testWorld.getCurrentPlayerWeapons()));
+    assertEquals("Poke (Damage: 1)", String.join("", testWorld.getCurrentPlayerWeapons()));
   }
 
   @Test
   public void testGetCurrentPlayerWeapons_ZeroWeapons_Human() {
-    testWorld.addPlayerToGame("Human", 2, false,  "Kitchen");
-    assertEquals("Poke (Damage: 1)", String.join("",testWorld.getCurrentPlayerWeapons()));
+    testWorld.addPlayerToGame("Human", 2, false, "Kitchen");
+    assertEquals("Poke (Damage: 1)", String.join("", testWorld.getCurrentPlayerWeapons()));
   }
 
   @Test
   public void testGetCurrentPlayerWeapons_OneWeapon_Computer() {
     testWorld.addPlayerToGame("Computer", 2, true, "Billiard Room");
     testWorld.pickWeapon(null);
-    assertEquals("Loud Noise (Damage: 2)", String.join(",",testWorld.getCurrentPlayerWeapons()));
+    assertEquals("Loud Noise (Damage: 2)", String.join(",", testWorld.getCurrentPlayerWeapons()));
   }
 
   @Test
   public void testGetCurrentPlayerWeapons_OneWeapon_Human() {
-    testWorld.addPlayerToGame("Human", 1,false, "Kitchen");
+    testWorld.addPlayerToGame("Human", 1, false, "Kitchen");
     testWorld.pickWeapon("pan");
     assertEquals("Pan (Damage: 3),Poke (Damage: 1)",
-            String.join(",",testWorld.getCurrentPlayerWeapons()));
+            String.join(",", testWorld.getCurrentPlayerWeapons()));
   }
 
   @Test
   public void testGetCurrentPlayerWeapons_ManyWeapons_Computer() {
-      RandomClass predictableRandom = new RandomClass(0);
-      testWorld = new WorldImpl(worldCoordinates, worldName,
-              targetPlayerHealth, targetPlayerName,
-              numRooms, roomCoordinates, roomNames,
-              numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName,
-              predictableRandom, maxNumberOfTurns);
+    RandomClass predictableRandom = new RandomClass(0);
+    testWorld = new WorldImpl(worldCoordinates, worldName,
+            targetPlayerHealth, targetPlayerName,
+            numRooms, roomCoordinates, roomNames,
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName,
+            predictableRandom, maxNumberOfTurns);
     testWorld.addPlayerToGame("Computer", 2, true, "Kitchen");
     testWorld.pickWeapon(null);
     testWorld.pickWeapon(null);
     assertEquals("Pan (Damage: 3)Rope (Damage: 2)",
-            String.join("",testWorld.getCurrentPlayerWeapons()));
+            String.join("", testWorld.getCurrentPlayerWeapons()));
   }
 
   @Test
@@ -452,7 +466,7 @@ public class WorldImplTest {
     testWorld.pickWeapon("pan");
     testWorld.pickWeapon("rope");
     assertEquals("Pan (Damage: 3),Rope (Damage: 2),Poke (Damage: 1)",
-            String.join(",",testWorld.getCurrentPlayerWeapons()));
+            String.join(",", testWorld.getCurrentPlayerWeapons()));
   }
 
   @Test
@@ -482,33 +496,33 @@ public class WorldImplTest {
   @Test
   public void testGetCurrentPlayerRoomWeapons_WithoutDamage_ZeroWeapons() {
     testWorld.addPlayerToGame("test human 1", 1, true, "Nursery");
-    assertEquals("", String.join("",testWorld.getCurrentPlayerRoomWeapons()));
+    assertEquals("", String.join("", testWorld.getCurrentPlayerRoomWeapons()));
   }
 
   @Test
   public void testGetCurrentPlayerRoomWeapons_WithoutDamage_ManyWeapons() {
-    testWorld.addPlayerToGame("test human 1", 1, true,  "Kitchen");
+    testWorld.addPlayerToGame("test human 1", 1, true, "Kitchen");
     assertEquals("Pan (Damage: 3),Rope (Damage: 2)",
-            String.join(",",testWorld.getCurrentPlayerRoomWeapons()));
+            String.join(",", testWorld.getCurrentPlayerRoomWeapons()));
   }
 
   @Test
   public void testGetCurrentPlayerRoomWeapons_WithDamage_ZeroWeapons() {
-    testWorld.addPlayerToGame("test human 1", 1, true,"Nursery");
-    assertEquals("", String.join("",testWorld.getCurrentPlayerRoomWeapons()));
+    testWorld.addPlayerToGame("test human 1", 1, true, "Nursery");
+    assertEquals("", String.join("", testWorld.getCurrentPlayerRoomWeapons()));
   }
 
   @Test
   public void testGetCurrentPlayerRoomWeapons_WithDamage_ManyWeapons() {
-    testWorld.addPlayerToGame("test human 1", 1, true,  "Kitchen");
+    testWorld.addPlayerToGame("test human 1", 1, true, "Kitchen");
     assertEquals("Pan (Damage: 3)Rope (Damage: 2)",
-            String.join("",testWorld.getCurrentPlayerRoomWeapons()));
+            String.join("", testWorld.getCurrentPlayerRoomWeapons()));
   }
 
   @Test
   public void testAddPlayerToGame_Unsuccessful_NameEmpty_Human() {
     assertThrows(IllegalArgumentException.class, () ->
-            testWorld.addPlayerToGame("", 2, false,"Kitchen"));
+            testWorld.addPlayerToGame("", 2, false, "Kitchen"));
   }
 
   @Test
@@ -520,7 +534,7 @@ public class WorldImplTest {
   @Test
   public void testAddPlayerToGame_Unsuccessful_NameNull_Human() {
     assertThrows(IllegalArgumentException.class, () ->
-            testWorld.addPlayerToGame(null, 2, false,  "Kitchen"));
+            testWorld.addPlayerToGame(null, 2, false, "Kitchen"));
   }
 
   @Test
@@ -728,68 +742,67 @@ public class WorldImplTest {
   }
 
   @Test
-  public void testLookAroundWithTargetInSameRoom(){
+  public void testLookAroundWithTargetInSameRoom() {
 
   }
 
   @Test
-  public void testMovePlayer_NegativeXCoordinate() {
+  public void testMovePlayer_NegativexCoordinate() {
     testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
     assertThrows(IllegalArgumentException.class, () -> testWorld.handleRoomClick(-1, 10));
   }
 
-    @Test
-    public void testMovePlayer_NegativeYCoordinate() {
-        testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
-        assertThrows(IllegalArgumentException.class, () -> testWorld.handleRoomClick(10, -1));
-    }
+  @Test
+  public void testMovePlayer_NegativeyCoordinate() {
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
+    assertThrows(IllegalArgumentException.class, () -> testWorld.handleRoomClick(10, -1));
+  }
 
-    @Test
-    public void testMovePlayer_InvalidXCoordinate() {
-        testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
-        assertThrows(IllegalArgumentException.class, () -> testWorld.handleRoomClick(100, 10));
-    }
+  @Test
+  public void testMovePlayer_InvalidxCoordinate() {
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
+    assertThrows(IllegalArgumentException.class, () -> testWorld.handleRoomClick(100, 10));
+  }
 
-    @Test
-    public void testMovePlayer_InvalidYCoordinate() {
-        testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
-        assertThrows(IllegalArgumentException.class, () -> testWorld.handleRoomClick(10, 100));
-    }
+  @Test
+  public void testMovePlayer_InvalidyCoordinate() {
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
+    assertThrows(IllegalArgumentException.class, () -> testWorld.handleRoomClick(10, 100));
+  }
 
-    @Test
-    public void testMovePlayer_NotANeighbor() {
-        testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
-        assertThrows(IllegalArgumentException.class, () -> testWorld.handleRoomClick(17,22));
-    }
+  @Test
+  public void testMovePlayer_NotNeighbor() {
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
+    assertThrows(IllegalArgumentException.class, () -> testWorld.handleRoomClick(17, 22));
+  }
 
-    @Test
-    public void testMovePlayer_SameRoom() {
-        testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
-        assertThrows(IllegalArgumentException.class, () -> testWorld.handleRoomClick(18,7));
-    }
+  @Test
+  public void testMovePlayer_SameRoom() {
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
+    assertThrows(IllegalArgumentException.class, () -> testWorld.handleRoomClick(18, 7));
+  }
 
-    @Test
-    public void testMovePlayer_InvisibleNeighbor() {
-        testWorld.addPlayerToGame("Test", 2, false, "Dining Hall");
-        assertThrows(IllegalArgumentException.class, () -> testWorld.handleRoomClick(18,26));
-    }
+  @Test
+  public void testMovePlayer_InvisibleNeighbor() {
+    testWorld.addPlayerToGame("Test", 2, false, "Dining Hall");
+    assertThrows(IllegalArgumentException.class, () -> testWorld.handleRoomClick(18, 26));
+  }
 
-    @Test
-    public void testMovePlayer_VisibleNeighbor() {
-        testWorld.addPlayerToGame("Test", 2, false, "Dining Hall");
-        assertThrows(IllegalArgumentException.class, () -> testWorld.handleRoomClick(12,8));
-    }
-
+  @Test
+  public void testMovePlayer_VisibleNeighbor() {
+    testWorld.addPlayerToGame("Test", 2, false, "Dining Hall");
+    assertThrows(IllegalArgumentException.class, () -> testWorld.handleRoomClick(12, 8));
+  }
 
   @Test
   public void testPickWeapon_WeaponNameEmpty_Human() {
-    testWorld.addPlayerToGame("Test", 2, false,"Kitchen");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
     assertThrows(IllegalArgumentException.class, () -> testWorld.pickWeapon(""));
   }
 
   @Test
   public void testPickWeapon_WeaponNameNull_Human() {
-    testWorld.addPlayerToGame("Test",2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
     assertThrows(IllegalArgumentException.class, () -> testWorld.pickWeapon(null));
   }
 
@@ -801,7 +814,7 @@ public class WorldImplTest {
 
   @Test
   public void testPickWeapon_WeaponNotInCurrentRoom_Human() {
-    testWorld.addPlayerToGame("Test", 2, false,  "Kitchen");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
     assertThrows(IllegalArgumentException.class, () -> testWorld.pickWeapon("Rod"));
   }
 
@@ -814,7 +827,7 @@ public class WorldImplTest {
 
   @Test
   public void testPickWeapon_WeaponInCurrentRoom_Human() {
-    testWorld.addPlayerToGame("Test", 2, false,  "Kitchen");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
     testWorld.pickWeapon("Pan");
     assertEquals("Name: Kitchen\n"
             + "Neighbours: Parlor\n"
@@ -824,31 +837,31 @@ public class WorldImplTest {
             + "Is Pet Present: No", testWorld.getCurrentPlayerRoomInformation());
   }
 
-    @Test
-    public void testPickWeapon_NoWeaponsInRoom_Computer() {
-        testWorld.addPlayerToGame("Test", 2, true, "Nursery");
-        assertThrows(IllegalArgumentException.class, () -> testWorld.pickWeapon(null));
-    }
+  @Test
+  public void testPickWeapon_NoWeaponsInRoom_Computer() {
+    testWorld.addPlayerToGame("Test", 2, true, "Nursery");
+    assertThrows(IllegalArgumentException.class, () -> testWorld.pickWeapon(null));
+  }
 
-    @Test
-    public void testPickWeapon_WeaponLimitReached_Computer() {
-        testWorld.addPlayerToGame("Test", 1, true, "Kitchen");
-        testWorld.pickWeapon(null);
-        assertThrows(IllegalArgumentException.class, () -> testWorld.pickWeapon(null));
-    }
+  @Test
+  public void testPickWeapon_WeaponLimitReached_Computer() {
+    testWorld.addPlayerToGame("Test", 1, true, "Kitchen");
+    testWorld.pickWeapon(null);
+    assertThrows(IllegalArgumentException.class, () -> testWorld.pickWeapon(null));
+  }
 
-    @Test
-    public void testPickWeapon_WeaponInCurrentRoom_Computer() {
-        testWorld.addPlayerToGame("Test", 2, true,  "Billiard Room");
-        testWorld.pickWeapon(null);
-        assertEquals("Name: Billiard Room\n"
-                + "Neighbours: -\n"
-                + "Weapons: -\n"
-                + "Players: Test\n"
-                + "Is Target Present: No\n"
-                + "Is Pet Present: No", testWorld.getCurrentPlayerRoomInformation());
+  @Test
+  public void testPickWeapon_WeaponInCurrentRoom_Computer() {
+    testWorld.addPlayerToGame("Test", 2, true, "Billiard Room");
+    testWorld.pickWeapon(null);
+    assertEquals("Name: Billiard Room\n"
+            + "Neighbours: -\n"
+            + "Weapons: -\n"
+            + "Players: Test\n"
+            + "Is Target Present: No\n"
+            + "Is Pet Present: No", testWorld.getCurrentPlayerRoomInformation());
 
-    }
+  }
 
   @Test
   public void testMovePet_Unsuccessful_RoomEmpty() {
@@ -970,7 +983,7 @@ public class WorldImplTest {
 
   @Test
   public void testAttackTargetPlayer_Unsuccessful_WeaponNotWithPlayer_Human() {
-    testWorld.addPlayerToGame("Test",  2, false, "Dining Hall");
+    testWorld.addPlayerToGame("Test", 2, false, "Dining Hall");
     testWorld.pickWeapon("Rod");
     assertThrows(IllegalArgumentException.class, () -> testWorld.attackTargetPlayer("rope"));
   }
@@ -1095,7 +1108,7 @@ public class WorldImplTest {
     testWorld.lookAroundSpace();
     testWorld.lookAroundSpace();
 
-    testWorld.handleRoomClick(276,210);
+    testWorld.handleRoomClick(276, 210);
     testWorld.lookAroundSpace();
     testWorld.lookAroundSpace();
 
@@ -1177,12 +1190,12 @@ public class WorldImplTest {
   public void testAttackTargetPlayer_Unsuccessful_SameRoomPlayersOnly_NeighbourPetOnly() {
 
     testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
-    testWorld.addPlayerToGame("Test2",  2, false, "Dining Hall");
+    testWorld.addPlayerToGame("Test2", 2, false, "Dining Hall");
 
     testWorld.lookAroundSpace();
     testWorld.pickWeapon("rod");
     testWorld.lookAroundSpace();
-    testWorld.handleRoomClick(420,186);
+    testWorld.handleRoomClick(420, 186);
     testWorld.lookAroundSpace();
     testWorld.lookAroundSpace();
     testWorld.lookAroundSpace();
@@ -1206,8 +1219,8 @@ public class WorldImplTest {
 
     assertEquals(
             "Name: Doctor Lucky\n"
-            + "Health: 2\n"
-            + "Current Room: Parlor", testWorld.getTargetPlayerDetails());
+                    + "Health: 2\n"
+                    + "Current Room: Parlor", testWorld.getTargetPlayerDetails());
     assertEquals("Name: Test2\n"
             + "Current Room: Kitchen\n"
             + "Weapons: -", testWorld.getCurrentPlayerInformation());
@@ -1216,8 +1229,8 @@ public class WorldImplTest {
   @Test
   public void testAttackTargetPlayer_Unsuccessful_SameRoomPlayersOnly_NeighbourPlayersOnly() {
 
-    testWorld.addPlayerToGame("Test",  2, false, "Billiard Room");
-    testWorld.addPlayerToGame("Test2",  2, false, "Dining Hall");
+    testWorld.addPlayerToGame("Test", 2, false, "Billiard Room");
+    testWorld.addPlayerToGame("Test2", 2, false, "Dining Hall");
 
     testWorld.pickWeapon("loud noise");
     testWorld.lookAroundSpace();
@@ -1330,8 +1343,8 @@ public class WorldImplTest {
   @Test
   public void testAttackTargetPlayer_Successful_SameRoomPetOnly_NeighbourPlayersOnly() {
 
-    testWorld.addPlayerToGame("Test",  2, false, "Kitchen");
-    testWorld.addPlayerToGame("Test2",  2, false, "Dining Hall");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test2", 2, false, "Dining Hall");
 
     testWorld.pickWeapon("pan");
     testWorld.lookAroundSpace();
@@ -1364,8 +1377,8 @@ public class WorldImplTest {
   @Test
   public void testAttackTargetPlayer_Unsuccessful_SameRoomNoPetNoPlayers_NeighbourPlayersOnly() {
 
-    testWorld.addPlayerToGame("Test",  2, false, "Billiard Room");
-    testWorld.addPlayerToGame("Test2",  2, false, "Dining Hall");
+    testWorld.addPlayerToGame("Test", 2, false, "Billiard Room");
+    testWorld.addPlayerToGame("Test2", 2, false, "Dining Hall");
 
     testWorld.pickWeapon("loud noise");
     testWorld.lookAroundSpace();
@@ -1410,7 +1423,7 @@ public class WorldImplTest {
     testWorld.addPlayerToGame("Test", 2, false, "Dining Hall");
 
     testWorld.pickWeapon("rod");
-    testWorld.handleRoomClick(276,210);
+    testWorld.handleRoomClick(276, 210);
     testWorld.lookAroundSpace();
     testWorld.lookAroundSpace();
 
@@ -1628,8 +1641,8 @@ public class WorldImplTest {
     testWorld.lookAroundSpace();
     assertEquals(
             "Name: Doctor Lucky\n"
-            + "Health: 2\n"
-            + "Current Room: Kitchen", testWorld.getTargetPlayerDetails());
+                    + "Health: 2\n"
+                    + "Current Room: Kitchen", testWorld.getTargetPlayerDetails());
     testWorld.attackTargetPlayer("pan");
     assertEquals(
             "Name: Doctor Lucky\n"
@@ -1888,7 +1901,7 @@ public class WorldImplTest {
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Billiard Room"));
 
-    testWorld.handleRoomClick(276,210);
+    testWorld.handleRoomClick(276, 210);
 
     assertEquals("Name: Dining Hall\n"
             + "Neighbours: Billiard Room, Kitchen, Parlor\n"
@@ -1979,7 +1992,7 @@ public class WorldImplTest {
     assertEquals("Name: Doctor Lucky\n"
             + "Health: 2\n"
             + "Current Room: Billiard Room", testWorld.getTargetPlayerDetails());
-    testWorld.handleRoomClick(426,372);
+    testWorld.handleRoomClick(426, 372);
     assertEquals("Name: Doctor Lucky\n"
             + "Health: 2\n"
             + "Current Room: Dining Hall", testWorld.getTargetPlayerDetails());
@@ -2049,11 +2062,11 @@ public class WorldImplTest {
     testWorld.lookAroundSpace();
 
     assertEquals("P1", testWorld.getCurrentPlayerName());
-    testWorld.handleRoomClick(426,372);
+    testWorld.handleRoomClick(426, 372);
     assertEquals("P2", testWorld.getCurrentPlayerName());
-    testWorld.handleRoomClick(426,372);
+    testWorld.handleRoomClick(426, 372);
     assertEquals("P3", testWorld.getCurrentPlayerName());
-    testWorld.handleRoomClick(420,642);
+    testWorld.handleRoomClick(420, 642);
 
     assertEquals("P1", testWorld.getCurrentPlayerName());
     testWorld.lookAroundSpace();

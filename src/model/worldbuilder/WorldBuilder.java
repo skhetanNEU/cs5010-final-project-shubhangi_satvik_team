@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-
 import model.random.RandomClass;
 import model.random.RandomGenerator;
 import model.world.WorldImpl;
