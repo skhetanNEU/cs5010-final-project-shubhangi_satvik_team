@@ -41,6 +41,9 @@ public class RoomImpl implements RoomInterface {
     if (roomName == null || "".equals(roomName)) {
       throw new IllegalArgumentException("Room name cannot be null/empty");
     }
+    if (roomCoordinates == null || roomCoordinates.size() != 4) {
+      throw new IllegalArgumentException("Room coordinates cannot be null/empty.");
+    }
     validateRoomCoordinates(roomCoordinates);
     this.roomId = roomId;
     this.roomName = roomName;
@@ -62,6 +65,9 @@ public class RoomImpl implements RoomInterface {
    */
   private void validateRoomCoordinates(List<Integer> roomCoordinates)
           throws IllegalArgumentException {
+    if (roomCoordinates == null || roomCoordinates.size() != 4) {
+      throw new IllegalArgumentException("Room coordinates cannot be null/empty.");
+    }
     for (int c : roomCoordinates) {
       if (c < 0) {
         throw new IllegalArgumentException("Room coordinates cannot be negative.");

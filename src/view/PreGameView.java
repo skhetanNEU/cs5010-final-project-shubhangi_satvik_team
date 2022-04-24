@@ -143,6 +143,9 @@ public class PreGameView extends JFrame implements DefaultGameViewInterface {
 
   @Override
   public void addFeatures(FeatureInterface features) {
+    if (features == null) {
+      throw new IllegalArgumentException("Listener cannot be null.");
+    }
     currentConfiguration.addActionListener(l -> features.playGame(null));
     newConfiguration.addActionListener(l -> {
       File chosen = chooseFile();
@@ -167,6 +170,14 @@ public class PreGameView extends JFrame implements DefaultGameViewInterface {
 
   @Override
   public void showCommandOutcome(String title, String outcome, boolean isLookAround) {
+
+    if (title == null || "".equals(title)) {
+      throw new IllegalArgumentException("Title cannot be null;");
+    }
+    if (outcome == null || "".equals(outcome)) {
+      throw new IllegalArgumentException("Outcome cannot be null;");
+    }
+
     UIManager.put("OptionPane.background", Color.decode("#FCF3CF"));
     UIManager.put("Panel.background", Color.decode("#FCF3CF"));
     UIManager.put("Button.background", Color.WHITE);

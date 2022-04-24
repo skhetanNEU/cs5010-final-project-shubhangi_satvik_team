@@ -20,7 +20,6 @@ public class PetImpl implements PetInterface {
    */
   public PetImpl(String petName, RoomInterface petRoom)
           throws IllegalArgumentException {
-
     if (petName == null || ("").equals(petName)) {
       throw new IllegalArgumentException("Pet name cannot be null/empty.");
     }
