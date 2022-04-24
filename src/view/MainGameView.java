@@ -66,7 +66,7 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
     JPanel container = new JPanel();
     container.setLayout(new BorderLayout());
 
-    this.gameBoard = new GameBoard(model, listener);
+    this.gameBoard = new GameBoard(model);
     container.add(gameBoard, BorderLayout.CENTER);
 
     this.messages = new GameMessages(model);
@@ -408,22 +408,20 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
 
   private class AddPlayersPopup extends JDialog {
 
-    JLabel playerNameLabel;
-    JTextField playerNameField;
-    JLabel playerStartRoomLabel;
-    String[] roomList;
-    JComboBox<String> playerStartRoomField;
-    JLabel playerWeaponLimitLabel;
-    JTextField playerWeaponLimitField;
-    JLabel playerTypeLabel;
-    String[] items = {"Human", "Computer"};
-    JComboBox<String> playerTypeOptions;
-
-    JLabel errorMessage;
-
-    JButton clear;
-    JButton addNext;
-    JButton startGame;
+    private final JLabel playerNameLabel;
+    private final JTextField playerNameField;
+    private final JLabel playerStartRoomLabel;
+    private final String[] roomList;
+    private final JComboBox<String> playerStartRoomField;
+    private final JLabel playerWeaponLimitLabel;
+    private final JTextField playerWeaponLimitField;
+    private final JLabel playerTypeLabel;
+    private final String[] items;
+    private final JComboBox<String> playerTypeOptions;
+    private final JLabel errorMessage;
+    private final JButton clear;
+    private final JButton addNext;
+    private final JButton startGame;
 
     public AddPlayersPopup(MainGameView frame, List<String> rooms) {
 
@@ -467,6 +465,7 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
       panel.add(playerWeaponLimitField);
 
       playerTypeLabel = new JLabel("Choose player type");
+      items = new String[]{"Human", "Computer"};
       playerTypeOptions = new JComboBox<>(items);
       playerTypeLabel.setForeground(Color.WHITE);
       panel.add(playerTypeLabel);
@@ -552,4 +551,3 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
   }
 
 }
-
