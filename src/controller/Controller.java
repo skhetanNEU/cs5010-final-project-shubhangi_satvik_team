@@ -26,7 +26,7 @@ public class Controller implements FeatureInterface {
   private MainGameViewInterface gameView;
   private final DefaultGameViewInterface preGameView;
   private final String defaultConfigurationFilePath;
-  private final int maxNumberOfTurns;
+  private int maxNumberOfTurns;
 
   public Controller(DefaultGameViewInterface preGameView,
                     String worldConfigurationPath, int maxNumberOfTurns) {
@@ -65,7 +65,6 @@ public class Controller implements FeatureInterface {
     quitGame();
 
     this.defaultConfigurationFilePath = worldConfigurationPath;
-    this.maxNumberOfTurns = 0;
     this.model = model;
 
     this.gameView = gameView;
@@ -143,12 +142,12 @@ public class Controller implements FeatureInterface {
       gameView.refresh();
       lookAround.execute(model);
       gameView.showCommandOutcome("Look Around Details", lookAround.getCommandResult(), true);
+      model.updateWorldView(false);
+      gameView.refresh();
       if (lookAround.isCommandSuccessful()) {
         checkAndPlayTurnForComputerPlayer();
         showGameOverMessage();
       }
-      model.updateWorldView(false);
-      gameView.refresh();
     } else {
       gameView.showCommandOutcome("Game Over!", "No more turns allowed. Start a new game.", false);
     }
@@ -172,12 +171,12 @@ public class Controller implements FeatureInterface {
           gameView.showCommandOutcome("Move Player Result", cellClick.getCommandResult(), false);
         }
       }
+      model.updateWorldView(false);
+      gameView.refresh();
       if (cellClick != null && cellClick.isCommandSuccessful()) {
         checkAndPlayTurnForComputerPlayer();
         showGameOverMessage();
       }
-      model.updateWorldView(false);
-      gameView.refresh();
     } else {
       gameView.showCommandOutcome("Game Over!", "No more turns allowed. Start a new game.", false);
     }
@@ -197,12 +196,12 @@ public class Controller implements FeatureInterface {
         pickWeapon.execute(model);
         gameView.showCommandOutcome("Pick Weapon Result", pickWeapon.getCommandResult(), false);
       }
+      model.updateWorldView(false);
+      gameView.refresh();
       if (pickWeapon != null && pickWeapon.isCommandSuccessful()) {
         checkAndPlayTurnForComputerPlayer();
         showGameOverMessage();
       }
-      model.updateWorldView(false);
-      gameView.refresh();
     } else {
       gameView.showCommandOutcome("Game Over!", "No more turns allowed. Start a new game.", false);
     }
@@ -222,12 +221,12 @@ public class Controller implements FeatureInterface {
         attackTarget.execute(model);
         gameView.showCommandOutcome("Attack Target Result", attackTarget.getCommandResult(), false);
       }
+      model.updateWorldView(false);
+      gameView.refresh();
       if (attackTarget != null && attackTarget.isCommandSuccessful()) {
         checkAndPlayTurnForComputerPlayer();
         showGameOverMessage();
       }
-      model.updateWorldView(false);
-      gameView.refresh();
     } else {
       gameView.showCommandOutcome("Game Over!", "No more turns allowed. Start a new game.", false);
     }
@@ -247,12 +246,12 @@ public class Controller implements FeatureInterface {
         movePet.execute(model);
         gameView.showCommandOutcome("Move Pet Result", movePet.getCommandResult(), false);
       }
+      model.updateWorldView(false);
+      gameView.refresh();
       if (movePet != null && movePet.isCommandSuccessful()) {
         checkAndPlayTurnForComputerPlayer();
         showGameOverMessage();
       }
-      model.updateWorldView(false);
-      gameView.refresh();
     } else {
       gameView.showCommandOutcome("Game Over!", "No more turns allowed. Start a new game.", false);
     }
