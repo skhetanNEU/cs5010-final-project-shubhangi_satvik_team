@@ -12,8 +12,9 @@ public class AttackTarget extends AbstractCommands {
   /**
    * Constructor for setting up the attack target.
    * @param weaponName Name of the weapon that should be used for attacking the target.
+   * @throws IllegalArgumentException when the weapon name is invalid.
    */
-  public AttackTarget(String weaponName) {
+  public AttackTarget(String weaponName) throws IllegalArgumentException {
     if (weaponName == null || "".equals(weaponName)) {
       throw new IllegalArgumentException("Invalid weapon name");
     }
@@ -21,7 +22,7 @@ public class AttackTarget extends AbstractCommands {
   }
 
   @Override
-  public void execute(WorldInterface model) {
+  public void execute(WorldInterface model) throws IllegalArgumentException {
     if (model == null) {
       throw new IllegalArgumentException("Model is invalid");
     }

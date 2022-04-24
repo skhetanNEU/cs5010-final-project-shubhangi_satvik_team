@@ -14,8 +14,9 @@ public class MovePlayer extends AbstractCommands {
    * Constructor for setting up the move player command.
    * @param row Row number where the player should be moved to according to player click.
    * @param col Column number where the player should be moved to according to player click.
+   * @throws IllegalArgumentException when the row or column is negative.
    */
-  public MovePlayer(int row, int col) {
+  public MovePlayer(int row, int col) throws IllegalArgumentException {
     if (row < 0 || col < 0) {
       throw new IllegalArgumentException("Invalid coordinates");
     }
@@ -24,7 +25,7 @@ public class MovePlayer extends AbstractCommands {
   }
 
   @Override
-  public void execute(WorldInterface model) {
+  public void execute(WorldInterface model) throws IllegalArgumentException {
     if (model == null) {
       throw new IllegalArgumentException("Model is invalid");
     }

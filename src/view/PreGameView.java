@@ -76,6 +76,9 @@ public class PreGameView extends JFrame implements DefaultGameViewInterface {
 
   }
 
+  /**
+   * Sets the menu bar with Start and Help options.
+   */
   private void setMenuBar() {
     JMenuBar menuBar = new JMenuBar();
     JMenu startMenu = new JMenu("Start");
@@ -93,6 +96,10 @@ public class PreGameView extends JFrame implements DefaultGameViewInterface {
     setJMenuBar(menuBar);
   }
 
+  /**
+   * Choose the configuration file for the game.
+   * @return File object made out of choosing the file.
+   */
   private File chooseFile() {
     File file = null;
     JFileChooser fc = new JFileChooser();
@@ -105,6 +112,9 @@ public class PreGameView extends JFrame implements DefaultGameViewInterface {
     return file;
   }
 
+  /**
+   * Show the menu for help information.
+   */
   private void showHelperMenu() {
 
     UIManager.put("OptionPane.background", Color.decode("#E8F6F3"));

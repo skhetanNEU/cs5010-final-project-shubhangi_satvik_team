@@ -8,7 +8,7 @@ import model.world.WorldInterface;
 public class GetPlayerDescription extends AbstractCommands {
 
   @Override
-  public void execute(WorldInterface model) {
+  public void execute(WorldInterface model) throws IllegalArgumentException {
     if (model == null) {
       throw new IllegalArgumentException("Model is invalid");
     }

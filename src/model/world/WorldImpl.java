@@ -65,13 +65,14 @@ public class WorldImpl implements WorldInterface {
    * @param weaponRoomIds      represents the list of id of the room each weapon is in
    * @param weaponDamageValues represents the list of damage values of each weapon
    * @param weaponNames        represents the list of name of each weapon
+   * @throws IllegalArgumentException when any of the parameter is invalid.
    */
   public WorldImpl(List<Integer> worldCoordinates, String worldName,
                    int targetPlayerHealth, String targetPlayerName,
                    int numRooms, List<List<Integer>> roomCoordinates, List<String> roomNames,
                    int numWeapons, List<Integer> weaponRoomIds, List<Integer> weaponDamageValues,
                    List<String> weaponNames, String targetPetName, RandomGenerator random,
-                   int maxTurns) {
+                   int maxTurns) throws IllegalArgumentException {
     if (worldCoordinates == null || worldCoordinates.size() == 0) {
       throw new IllegalArgumentException("World coordinates cannot be null/empty.");
     } else if (worldName == null || ("").equals(worldName)) {
@@ -181,6 +182,7 @@ public class WorldImpl implements WorldInterface {
    * @param weaponRoomIds      represents the list of id of the room each weapon is in
    * @param weaponDamageValues represents the list of damage values of each weapon
    * @param weaponNames        represents the list of name of each weapon
+   * @throws IllegalArgumentException when the weapon id or weapon name is invalid.
    */
   private void initializeWeapons(int numRooms, List<String> weaponNames,
                                  List<Integer> weaponDamageValues, List<Integer> weaponRoomIds)
@@ -205,8 +207,9 @@ public class WorldImpl implements WorldInterface {
    * Helper class that initializes the target pet.
    *
    * @param targetPlayerName represents the name of the pet
+   * @throws IllegalArgumentException when the target name or health is invalid.
    */
-  private void initializeTargetPlayer(String targetPlayerName, int targetPlayerHealth) {
+  private void initializeTargetPlayer(String targetPlayerName, int targetPlayerHealth) throws IllegalArgumentException {
     this.targetPlayer = new TargetPlayerImpl(
             targetPlayerName, targetPlayerHealth, this.rooms.get(0)
     );
@@ -327,8 +330,9 @@ public class WorldImpl implements WorldInterface {
    * Checks if there are any players in the world with same name.
    *
    * @param playerName name of the player
+   * @throws IllegalArgumentException when the player with same name already exists.
    */
-  private void checkIfPlayerAlreadyExistsWithSameName(String playerName) {
+  private void checkIfPlayerAlreadyExistsWithSameName(String playerName) throws IllegalArgumentException {
     for (PlayerInterface player : this.players) {
       if (player.getPlayerName().equalsIgnoreCase(playerName)) {
         throw new IllegalArgumentException("Player with same name already exists.");
@@ -336,6 +340,9 @@ public class WorldImpl implements WorldInterface {
     }
   }
 
+  /**
+   * Draw the world
+   */
   private void drawWorld() {
     Graphics g = worldView.getGraphics();
     g.setFont(g.getFont().deriveFont(10f));
@@ -429,7 +436,13 @@ public class WorldImpl implements WorldInterface {
     }
   }
 
-  private List<Integer> getRoomViewCoordinates(RoomInterface room) {
+  /**
+   * Get the view coordinates of the room.
+   * @param room Room whose coordinates are required.
+   * @return List of integer representing the coordinates of the room.
+   * @throws IllegalArgumentException When the room is null.
+   */
+  private List<Integer> getRoomViewCoordinates(RoomInterface room) throws IllegalArgumentException {
     if (room == null) {
       throw new IllegalArgumentException("Unable to get coordinates. Room is null.");
     }
@@ -443,7 +456,14 @@ public class WorldImpl implements WorldInterface {
 
   }
 
-  private String getRoomCellClicked(int r, int c) {
+  /**
+   * Get the room where the click has been made.
+   * @param r Row coordinate of the click
+   * @param c Column coordinate of the click
+   * @return String representing the room name where the click was made
+   * @throws IllegalArgumentException when the row coordinate or column coordinate is negative.
+   */
+  private String getRoomCellClicked(int r, int c) throws IllegalArgumentException {
     if (r < 0 || c < 0) {
       throw new IllegalArgumentException("Clicked coordinates cannot be negative.");
     }
@@ -460,7 +480,13 @@ public class WorldImpl implements WorldInterface {
     return null;
   }
 
-  private String movePlayer(String roomName) {
+  /**
+   * Move the player to the specified room.
+   * @param roomName Name of the room where the player should be moved to.
+   * @return Stirng representing the result of the move.
+   * @throws IllegalArgumentException When the room name is invalid.
+   */
+  private String movePlayer(String roomName) throws IllegalArgumentException {
     if (!isCurrentPlayerComputer() && (roomName == null || "".equals(roomName))) {
       throw new IllegalArgumentException("Room name is null/empty.");
     }
@@ -564,7 +590,7 @@ public class WorldImpl implements WorldInterface {
   }
 
   @Override
-  public String getRoomInformation(String roomName) {
+  public String getRoomInformation(String roomName) throws IllegalArgumentException {
     if (roomName == null || "".equals(roomName)) {
       throw new IllegalArgumentException("ERROR: Room name cannot be null/empty");
     }
@@ -589,7 +615,7 @@ public class WorldImpl implements WorldInterface {
   }
 
   @Override
-  public boolean isPlayerIconClicked(int r, int c) {
+  public boolean isPlayerIconClicked(int r, int c) throws IllegalArgumentException {
     if (r < 0 || c < 0) {
       throw new IllegalArgumentException("Clicked coordinates cannot be negative.");
     }
@@ -606,7 +632,7 @@ public class WorldImpl implements WorldInterface {
   }
 
   @Override
-  public void updateWorldView(boolean isLookAround) {
+  public void updateWorldView(boolean isLookAround) throws IllegalArgumentException {
 
     this.playersView = new BufferedImage(worldView.getWidth(), worldView.getHeight(),
             BufferedImage.TYPE_INT_ARGB);
@@ -693,7 +719,7 @@ public class WorldImpl implements WorldInterface {
 
   @Override
   public void addPlayerToGame(String playerName, int weaponLimit,
-                              boolean isComputerPlayer, String startingRoomName) {
+                              boolean isComputerPlayer, String startingRoomName) throws IllegalArgumentException {
     if (playerName == null || "".equals(playerName)) {
       throw new IllegalArgumentException("Player name cannot be null/empty.");
     } else if (weaponLimit <= 0 && weaponLimit != -1) {
@@ -739,7 +765,7 @@ public class WorldImpl implements WorldInterface {
   }
 
   @Override
-  public String handleRoomClick(int x, int y) {
+  public String handleRoomClick(int x, int y) throws IllegalArgumentException {
     if (x < 0 || y < 0) {
       throw new IllegalArgumentException("Clicked coordinates cannot be negative.");
     }
@@ -757,7 +783,7 @@ public class WorldImpl implements WorldInterface {
   }
 
   @Override
-  public String pickWeapon(String weaponName) {
+  public String pickWeapon(String weaponName) throws IllegalArgumentException {
     checkIfPlayersExistToPlayGame();
     if (!isCurrentPlayerComputer() && (weaponName == null || "".equals(weaponName))) {
       throw new IllegalArgumentException("Weapon name cannot be null/empty.");
@@ -771,7 +797,7 @@ public class WorldImpl implements WorldInterface {
   }
 
   @Override
-  public String movePet(String roomName) {
+  public String movePet(String roomName) throws IllegalArgumentException {
     checkIfPlayersExistToPlayGame();
     if (roomName == null || "".equals(roomName)) {
       throw new IllegalArgumentException("Room name is null/empty.");
@@ -793,7 +819,7 @@ public class WorldImpl implements WorldInterface {
   }
 
   @Override
-  public String attackTargetPlayer(String weaponName) {
+  public String attackTargetPlayer(String weaponName) throws IllegalArgumentException {
     checkIfPlayersExistToPlayGame();
     if (!isCurrentPlayerComputer() && (weaponName == null || "".equals(weaponName))) {
       throw new IllegalArgumentException("Weapon name is null/empty.");

@@ -30,6 +30,8 @@ public class RoomImpl implements RoomInterface {
    * @param roomId          represents the id of the room
    * @param roomName        represents the name of the room
    * @param roomCoordinates represents the coordinates of the room
+   * @throws IllegalArgumentException when the room id is negative or room name is invalid or
+   * room coordinates is invalid.
    */
   public RoomImpl(int roomId, String roomName, List<Integer> roomCoordinates)
           throws IllegalArgumentException {
@@ -126,7 +128,7 @@ public class RoomImpl implements RoomInterface {
   }
 
   @Override
-  public RoomInterface getNeighboringRoom(String neighboringRoomName) {
+  public RoomInterface getNeighboringRoom(String neighboringRoomName) throws IllegalArgumentException {
     if (neighboringRoomName == null || "".equals(neighboringRoomName)) {
       throw new IllegalArgumentException("Desired room name cannot be null/empty.");
     }
@@ -152,7 +154,7 @@ public class RoomImpl implements RoomInterface {
   }
 
   @Override
-  public WeaponInterface getWeaponByWeaponName(String weaponName) {
+  public WeaponInterface getWeaponByWeaponName(String weaponName) throws IllegalArgumentException {
     if (weaponName == null || "".equals(weaponName)) {
       throw new IllegalArgumentException("Weapon name cannot be empty.");
     }
@@ -209,7 +211,7 @@ public class RoomImpl implements RoomInterface {
   }
 
   @Override
-  public void addWeaponToRoom(int weaponId, String weaponName, int weaponDamageValue) {
+  public void addWeaponToRoom(int weaponId, String weaponName, int weaponDamageValue) throws IllegalArgumentException {
     if (weaponName == null || "".equals(weaponName)) {
       throw new IllegalArgumentException("Weapon name cannot be empty.");
     } else if (weaponId < 0) {
@@ -224,7 +226,7 @@ public class RoomImpl implements RoomInterface {
   }
 
   @Override
-  public void removeWeaponFromRoom(WeaponInterface weapon) {
+  public void removeWeaponFromRoom(WeaponInterface weapon) throws IllegalArgumentException {
     if (weapon == null) {
       throw new IllegalArgumentException("Weapon cannot be null.");
     }
@@ -236,7 +238,7 @@ public class RoomImpl implements RoomInterface {
   }
 
   @Override
-  public void addPlayerToRoom(PlayerInterface player) {
+  public void addPlayerToRoom(PlayerInterface player) throws IllegalArgumentException {
     if (player == null) {
       throw new IllegalArgumentException("Player cannot be null.");
     }
@@ -246,7 +248,7 @@ public class RoomImpl implements RoomInterface {
   }
 
   @Override
-  public void removePlayerFromRoom(PlayerInterface player) {
+  public void removePlayerFromRoom(PlayerInterface player) throws IllegalArgumentException {
     if (player == null) {
       throw new IllegalArgumentException("Player cannot be null.");
     }

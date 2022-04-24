@@ -19,9 +19,11 @@ public class AddPlayer extends AbstractCommands {
    * @param maxNumberOfWeapons Maximum number of weapons that can be carried by the player. If it
    *                          is -1, then there is no limit.
    * @param isComputerPlayer If the player is a computer player or not.
+   * @throws IllegalArgumentException When any of the player name, room name, maximum number of
+   * weapons and isComputerPlayer is invalid.
    */
   public AddPlayer(String playerName, String roomName, int maxNumberOfWeapons,
-                   boolean isComputerPlayer) {
+                   boolean isComputerPlayer) throws IllegalArgumentException {
     if (playerName == null || "".equals(playerName)) {
       throw new IllegalArgumentException("Invalid player name");
     }
@@ -40,7 +42,7 @@ public class AddPlayer extends AbstractCommands {
   }
 
   @Override
-  public void execute(WorldInterface model) {
+  public void execute(WorldInterface model) throws IllegalArgumentException {
     if (model == null) {
       throw new IllegalArgumentException("Model is invalid");
     }

@@ -38,7 +38,7 @@ public class PetImpl implements PetInterface {
   }
 
   @Override
-  public void setPetRoom(RoomInterface newRoom) {
+  public void setPetRoom(RoomInterface newRoom) throws IllegalArgumentException {
     if (newRoom == null) {
       throw new IllegalArgumentException("Room cannot be null.");
     }

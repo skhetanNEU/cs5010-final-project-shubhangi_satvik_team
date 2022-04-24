@@ -86,6 +86,7 @@ public interface RoomInterface extends Comparable<RoomInterface> {
    *
    * @param weaponName represents the name of the weapon
    * @return the weapon object
+   * @throws IllegalArgumentException when the weapon name is invalid.
    */
   WeaponInterface getWeaponByWeaponName(String weaponName);
 
@@ -95,6 +96,8 @@ public interface RoomInterface extends Comparable<RoomInterface> {
    * @param weaponId          represents the id of the weapon
    * @param weaponDamageValue represents the damage value of the weapon
    * @param weaponName        represents the name of the weapon
+   * @throws IllegalArgumentException when the weapon id or damage value is negative or weapon
+   * name is invalid.
    */
   void addWeaponToRoom(int weaponId, String weaponName, int weaponDamageValue);
 
@@ -102,6 +105,7 @@ public interface RoomInterface extends Comparable<RoomInterface> {
    * Removes a weapon from the room.
    *
    * @param weapon represents the name of the weapon to be removed
+   * @throws IllegalArgumentException when the weapon is null.
    */
   void removeWeaponFromRoom(WeaponInterface weapon);
 
@@ -123,6 +127,7 @@ public interface RoomInterface extends Comparable<RoomInterface> {
    * Adds a player to the room.
    *
    * @param player represents the player object to be added
+   * @throws IllegalArgumentException when the player is null.
    */
   void addPlayerToRoom(PlayerInterface player);
 
@@ -130,6 +135,7 @@ public interface RoomInterface extends Comparable<RoomInterface> {
    * Removes a player from the room.
    *
    * @param player represents the player object to be removed
+   * @throws IllegalArgumentException when the player is null.
    */
   void removePlayerFromRoom(PlayerInterface player);
 
@@ -137,6 +143,7 @@ public interface RoomInterface extends Comparable<RoomInterface> {
    * Get the neighboring room if the specified room is a neighbor.
    * @param neighboringRoomName Name of the room whose object is required.
    * @return Room object if the specified room is neighbor of the current room.
+   * @throws IllegalArgumentException when the neighboring room name is invalid.
    */
   RoomInterface getNeighboringRoom(String neighboringRoomName);
 

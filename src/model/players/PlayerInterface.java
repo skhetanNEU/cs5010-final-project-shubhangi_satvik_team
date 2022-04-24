@@ -34,6 +34,7 @@ public interface PlayerInterface {
    * Updates the current location of the player.
    *
    * @param roomName represents the new location/room of the player
+   * @throws IllegalArgumentException when the room name is invalid and player is not computer.
    */
   String setPlayerRoom(String roomName);
 
@@ -41,6 +42,7 @@ public interface PlayerInterface {
    * Pick up the specified weapon.
    * @param weaponName Name of the weapon that the player wants to pick.
    * @return String representing whether the pick up was successful or not.
+   * @throws IllegalArgumentException when the weapon name is invalid and player is not computer.
    */
   String pickWeapon(String weaponName);
 
@@ -49,6 +51,7 @@ public interface PlayerInterface {
    * @param weaponName Name of the weapon that should be used for the attack.
    * @return A number representing the damage of the attack. It is -1 if the attack was not
    *      successful.
+   * @throws IllegalArgumentException when the weapon name is invalid and player is not computer.
    */
   int attackTarget(String weaponName);
 }
