@@ -210,8 +210,12 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
 
   @Override
   public void refresh() {
-    this.gameBoard.repaint();
-    this.messages.updateGameDetails();
+    try {
+      this.gameBoard.repaint();
+      this.messages.updateGameDetails();
+    } catch (IllegalArgumentException iae) {
+      showCommandOutcome("ERROR", iae.getMessage(), false);
+    }
   }
 
   @Override
