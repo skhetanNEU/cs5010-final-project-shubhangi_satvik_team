@@ -12,8 +12,9 @@ public class MovePet extends AbstractCommands {
   /**
    * Constructor for setting up the move pet command.
    * @param roomName Name of the room where the pet should be moved to.
+   * @throws IllegalArgumentException when the room name is invalid.
    */
-  public MovePet(String roomName) {
+  public MovePet(String roomName) throws IllegalArgumentException {
     if (roomName == null || "".equals(roomName)) {
       throw new IllegalArgumentException("Invalid room name");
     }
@@ -21,7 +22,7 @@ public class MovePet extends AbstractCommands {
   }
 
   @Override
-  public void execute(WorldInterface model) {
+  public void execute(WorldInterface model) throws IllegalArgumentException {
     if (model == null) {
       throw new IllegalArgumentException("Model is invalid");
     }

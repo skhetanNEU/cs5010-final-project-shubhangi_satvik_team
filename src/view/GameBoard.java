@@ -1,6 +1,5 @@
 package view;
 
-import controller.FeatureInterface;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -23,8 +22,9 @@ public class GameBoard extends JPanel {
   /**
    * Constructor for setting up the game board.
    * @param model Model based on which the board should be presented.
+   * @throws IllegalArgumentException when the model is null.
    */
-  public GameBoard(ReadOnlyWorldInterface model) {
+  public GameBoard(ReadOnlyWorldInterface model) throws IllegalArgumentException {
     if (model == null) {
       throw new IllegalArgumentException("Model cannot be null");
     }
@@ -33,7 +33,7 @@ public class GameBoard extends JPanel {
   }
 
   @Override
-  protected void paintComponent(Graphics g) {
+  protected void paintComponent(Graphics g) throws IllegalArgumentException {
     super.paintComponent(g);
     BufferedImage img = model.getWorldView();
     g.drawImage(img, 0, 0, null);

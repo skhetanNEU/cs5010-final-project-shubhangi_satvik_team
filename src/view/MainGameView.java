@@ -54,10 +54,11 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
    * @param model    Model of the game.
    * @param listener Features object using which we can assign the listeners for each event.
    * @param roomList List of all the rooms in the world.
+   * @throws IllegalArgumentException when the model or the listener or the list of rooms is null.
    */
   public MainGameView(ReadOnlyWorldInterface model,
                       FeatureInterface listener,
-                      List<String> roomList) {
+                      List<String> roomList) throws IllegalArgumentException {
 
     super("Game Started");
 
@@ -103,6 +104,9 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
     pack();
   }
 
+  /**
+   * Sets the menu bar with Start and Help options.
+   */
   private void setMenuBar() {
     JMenuBar menuBar = new JMenuBar();
     JMenu startMenu = new JMenu("Start");
@@ -120,6 +124,10 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
     setJMenuBar(menuBar);
   }
 
+  /**
+   * Choose the configuration file.
+   * @return File object for the configuration file chosen
+   */
   private File chooseFile() {
     File file = null;
     JFileChooser fc = new JFileChooser();
@@ -132,6 +140,9 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
     return file;
   }
 
+  /**
+   * Showing the help information to the player.
+   */
   private void showHelperMenu() {
 
     UIManager.put("OptionPane.background", Color.decode("#E8F6F3"));
@@ -266,7 +277,7 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
   }
 
   @Override
-  public String showPickWeaponDialog(List<String> roomWeapons) {
+  public String showPickWeaponDialog(List<String> roomWeapons) throws IllegalArgumentException {
 
     if (roomWeapons == null) {
       throw new IllegalArgumentException("Room weapons cannot be null.");
@@ -328,7 +339,7 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
   }
 
   @Override
-  public String showMovePetDialog(List<String> roomList) {
+  public String showMovePetDialog(List<String> roomList) throws IllegalArgumentException {
     if (roomList == null || roomList.size() == 0) {
       throw new IllegalArgumentException("Room list cannot be null/empty.");
     }
@@ -367,7 +378,7 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
   }
 
   @Override
-  public String showAttackTargetDialog(List<String> playerWeapons) {
+  public String showAttackTargetDialog(List<String> playerWeapons) throws IllegalArgumentException {
 
     if (playerWeapons == null) {
       throw new IllegalArgumentException("Player weapons cannot be null.");
@@ -428,6 +439,9 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
 
   }
 
+  /**
+   * Pop up for adding the players.
+   */
   private class AddPlayersPopup extends JDialog {
 
     private final JLabel playerNameLabel;
@@ -445,7 +459,13 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
     private final JButton addNext;
     private final JButton startGame;
 
-    public AddPlayersPopup(MainGameView frame, List<String> rooms) {
+    /**
+     * Constructor for setting up the dialog for adding players.
+     * @param frame Main game view frame.
+     * @param rooms List of rooms present in the world.
+     * @throws IllegalArgumentException When the list of rooms is null.
+     */
+    public AddPlayersPopup(MainGameView frame, List<String> rooms) throws IllegalArgumentException {
 
       super(frame, "Add Players to Game");
 
@@ -520,12 +540,20 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
       pack();
     }
 
+    /**
+     * Clears the add players form.
+     */
     private void clearForm() {
       playerNameField.setText(null);
       playerWeaponLimitField.setText(null);
       errorMessage.setText(null);
     }
 
+    /**
+     * Adds the player to the world.
+     * @param listener Listener object for the event.
+     * @return Boolean representing whether the addition of player was successful or not.
+     */
     private boolean addPlayer(FeatureInterface listener) {
       if (listener == null) {
         throw new IllegalArgumentException("Listener cannot be null.");
@@ -543,6 +571,10 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
       }
     }
 
+    /**
+     * Adding the click listener for the form.
+     * @param listener Listener object for the event.
+     */
     public void addClickListener(FeatureInterface listener) {
       if (listener == null) {
         throw new IllegalArgumentException("Listener cannot be null.");

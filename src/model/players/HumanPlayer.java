@@ -16,8 +16,10 @@ public class HumanPlayer extends AbstractPlayer {
    * @param weaponLimit Maximum number of weapons that can be carried by the player. It is -1 if
    *                    there is no limit.
    * @param currentRoom Room where the player should be added.
+   * @throws IllegalArgumentException when the player name or weapon limit is invalid or the
+   * current room is null.
    */
-  public HumanPlayer(String playerName, int weaponLimit, RoomInterface currentRoom) {
+  public HumanPlayer(String playerName, int weaponLimit, RoomInterface currentRoom) throws IllegalArgumentException {
     super(playerName, weaponLimit, currentRoom);
   }
 
@@ -29,7 +31,7 @@ public class HumanPlayer extends AbstractPlayer {
   }
 
   @Override
-  public String setPlayerRoom(String roomName) {
+  public String setPlayerRoom(String roomName) throws IllegalArgumentException {
     if (roomName == null || "".equals(roomName)) {
       throw new IllegalArgumentException("Room name cannot be null/empty.");
     }
@@ -41,7 +43,7 @@ public class HumanPlayer extends AbstractPlayer {
   }
 
   @Override
-  public String pickWeapon(String weaponName) {
+  public String pickWeapon(String weaponName) throws IllegalArgumentException {
     if (weaponName == null || "".equals(weaponName)) {
       throw new IllegalArgumentException("Weapon name cannot be null/empty.");
     }
@@ -52,7 +54,7 @@ public class HumanPlayer extends AbstractPlayer {
   }
 
   @Override
-  public int attackTarget(String weaponName) {
+  public int attackTarget(String weaponName) throws IllegalArgumentException {
     if (weaponName == null || "".equals(weaponName)) {
       throw new IllegalArgumentException("Weapon name cannot be null/empty.");
     }

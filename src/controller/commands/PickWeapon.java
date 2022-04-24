@@ -12,8 +12,9 @@ public class PickWeapon extends AbstractCommands {
   /**
    * Constructor for setting up the pick weapon command.
    * @param weaponName Name of the weapon that should be picked.
+   * @throws IllegalArgumentException when the weapon name is invalid.
    */
-  public PickWeapon(String weaponName) {
+  public PickWeapon(String weaponName) throws IllegalArgumentException {
     if (weaponName == null || "".equals(weaponName)) {
       throw new IllegalArgumentException("Weapon name is invalid");
     }
@@ -21,7 +22,7 @@ public class PickWeapon extends AbstractCommands {
   }
 
   @Override
-  public void execute(WorldInterface model) {
+  public void execute(WorldInterface model) throws IllegalArgumentException {
     if (model == null) {
       throw new IllegalArgumentException("Model is invalid");
     }

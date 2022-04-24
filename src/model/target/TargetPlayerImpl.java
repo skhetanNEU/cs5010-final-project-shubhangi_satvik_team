@@ -61,7 +61,7 @@ public class TargetPlayerImpl implements TargetPlayerInterface {
   }
 
   @Override
-  public void setTargetPlayerRoom(RoomInterface newRoom) {
+  public void setTargetPlayerRoom(RoomInterface newRoom) throws IllegalArgumentException {
     if (newRoom == null) {
       throw new IllegalArgumentException(
               "Unable to update location of target player. Room cannot be null.");

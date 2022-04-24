@@ -31,8 +31,9 @@ public class GameMessages extends JPanel {
   /**
    * Constructor for setting up the game messages.
    * @param model Model of the game.
+   * @throws IllegalArgumentException when the model is null.
    */
-  public GameMessages(ReadOnlyWorldInterface model) {
+  public GameMessages(ReadOnlyWorldInterface model) throws IllegalArgumentException {
     if (model == null) {
       throw new IllegalArgumentException("Model cannot be null");
     }
@@ -40,7 +41,11 @@ public class GameMessages extends JPanel {
     initialize();
   }
 
-  private void initialize() {
+  /**
+   * Initialize the game messages
+   * @throws IllegalArgumentException when it is unable to read the image file.
+   */
+  private void initialize() throws IllegalArgumentException {
 
     setLayout(new BorderLayout());
     setBackground(Color.decode("#2C3E50"));

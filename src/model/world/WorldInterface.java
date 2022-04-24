@@ -31,12 +31,14 @@ public interface WorldInterface extends ReadOnlyWorldInterface {
    * @param r Row coordinate where the click is made
    * @param c Column coordinate where the click is made.
    * @return Boolean representing whether the player icon is clicked or not.
+   * @throws IllegalArgumentException when row or column coordinate is invalid.
    */
   boolean isPlayerIconClicked(int r, int c);
 
   /**
    * Update the world view after the recent changes.
    * @param isLookAround Boolean representing whether the update is because of the look around.
+   * @throws IllegalArgumentException when the world view cannot be updated.
    */
   void updateWorldView(boolean isLookAround);
 
@@ -47,6 +49,8 @@ public interface WorldInterface extends ReadOnlyWorldInterface {
    * @param weaponLimit       represents the limit on weapons
    * @param isComputerPlayer  represents if the player is computer controlled
    * @param startingRoomName  represents the name of the starting room
+   * @throws IllegalArgumentException when the player name or weapon limit or startingRoomName is
+   * invalid.
    */
   void addPlayerToGame(String playerName, int weaponLimit,
                        boolean isComputerPlayer, String startingRoomName);
@@ -64,6 +68,7 @@ public interface WorldInterface extends ReadOnlyWorldInterface {
    * @param x X coordinate of the click.
    * @param y Y coordinate of the click.
    * @return String representing whether the player was able to move.
+   * @throws IllegalArgumentException when any of the coordintes is negative.
    */
   String handleRoomClick(int x, int y);
 
@@ -71,6 +76,7 @@ public interface WorldInterface extends ReadOnlyWorldInterface {
    * Get the information about a specific room.
    * @param roomName Name of the room.
    * @return String representing the information about the specified room.
+   * @throws IllegalArgumentException when the room name is invalid.
    */
   String getRoomInformation(String roomName);
 
@@ -87,6 +93,7 @@ public interface WorldInterface extends ReadOnlyWorldInterface {
    *
    * @param weaponName represents the name of the weapon that the player has to pick.
    * @return String representing that player has picked the specified weapon.
+   * @throws IllegalArgumentException when the weapon name is invalid.
    */
   String pickWeapon(String weaponName);
 
@@ -95,6 +102,7 @@ public interface WorldInterface extends ReadOnlyWorldInterface {
    *
    * @param roomName represents the name of the room to which the pet has to be moved.
    * @return String representing that player has moved the pet.
+   * @throws IllegalArgumentException when the room name is invalid.
    */
   String movePet(String roomName);
 
@@ -103,6 +111,7 @@ public interface WorldInterface extends ReadOnlyWorldInterface {
    *
    * @param weaponName represents the name of the weapon which is used to attack
    * @return String representing whether the attack was successful or not.
+   * @throws IllegalArgumentException when the weapon name is invalid.
    */
   String attackTargetPlayer(String weaponName);
 

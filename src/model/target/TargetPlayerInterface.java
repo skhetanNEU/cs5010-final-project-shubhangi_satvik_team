@@ -33,6 +33,7 @@ public interface TargetPlayerInterface {
    * Updates the current location of the target player to the next indexed room.
    *
    * @param room represents the new location/room of the target player
+   * @throws IllegalArgumentException when the room is null.
    */
   void setTargetPlayerRoom(RoomInterface room);
 }

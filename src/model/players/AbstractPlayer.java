@@ -23,8 +23,10 @@ public abstract class AbstractPlayer implements PlayerInterface {
    * @param playerName Name of the player.
    * @param weaponLimit Maximum number of weapons.
    * @param currentRoom Room object where the player should be added.
+   * @throws IllegalArgumentException when the player name or weapon limit is invalid or the
+   * current room is null.
    */
-  public AbstractPlayer(String playerName, int weaponLimit, RoomInterface currentRoom) {
+  public AbstractPlayer(String playerName, int weaponLimit, RoomInterface currentRoom) throws IllegalArgumentException {
     if (playerName == null || "".equals(playerName)) {
       throw new IllegalArgumentException("Player name cannot be null/empty.");
     } else if (weaponLimit <= 0 && weaponLimit != -1) {
@@ -77,8 +79,9 @@ public abstract class AbstractPlayer implements PlayerInterface {
    * @param weaponName Name of the weapon that should be used for the attack.
    * @return Integer representing the damage of the attack. It is -1, if the attack was
    *         unsuccessful.
+   * @throws IllegalArgumentException when the weapon name is invalid.
    */
-  protected int attemptToAttackTarget(String weaponName) {
+  protected int attemptToAttackTarget(String weaponName) throws IllegalArgumentException {
 
     if (weaponName == null || "".equals(weaponName)) {
       throw new IllegalArgumentException("Weapon name cannot be null/empty.");
@@ -108,8 +111,10 @@ public abstract class AbstractPlayer implements PlayerInterface {
    * Adds a new weapon to the player.
    *
    * @param weapon represents the weapon object to be added
+   * @throws IllegalArgumentException when the weapon is null or weapon cannot be added to the
+   * player due to its limit.
    */
-  protected void addWeaponToPlayer(WeaponInterface weapon) {
+  protected void addWeaponToPlayer(WeaponInterface weapon) throws IllegalArgumentException {
     if (weapon == null) {
       throw new IllegalArgumentException("Weapon cannot be null.");
     } else if (weaponLimit != -1 && playerWeapons != null && playerWeapons.size() == weaponLimit) {
@@ -124,8 +129,9 @@ public abstract class AbstractPlayer implements PlayerInterface {
    *
    * @param weaponName represents the name of the weapon to be removed
    * @return weapon object that is removed
+   * @throws IllegalArgumentException when the weapon name is invalid.
    */
-  protected WeaponInterface removeWeaponFromPlayer(String weaponName) {
+  protected WeaponInterface removeWeaponFromPlayer(String weaponName) throws IllegalArgumentException {
     if (weaponName == null || "".equals(weaponName)) {
       throw new IllegalArgumentException("Weapon name cannot be null/empty.");
     } else if (weaponPoke.getWeaponName().equalsIgnoreCase(weaponName)) {

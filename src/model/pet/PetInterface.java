@@ -18,6 +18,7 @@ public interface PetInterface {
    * Updates the current location of the target pet.
    *
    * @param room represents the new location/room of the target pet
+   * @throws IllegalArgumentException when the room is null.
    */
   void setPetRoom(RoomInterface room);
 }
