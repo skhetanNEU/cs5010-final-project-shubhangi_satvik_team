@@ -15,17 +15,12 @@ import model.world.ReadOnlyWorldInterface;
 public class GameBoard extends JPanel {
 
   private final ReadOnlyWorldInterface model;
-  private final FeatureInterface listener;
 
-  public GameBoard(ReadOnlyWorldInterface model, FeatureInterface listener) {
+  public GameBoard(ReadOnlyWorldInterface model) {
     if (model == null) {
       throw new IllegalArgumentException("Model cannot be null");
     }
-    if (listener == null) {
-      throw new IllegalArgumentException("Controller cannot be null");
-    }
     this.model = model;
-    this.listener = listener;
     setBackground(Color.BLACK);
   }
 
