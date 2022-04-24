@@ -19,6 +19,9 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+/**
+ * Pre game view for the welcome screen.
+ */
 public class PreGameView extends JFrame implements DefaultGameViewInterface {
 
   private JMenuItem currentConfiguration;
@@ -26,6 +29,9 @@ public class PreGameView extends JFrame implements DefaultGameViewInterface {
   private JMenuItem quitGame;
   private JMenuItem helperItem;
 
+  /**
+   * Constructor for setting up the welcome screen.
+   */
   public PreGameView() {
 
     super("Welcome to Milestone 4");

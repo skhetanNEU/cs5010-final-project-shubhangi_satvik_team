@@ -5,11 +5,19 @@ import java.util.ArrayList;
 import java.util.List;
 import model.world.WorldInterface;
 
+/**
+ * Mock class for model for computer player throwing exceptions.
+ */
 public class MockWorldComputerCommandThrowsException implements WorldInterface {
 
   private StringBuilder log;
   private final String uniqueCode;
 
+  /**
+   * Constructor for setting up the mock class for model for computer player throwing exceptions.
+   * @param log StringBuilder for appending the actions.
+   * @param uniqueCode Unique code to verify the correct call was made.
+   */
   public MockWorldComputerCommandThrowsException(StringBuilder log, String uniqueCode) {
     this.log = log;
     this.uniqueCode = uniqueCode;

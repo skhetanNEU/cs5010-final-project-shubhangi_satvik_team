@@ -4,10 +4,17 @@ import controller.FeatureInterface;
 import java.util.List;
 import view.MainGameViewInterface;
 
+/**
+ * Mock class for the main game view.
+ */
 public class MockMainGameView implements MainGameViewInterface {
 
   private StringBuilder out;
 
+  /**
+   * Constructor for setting up the mock main game view.
+   * @param out StringBuilder for appending the actions.
+   */
   public MockMainGameView(StringBuilder out) {
     this.out = out;
     this.out.append("MainGameView constructor called\n");

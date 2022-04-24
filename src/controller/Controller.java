@@ -20,6 +20,9 @@ import view.DefaultGameViewInterface;
 import view.MainGameView;
 import view.MainGameViewInterface;
 
+/**
+ * Controller class for the game that is responsible for playing the game.
+ */
 public class Controller implements FeatureInterface {
 
   private WorldInterface model;
@@ -29,6 +32,13 @@ public class Controller implements FeatureInterface {
   private final int maxNumberOfTurns;
   private boolean gameOverMessageDisplayed;
 
+  /**
+   * Constructor for the controller class that sets up the game along with the view and
+   * required model setting.
+   * @param preGameView Pre game view showing the welcome screen.
+   * @param worldConfigurationPath Path of the world configuration file
+   * @param maxNumberOfTurns Maximum number of turns to be played in the game
+   */
   public Controller(DefaultGameViewInterface preGameView,
                     String worldConfigurationPath, int maxNumberOfTurns) {
     if (preGameView == null) {
@@ -49,6 +59,14 @@ public class Controller implements FeatureInterface {
     this.gameOverMessageDisplayed = false;
   }
 
+  /**
+   * Constructor for the controller class that sets up the game along with the view and model.
+   * @param preGameView Pre game view showing the welcome screen.
+   * @param gameView Main game view showing the gameplay screen.
+   * @param model Model of the game.
+   * @param worldConfigurationPath Path of the world configuration file
+   * @param maxNumberOfTurns Maximum number of turns to be played in the game
+   */
   public Controller(DefaultGameViewInterface preGameView,
                     MainGameViewInterface gameView,
                     WorldInterface model,

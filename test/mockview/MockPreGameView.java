@@ -3,10 +3,17 @@ package mockview;
 import controller.FeatureInterface;
 import view.DefaultGameViewInterface;
 
+/**
+ * Mock class for the pre game view.
+ */
 public class MockPreGameView implements DefaultGameViewInterface {
 
   private StringBuilder out;
 
+  /**
+   * Constructor for setting up the mock pre game view.
+   * @param out StringBuilder for appending the actions.
+   */
   public MockPreGameView(StringBuilder out) {
     this.out = out;
     this.out.append("PreGameView constructor called\n");

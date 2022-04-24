@@ -7,6 +7,9 @@ import model.room.RoomInterface;
 import model.weapon.WeaponImpl;
 import model.weapon.WeaponInterface;
 
+/**
+ * Abstract class for a player that implements the PlayerInterface.
+ */
 public abstract class AbstractPlayer implements PlayerInterface {
 
   protected static final WeaponInterface weaponPoke = new WeaponImpl(99999, "Poke", 1);
@@ -15,6 +18,12 @@ public abstract class AbstractPlayer implements PlayerInterface {
   protected RoomInterface currentRoom;
   protected final List<WeaponInterface> playerWeapons;
 
+  /**
+   * Constructor for player abstract class.
+   * @param playerName Name of the player.
+   * @param weaponLimit Maximum number of weapons.
+   * @param currentRoom Room object where the player should be added.
+   */
   public AbstractPlayer(String playerName, int weaponLimit, RoomInterface currentRoom) {
     if (playerName == null || "".equals(playerName)) {
       throw new IllegalArgumentException("Player name cannot be null/empty.");
@@ -48,6 +57,11 @@ public abstract class AbstractPlayer implements PlayerInterface {
     );
   }
 
+  /**
+   * Get the weapons that the player is carrying.
+   * @param includeDamageValue Include the damage values along with weapon names or not.
+   * @return List of string representing the weapons that the player is carrying.
+   */
   protected List<String> getDefaultPlayerWeapons(boolean includeDamageValue) {
     List<String> weapons = new ArrayList<>();
 
@@ -58,6 +72,12 @@ public abstract class AbstractPlayer implements PlayerInterface {
     return weapons;
   }
 
+  /**
+   * Making an attempt on the target.
+   * @param weaponName Name of the weapon that should be used for the attack.
+   * @return Integer representing the damage of the attack. It is -1, if the attack was
+   *         unsuccessful.
+   */
   protected int attemptToAttackTarget(String weaponName) {
 
     if (weaponName == null || "".equals(weaponName)) {

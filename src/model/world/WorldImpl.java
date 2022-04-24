@@ -708,7 +708,7 @@ public class WorldImpl implements WorldInterface {
     PlayerInterface newPlayer;
     if (isComputerPlayer) {
       newPlayer = new ComputerPlayer(playerName,
-              weaponLimit, startRoom);
+              weaponLimit, startRoom, random);
     } else {
       newPlayer = new HumanPlayer(playerName,
               weaponLimit, startRoom);

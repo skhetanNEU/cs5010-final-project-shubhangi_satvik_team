@@ -189,6 +189,12 @@ public class WorldBuilder {
     return this;
   }
 
+  /**
+   * Method to set the maximum number of turns in the game.
+   * @param maxTurns Maximum number of turns in the game.
+   * @return WorldBuilder object with max number of turns set accordingly.
+   * @throws IllegalArgumentException When max number of turns is zero or negative.
+   */
   public WorldBuilder setMaxTurns(int maxTurns) throws IllegalArgumentException {
     if (maxTurns <= 0) {
       throw new IllegalArgumentException("Number of turns cannot be non-positive.");

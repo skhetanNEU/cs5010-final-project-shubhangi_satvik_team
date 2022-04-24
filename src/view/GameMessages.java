@@ -18,6 +18,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import model.world.ReadOnlyWorldInterface;
 
+/**
+ * Messages that should be displayed in the game.
+ */
 public class GameMessages extends JPanel {
 
   ReadOnlyWorldInterface model;
@@ -26,6 +29,10 @@ public class GameMessages extends JPanel {
   JTextArea currentPlayerRoomInfo;
 
 
+  /**
+   * Constructor for setting up the game messages.
+   * @param model Model of the game.
+   */
   public GameMessages(ReadOnlyWorldInterface model) {
     if (model == null) {
       throw new IllegalArgumentException("Model cannot be null");
@@ -214,6 +221,9 @@ public class GameMessages extends JPanel {
     add(content, BorderLayout.NORTH);
   }
 
+  /**
+   * Update the details of the game according to the current player and its details.
+   */
   public void updateGameDetails() {
     currentTurnName.setText(model.getCurrentPlayerName());
     targetPlayerInfo.setText(model.getTargetPlayerDetails());

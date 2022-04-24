@@ -41,7 +41,10 @@ public class RandomClass implements RandomGenerator {
 
   @Override
   public int getRandomWithinBound(int bound) {
-    return r.nextInt(bound);
+    if (isTrueRandom) {
+      return r.nextInt(bound);
+    }
+    return this.randomNumber;
   }
 
 }

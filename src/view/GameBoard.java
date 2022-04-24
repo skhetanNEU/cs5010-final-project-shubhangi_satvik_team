@@ -12,10 +12,18 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import model.world.ReadOnlyWorldInterface;
 
+/**
+ * Board of the game representing the map of the world with all the rooms, players, weapons and
+ * target character.
+ */
 public class GameBoard extends JPanel {
 
   private final ReadOnlyWorldInterface model;
-
+  
+  /**
+   * Constructor for setting up the game board.
+   * @param model Model based on which the board should be presented.
+   */
   public GameBoard(ReadOnlyWorldInterface model) {
     if (model == null) {
       throw new IllegalArgumentException("Model cannot be null");

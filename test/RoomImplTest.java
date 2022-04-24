@@ -12,6 +12,8 @@ import model.pet.PetInterface;
 import model.players.ComputerPlayer;
 import model.players.HumanPlayer;
 import model.players.PlayerInterface;
+import model.random.RandomClass;
+import model.random.RandomGenerator;
 import model.room.RoomImpl;
 import model.room.RoomInterface;
 import model.target.TargetPlayerImpl;
@@ -42,6 +44,7 @@ public class RoomImplTest {
    */
   @Before
   public void setUp() {
+    RandomGenerator random = new RandomClass();
     room0 = new RoomImpl(0, "Armory", new ArrayList<>(Arrays.asList(14, 14, 16, 20)));
     room1 = new RoomImpl(1, "Billiard Room", new ArrayList<>(Arrays.asList(17, 14, 20, 20)));
     room2 = new RoomImpl(2, "Dining Hall", new ArrayList<>(Arrays.asList(7, 6, 15, 13)));
@@ -49,8 +52,8 @@ public class RoomImplTest {
     PetInterface targetPet = new PetImpl("Fortune Cat", room0);
     humanPlayer1 = new HumanPlayer("humanPlayer1", 2, room0);
     humanPlayer2 = new HumanPlayer("humanPlayer2", -1, room1);
-    computerPlayer1 = new ComputerPlayer("computerPlayer1", 3, room0);
-    computerPlayer2 = new ComputerPlayer("computerPlayer2", -1, room2);
+    computerPlayer1 = new ComputerPlayer("computerPlayer1", 3, room0, random);
+    computerPlayer2 = new ComputerPlayer("computerPlayer2", -1, room2, random);
     weapon1 = new WeaponImpl(1, "Blade", 2);
     weapon3 = new WeaponImpl(3, "Rat Poison", 3);
   }

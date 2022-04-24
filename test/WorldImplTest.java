@@ -1583,6 +1583,9 @@ public class WorldImplTest {
 
             testWorld.getCurrentPlayerInformation());
     testWorld.attackTargetPlayer(null);
+    assertEquals("Name: Doctor Lucky\n"
+            + "Health: 0\n"
+            + "Current Room: Kitchen", testWorld.getTargetPlayerDetails());
     assertEquals("Name: Test\n"
             + "Current Room: Kitchen\n"
             + "Weapons: Rope (Damage: 2)", testWorld.getCurrentPlayerInformation());
@@ -2084,6 +2087,226 @@ public class WorldImplTest {
 
 
     assertEquals("P1", testWorld.getCurrentPlayerName());
+  }
+
+  @Test
+  public void testPlayerIconClicked_Successful() {
+    testWorld.addPlayerToGame("P1", 2, false, "Billiard Room");
+    assertTrue(testWorld.isPlayerIconClicked(472, 694));
+  }
+
+  @Test
+  public void testPlayerIconClicked_InvalidRow() {
+    assertThrows(IllegalArgumentException.class, () -> testWorld.isPlayerIconClicked(-10, 10));
+  }
+
+  @Test
+  public void testPlayerIconClicked_InvalidColumn() {
+    assertThrows(IllegalArgumentException.class, () -> testWorld.isPlayerIconClicked(10, -10));
+  }
+
+  @Test
+  public void testPlayerIconClicked_PlayerDoesntExist() {
+    assertThrows(IllegalArgumentException.class, () -> testWorld.isPlayerIconClicked(10, 10));
+  }
+
+  @Test
+  public void testTakeTurnForComputerPlayer_AttackTarget_TargetInSameRoom_PlayerNotSeen() {
+    RandomClass predictableRandom = new RandomClass(0);
+    testWorld = new WorldImpl(worldCoordinates, worldName,
+            targetPlayerHealth, targetPlayerName,
+            numRooms, roomCoordinates, roomNames,
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName,
+            predictableRandom, maxNumberOfTurns);
+
+    testWorld.addPlayerToGame("Test", 2, true, "Kitchen");
+    testWorld.addPlayerToGame("Test2", 2, false, "Dining Hall");
+
+    testWorld.pickWeapon(null);
+    testWorld.lookAroundSpace();
+
+    assertEquals("Name: Kitchen\n"
+            + "Neighbours: Dining Hall, Parlor\n"
+            + "Weapons: Rope (Damage: 2)\n"
+            + "Players: Test\n"
+            + "Is Target Present: Yes\n"
+            + "Is Pet Present: Yes", testWorld.getRoomInformation("Kitchen"));
+
+    assertEquals("Attack on target was successful.", testWorld.takeTurnForComputerPlayer());
+
+    assertEquals("Name: Doctor Lucky\n"
+            + "Health: 3\n"
+            + "Current Room: Nursery", testWorld.getTargetPlayerDetails());
+    assertEquals("Name: Test2\n"
+            + "Current Room: Dining Hall\n"
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
+  }
+
+  @Test
+  public void testTakeTurnForComputerPlayer_MoveToNeighbor() {
+    RandomClass predictableRandom = new RandomClass(1);
+    testWorld = new WorldImpl(worldCoordinates, worldName,
+            targetPlayerHealth, targetPlayerName,
+            numRooms, roomCoordinates, roomNames,
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName,
+            predictableRandom, maxNumberOfTurns);
+
+    testWorld.addPlayerToGame("Test", 2, true, "Kitchen");
+    testWorld.addPlayerToGame("Test2", 2, false, "Dining Hall");
+
+    testWorld.lookAroundSpace();
+    testWorld.lookAroundSpace();
+    testWorld.lookAroundSpace();
+    testWorld.lookAroundSpace();
+
+    assertEquals("Name: Kitchen\n"
+            + "Neighbours: Dining Hall, Parlor\n"
+            + "Weapons: Pan (Damage: 3), Rope (Damage: 2)\n"
+            + "Players: Test\n"
+            + "Is Target Present: No\n"
+            + "Is Pet Present: Yes", testWorld.getRoomInformation("Kitchen"));
+
+    String expected = "Player has successfully moved to room Parlor.";
+    assertEquals(expected, testWorld.takeTurnForComputerPlayer());
+
+    assertEquals("Name: Doctor Lucky\n"
+            + "Health: 6\n"
+            + "Current Room: Billiard Room", testWorld.getTargetPlayerDetails());
+    assertEquals("Name: Test2\n"
+            + "Current Room: Dining Hall\n"
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
+  }
+
+  @Test
+  public void testTakeTurnForComputerPlayer_MovePet() {
+    RandomClass predictableRandom = new RandomClass(3);
+    testWorld = new WorldImpl(worldCoordinates, worldName,
+            targetPlayerHealth, targetPlayerName,
+            numRooms, roomCoordinates, roomNames,
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName,
+            predictableRandom, maxNumberOfTurns);
+
+    testWorld.addPlayerToGame("Test", 2, true, "Kitchen");
+    testWorld.addPlayerToGame("Test2", 2, false, "Dining Hall");
+
+    testWorld.lookAroundSpace();
+    testWorld.lookAroundSpace();
+    testWorld.lookAroundSpace();
+    testWorld.lookAroundSpace();
+
+    assertEquals("Name: Kitchen\n"
+            + "Neighbours: Dining Hall, Parlor\n"
+            + "Weapons: Pan (Damage: 3), Rope (Damage: 2)\n"
+            + "Players: Test\n"
+            + "Is Target Present: No\n"
+            + "Is Pet Present: Yes", testWorld.getRoomInformation("Kitchen"));
+
+    String expected = "Player has successfully moved the pet to Nursery.";
+    assertEquals(expected, testWorld.takeTurnForComputerPlayer());
+
+    assertEquals("Name: Doctor Lucky\n"
+            + "Health: 6\n"
+            + "Current Room: Billiard Room", testWorld.getTargetPlayerDetails());
+    assertEquals("Name: Test2\n"
+            + "Current Room: Dining Hall\n"
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
+  }
+
+  @Test
+  public void testTakeTurnForComputerPlayer_LookAround() {
+    RandomClass predictableRandom = new RandomClass(0);
+    testWorld = new WorldImpl(worldCoordinates, worldName,
+            targetPlayerHealth, targetPlayerName,
+            numRooms, roomCoordinates, roomNames,
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName,
+            predictableRandom, maxNumberOfTurns);
+
+    testWorld.addPlayerToGame("Test", 2, true, "Kitchen");
+    testWorld.addPlayerToGame("Test2", 2, false, "Dining Hall");
+
+    testWorld.lookAroundSpace();
+    testWorld.lookAroundSpace();
+    testWorld.lookAroundSpace();
+    testWorld.lookAroundSpace();
+
+    assertEquals("Name: Kitchen\n"
+            + "Neighbours: Dining Hall, Parlor\n"
+            + "Weapons: Pan (Damage: 3), Rope (Damage: 2)\n"
+            + "Players: Test\n"
+            + "Is Target Present: No\n"
+            + "Is Pet Present: Yes", testWorld.getRoomInformation("Kitchen"));
+
+    String expected = "-----Look Around Details------\n"
+            + "------Current Room Details------\n"
+            + "Name: Kitchen\n"
+            + "Neighbours: Dining Hall, Parlor\n"
+            + "Weapons: Pan (Damage: 3), Rope (Damage: 2)\n"
+            + "Players: Test\n"
+            + "Is Target Present: No\n"
+            + "Is Pet Present: Yes\n"
+            + "\n"
+            + "------Neighboring Room Details------\n"
+            + "\n"
+            + "Name: Dining Hall\n"
+            + "Neighbours: Billiard Room, Parlor\n"
+            + "Weapons: -\n"
+            + "Players: Test2\n"
+            + "Is Target Present: No\n"
+            + "Is Pet Present: No\n"
+            + "\n"
+            + "Name: Parlor\n"
+            + "Neighbours: Dining Hall\n"
+            + "Weapons: Rod (Damage: 1)\n"
+            + "Players: -\n"
+            + "Is Target Present: Yes\n"
+            + "Is Pet Present: No\n";
+    assertEquals(expected, testWorld.takeTurnForComputerPlayer());
+
+    assertEquals("Name: Doctor Lucky\n"
+            + "Health: 6\n"
+            + "Current Room: Billiard Room", testWorld.getTargetPlayerDetails());
+    assertEquals("Name: Test2\n"
+            + "Current Room: Dining Hall\n"
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
+  }
+
+  @Test
+  public void testTakeTurnForComputerPlayer_PickWeapon() {
+    RandomClass predictableRandom = new RandomClass(2);
+    numWeapons++;
+    weaponRoomIds.add(2);
+    weaponDamageValues.add(4);
+    weaponNames.add("Stick");
+    testWorld = new WorldImpl(worldCoordinates, worldName,
+            targetPlayerHealth, targetPlayerName,
+            numRooms, roomCoordinates, roomNames,
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName,
+            predictableRandom, maxNumberOfTurns);
+
+    testWorld.addPlayerToGame("Test", 2, true, "Kitchen");
+    testWorld.addPlayerToGame("Test2", 2, false, "Dining Hall");
+
+    testWorld.lookAroundSpace();
+    testWorld.lookAroundSpace();
+    testWorld.lookAroundSpace();
+    testWorld.lookAroundSpace();
+
+    assertEquals("Name: Kitchen\n"
+            + "Neighbours: Dining Hall, Parlor\n"
+            + "Weapons: Stick (Damage: 4), Pan (Damage: 3), Rope (Damage: 2)\n"
+            + "Players: Test\n"
+            + "Is Target Present: No\n"
+            + "Is Pet Present: Yes", testWorld.getRoomInformation("Kitchen"));
+
+    String expected = "Player has successfully picked up Rope.";
+    assertEquals(expected, testWorld.takeTurnForComputerPlayer());
+
+    assertEquals("Name: Doctor Lucky\n"
+            + "Health: 6\n"
+            + "Current Room: Billiard Room", testWorld.getTargetPlayerDetails());
+    assertEquals("Name: Test2\n"
+            + "Current Room: Dining Hall\n"
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
   }
 
 }

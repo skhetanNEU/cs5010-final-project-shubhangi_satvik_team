@@ -34,6 +34,10 @@ import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import model.world.ReadOnlyWorldInterface;
 
+/**
+ * Main game view showing the map and all the other details in the game such as players, target
+ * character, pet, weapons, etc.
+ */
 public class MainGameView extends JFrame implements MainGameViewInterface {
 
   private JMenuItem currentConfiguration;
@@ -44,6 +48,12 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
   private final GameMessages messages;
   private final AddPlayersPopup addPlayerPopup;
 
+  /**
+   * Constructor for setting up the main game view.
+   * @param model Model of the game.
+   * @param listener Features object using which we can assign the listeners for each event.
+   * @param roomList List of all the rooms in the world.
+   */
   public MainGameView(ReadOnlyWorldInterface model,
                       FeatureInterface listener,
                       List<String> roomList) {

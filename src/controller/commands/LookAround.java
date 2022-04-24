@@ -2,6 +2,9 @@ package controller.commands;
 
 import model.world.WorldInterface;
 
+/**
+ * Command for look around option for the player.
+ */
 public class LookAround extends AbstractCommands {
 
   @Override
