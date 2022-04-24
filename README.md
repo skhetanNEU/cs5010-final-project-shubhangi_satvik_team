@@ -281,6 +281,9 @@ Used sample text file (/res/ExampleRunMansion.txt) for example runs to easily re
 21. Game menu displayed - Turns left 12 - Current turn for 'human player 1' - User enters q
 22. Game quit
 
+#### Milestone 4
+The video submission showcasing the demo of the game will be added soon.
+
 
 
 ### Design/Model Changes
@@ -336,7 +339,7 @@ In the modified design,
 
 
 #### Milestone 4
-The video submission showcasing the demo of the game will be added soon.
+
 
 
 ### Assumptions
