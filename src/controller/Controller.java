@@ -9,9 +9,11 @@ import controller.commands.MovePet;
 import controller.commands.MovePlayer;
 import controller.commands.PickWeapon;
 import controller.commands.PlayTurnForComputerPlayer;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+
 import model.random.RandomClass;
 import model.random.RandomGenerator;
 import model.world.WorldImpl;
@@ -102,9 +104,9 @@ public class Controller implements FeatureInterface {
       new Controller(this.preGameView, this.gameView, this.model,
               this.defaultConfigurationFilePath);
     } catch (FileNotFoundException e) {
-      // TODO: throw new IllegalArgumentException("ERROR: File not found.");
+      preGameView.showCommandOutcome("ERROR", "File not found", false);
     } catch (IllegalArgumentException iae) {
-      // TODO: Error can come from file parsing or model constructor
+      preGameView.showCommandOutcome("ERROR", iae.getMessage(), false);
     }
   }
 
@@ -124,7 +126,7 @@ public class Controller implements FeatureInterface {
     } catch (NumberFormatException nfe) {
       return "Maximum number of weapons must be a number";
     }
-    if (numWeapons < -1) {
+    if (numWeapons < -1 || numWeapons == 0) {
       return "Maximum number of weapons should be -1 or positive";
     }
     CommandsInterface addPlayer = new AddPlayer(playerName, roomName, numWeapons,

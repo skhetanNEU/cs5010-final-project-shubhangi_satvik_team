@@ -9,4 +9,6 @@ public interface DefaultGameViewInterface {
   void makeVisible();
 
   void close();
+
+  void showCommandOutcome(String title, String outcome, boolean isLookAround);
 }

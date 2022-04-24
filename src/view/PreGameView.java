@@ -147,4 +147,13 @@ public class PreGameView extends JFrame implements DefaultGameViewInterface {
   public void close() {
     this.setVisible(false);
   }
+
+  @Override
+  public void showCommandOutcome(String title, String outcome, boolean isLookAround) {
+    UIManager.put("OptionPane.background", Color.decode("#FCF3CF"));
+    UIManager.put("Panel.background", Color.decode("#FCF3CF"));
+    UIManager.put("Button.background", Color.WHITE);
+    JOptionPane.showOptionDialog(getParent(), outcome, title, JOptionPane.DEFAULT_OPTION,
+            JOptionPane.PLAIN_MESSAGE, null, null, null);
+  }
 }

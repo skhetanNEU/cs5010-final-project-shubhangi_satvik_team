@@ -215,7 +215,7 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
   }
 
   @Override
-  public int showCommandOutcome(String title, String outcome, boolean isLookAround) {
+  public void showCommandOutcome(String title, String outcome, boolean isLookAround) {
 
     if (isLookAround) {
       UIManager.put("OptionPane.background", Color.decode("#D6DBDF"));
@@ -227,14 +227,15 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
       textArea.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
       JScrollPane sp = new JScrollPane(textArea);
       sp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-      return JOptionPane.showOptionDialog(getParent(), sp, title, JOptionPane.DEFAULT_OPTION,
+      JOptionPane.showOptionDialog(getParent(), sp, title, JOptionPane.DEFAULT_OPTION,
               JOptionPane.PLAIN_MESSAGE, null, null, null);
+      return;
 
     }
     UIManager.put("OptionPane.background", Color.decode("#FCF3CF"));
     UIManager.put("Panel.background", Color.decode("#FCF3CF"));
     UIManager.put("Button.background", Color.WHITE);
-    return JOptionPane.showOptionDialog(getParent(), outcome, title, JOptionPane.DEFAULT_OPTION,
+    JOptionPane.showOptionDialog(getParent(), outcome, title, JOptionPane.DEFAULT_OPTION,
             JOptionPane.PLAIN_MESSAGE, null, null, null);
   }
 
