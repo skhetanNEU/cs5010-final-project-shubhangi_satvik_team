@@ -216,6 +216,7 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
   @Override
   public void close() {
     this.setVisible(false);
+    this.dispose();
   }
 
   @Override

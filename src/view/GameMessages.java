@@ -28,7 +28,6 @@ public class GameMessages extends JPanel {
   JTextArea targetPlayerInfo;
   JTextArea currentPlayerRoomInfo;
 
-
   /**
    * Constructor for setting up the game messages.
    * @param model Model of the game.
@@ -152,7 +151,7 @@ public class GameMessages extends JPanel {
       content.add(otherKey, c);
 
     } catch (IOException e) {
-      // TODO: Do nothing?
+      throw new IllegalArgumentException("Unable to read image file.");
     }
 
     JLabel currentTurnLabel = new JLabel("Current Turn");

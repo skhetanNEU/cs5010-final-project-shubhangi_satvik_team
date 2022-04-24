@@ -152,6 +152,7 @@ public class PreGameView extends JFrame implements DefaultGameViewInterface {
   @Override
   public void close() {
     this.setVisible(false);
+    this.dispose();
   }
 
   @Override
