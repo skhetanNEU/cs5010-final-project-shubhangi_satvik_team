@@ -235,8 +235,7 @@ public class ControllerTest {
                     + "PreGameView close() called\n"
                     + "MainGameView makeVisible() called\n"
                     + "MainGameView addFeatures() called\n"
-                    + "PreGameView showAttackTargetDialog() called\n"
-                    + "Parameters: ERROR, Number of turns cannot be non-positive., false\n",
+                    + "PreGameView close() called\n",
             logView.toString());
 
   }
@@ -259,8 +258,7 @@ public class ControllerTest {
                     + "PreGameView close() called\n"
                     + "MainGameView makeVisible() called\n"
                     + "MainGameView addFeatures() called\n"
-                    + "PreGameView showAttackTargetDialog() called\n"
-                    + "Parameters: ERROR, Number of turns cannot be non-positive., false\n",
+                    + "PreGameView close() called\n",
             logView.toString());
 
   }
@@ -532,12 +530,12 @@ public class ControllerTest {
             + "Model updateWorldView() called\n"
             + "Parameters: true\n"
             + "Model lookAroundSpace() called\n"
-            + "Model isGameOver() called\n"
-            + "Model isCurrentPlayerComputer() called\n"
-            + "Model isCurrentPlayerComputer() called\n"
-            + "Model isGameOver() called\n"
             + "Model updateWorldView() called\n"
-            + "Parameters: false\n", logModel.toString());
+            + "Parameters: false\n"
+            + "Model isGameOver() called\n"
+            + "Model isCurrentPlayerComputer() called\n"
+            + "Model isCurrentPlayerComputer() called\n"
+            + "Model isGameOver() called\n", logModel.toString());
   }
 
   @Test
@@ -676,12 +674,12 @@ public class ControllerTest {
             + "Parameters: 2, 3\n"
             + "Model handleRoomClick() called\n"
             + "Parameters: 2, 3\n"
-            + "Model isGameOver() called\n"
-            + "Model isCurrentPlayerComputer() called\n"
-            + "Model isCurrentPlayerComputer() called\n"
-            + "Model isGameOver() called\n"
             + "Model updateWorldView() called\n"
-            + "Parameters: false\n", logModel.toString());
+            + "Parameters: false\n"
+            + "Model isGameOver() called\n"
+            + "Model isCurrentPlayerComputer() called\n"
+            + "Model isCurrentPlayerComputer() called\n"
+            + "Model isGameOver() called\n", logModel.toString());
   }
 
   @Test
@@ -829,12 +827,12 @@ public class ControllerTest {
             + "Model getCurrentPlayerRoomWeapons() called\n"
             + "Model pickWeapon() called\n"
             + "Parameters: 1234\n"
-            + "Model isGameOver() called\n"
-            + "Model isCurrentPlayerComputer() called\n"
-            + "Model isCurrentPlayerComputer() called\n"
-            + "Model isGameOver() called\n"
             + "Model updateWorldView() called\n"
-            + "Parameters: false\n", logModel.toString());
+            + "Parameters: false\n"
+            + "Model isGameOver() called\n"
+            + "Model isCurrentPlayerComputer() called\n"
+            + "Model isCurrentPlayerComputer() called\n"
+            + "Model isGameOver() called\n", logModel.toString());
   }
 
   @Test
@@ -951,12 +949,12 @@ public class ControllerTest {
             + "Model attackTargetPlayer() called\n"
             + "Parameters: 1234\n"
             + "Model isCurrentPlayerComputer() called\n"
-            + "Model isGameOver() called\n"
-            + "Model isCurrentPlayerComputer() called\n"
-            + "Model isCurrentPlayerComputer() called\n"
-            + "Model isGameOver() called\n"
             + "Model updateWorldView() called\n"
-            + "Parameters: false\n", logModel.toString());
+            + "Parameters: false\n"
+            + "Model isGameOver() called\n"
+            + "Model isCurrentPlayerComputer() called\n"
+            + "Model isCurrentPlayerComputer() called\n"
+            + "Model isGameOver() called\n", logModel.toString());
   }
 
   @Test
@@ -1106,12 +1104,12 @@ public class ControllerTest {
             + "Model getListOfRooms() called\n"
             + "Model movePet() called\n"
             + "Parameters: 1234\n"
-            + "Model isGameOver() called\n"
-            + "Model isCurrentPlayerComputer() called\n"
-            + "Model isCurrentPlayerComputer() called\n"
-            + "Model isGameOver() called\n"
             + "Model updateWorldView() called\n"
-            + "Parameters: false\n", logModel.toString());
+            + "Parameters: false\n"
+            + "Model isGameOver() called\n"
+            + "Model isCurrentPlayerComputer() called\n"
+            + "Model isCurrentPlayerComputer() called\n"
+            + "Model isGameOver() called\n", logModel.toString());
   }
 
   @Test
