@@ -8,14 +8,36 @@ import java.util.List;
  */
 public interface WorldInterface extends ReadOnlyWorldInterface {
 
+  /**
+   * Get the list of rooms present in the world.
+   * @return List of room names
+   */
   List<String> getListOfRooms();
 
+  /**
+   * Get the weapons that the current player is carrying.
+   * @return List of weapons with player.
+   */
   List<String> getCurrentPlayerWeapons();
 
+  /**
+   * Get the weapons present in current player's room.
+   * @return List of weapons present in the room.
+   */
   List<String> getCurrentPlayerRoomWeapons();
 
+  /**
+   * Check if the player icon is clicked.
+   * @param r Row coordinate where the click is made
+   * @param c Column coordinate where the click is made.
+   * @return Boolean representing whether the player icon is clicked or not.
+   */
   boolean isPlayerIconClicked(int r, int c);
 
+  /**
+   * Update the world view after the recent changes.
+   * @param isLookAround Boolean representing whether the update is because of the look around.
+   */
   void updateWorldView(boolean isLookAround);
 
   /**
@@ -37,8 +59,19 @@ public interface WorldInterface extends ReadOnlyWorldInterface {
    */
   String lookAroundSpace();
 
+  /**
+   * Handle the click on the room.
+   * @param x X coordinate of the click.
+   * @param y Y coordinate of the click.
+   * @return String representing whether the player was able to move.
+   */
   String handleRoomClick(int x, int y);
 
+  /**
+   * Get the information about a specific room.
+   * @param roomName Name of the room.
+   * @return String representing the information about the specified room.
+   */
   String getRoomInformation(String roomName);
 
   /**
@@ -79,6 +112,10 @@ public interface WorldInterface extends ReadOnlyWorldInterface {
    */
   String takeTurnForComputerPlayer();
 
+  /**
+   * Get the winner of the game.
+   * @return Get the name of the player who is the winner.
+   */
   String getWinner();
 
   /**

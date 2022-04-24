@@ -11,6 +11,9 @@ import model.room.RoomInterface;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * JUnit class for testing the Human Player.
+ */
 public class HumanPlayerTest {
 
   private RoomInterface room0;

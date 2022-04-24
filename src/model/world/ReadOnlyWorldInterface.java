@@ -37,6 +37,10 @@ public interface ReadOnlyWorldInterface {
    */
   String getCurrentPlayerRoomInformation();
 
+  /**
+   * Get the view of the world map.
+   * @return Buffered image of the map of the world.
+   */
   BufferedImage getWorldView();
 
   /**

@@ -2,6 +2,9 @@ package controller.commands;
 
 import model.world.WorldInterface;
 
+/**
+ * Command class for adding a player to the world.
+ */
 public class AddPlayer extends AbstractCommands {
 
   private final String playerName;
@@ -9,6 +12,14 @@ public class AddPlayer extends AbstractCommands {
   private final int maxNumberOfWeapons;
   private final boolean isComputerPlayer;
 
+  /**
+   * Constructor for adding a player to the game.
+   * @param playerName Name of the player
+   * @param roomName Name of the room where the player should be added
+   * @param maxNumberOfWeapons Maximum number of weapons that can be carried by the player. If it
+   *                          is -1, then there is no limit.
+   * @param isComputerPlayer If the player is a computer player or not.
+   */
   public AddPlayer(String playerName, String roomName, int maxNumberOfWeapons,
                    boolean isComputerPlayer) {
     if (playerName == null || "".equals(playerName)) {

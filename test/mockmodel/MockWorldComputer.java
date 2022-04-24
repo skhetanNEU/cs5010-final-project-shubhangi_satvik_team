@@ -5,11 +5,19 @@ import java.util.ArrayList;
 import java.util.List;
 import model.world.WorldInterface;
 
+/**
+ * Mock class for the world object to be used for computer player.
+ */
 public class MockWorldComputer implements WorldInterface {
 
   private StringBuilder log;
   private final String uniqueCode;
 
+  /**
+   * Constructor for setting up the mock model for computer player.
+   * @param log StringBuilder for appending the actions.
+   * @param uniqueCode unique code to verify correct call was made.
+   */
   public MockWorldComputer(StringBuilder log, String uniqueCode) {
     this.log = log;
     this.uniqueCode = uniqueCode;

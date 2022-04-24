@@ -22,6 +22,12 @@ public interface PlayerInterface {
    */
   String getPlayerRoomName();
 
+  /**
+   * Get the weapons that the player is carrying.
+   * @param includeDamageValue Boolean representing whether we should include the damage values
+   *                           or not.
+   * @return List of weapons that the player is carrying.
+   */
   List<String> getPlayerWeapons(boolean includeDamageValue);
 
   /**
@@ -31,7 +37,18 @@ public interface PlayerInterface {
    */
   String setPlayerRoom(String roomName);
 
+  /**
+   * Pick up the specified weapon.
+   * @param weaponName Name of the weapon that the player wants to pick.
+   * @return String representing whether the pick up was successful or not.
+   */
   String pickWeapon(String weaponName);
 
+  /**
+   * Attack the target with the specified weapon.
+   * @param weaponName Name of the weapon that should be used for the attack.
+   * @return A number representing the damage of the attack. It is -1 if the attack was not
+   *      successful.
+   */
   int attackTarget(String weaponName);
 }

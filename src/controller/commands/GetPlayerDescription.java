@@ -2,6 +2,9 @@ package controller.commands;
 
 import model.world.WorldInterface;
 
+/**
+ * Command for getting the description of the player.
+ */
 public class GetPlayerDescription extends AbstractCommands {
 
   @Override

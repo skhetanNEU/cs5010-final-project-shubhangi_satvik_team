@@ -4,8 +4,19 @@ import java.util.List;
 import model.room.RoomInterface;
 import model.weapon.WeaponInterface;
 
+/**
+ * Class for a human player in the game.
+ */
+
 public class HumanPlayer extends AbstractPlayer {
 
+  /**
+   * Constructor for setting up a human player.
+   * @param playerName Name of the player.
+   * @param weaponLimit Maximum number of weapons that can be carried by the player. It is -1 if
+   *                    there is no limit.
+   * @param currentRoom Room where the player should be added.
+   */
   public HumanPlayer(String playerName, int weaponLimit, RoomInterface currentRoom) {
     super(playerName, weaponLimit, currentRoom);
   }

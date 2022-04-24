@@ -2,6 +2,10 @@ package controller.commands;
 
 import model.world.WorldInterface;
 
+/**
+ * Command class for playing a turn for the computer player.
+ *
+ */
 public class PlayTurnForComputerPlayer extends AbstractCommands {
 
   @Override

@@ -5,11 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 import model.world.WorldInterface;
 
+/**
+ * Mock class for world object for human player when attack is successful.
+ */
 public class MockWorldHumanAttackSuccessful implements WorldInterface {
 
   private StringBuilder log;
   private final String uniqueCode;
 
+  /**
+   * Constructor for setting up the mock class for world object for human player when attack is
+   * successful.
+   * @param log StringBuilder for appending the actions.
+   * @param uniqueCode Unique code for verifying that the correct method is called.
+   */
   public MockWorldHumanAttackSuccessful(StringBuilder log, String uniqueCode) {
     this.log = log;
     this.uniqueCode = uniqueCode;

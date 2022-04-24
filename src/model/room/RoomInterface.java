@@ -58,6 +58,12 @@ public interface RoomInterface extends Comparable<RoomInterface> {
    */
   void updatePetPresence(boolean isPresent);
 
+  /**
+   * Get the neighbors of the room.
+   * @param includeInvisibleRooms Boolean to figure out if the invisible rooms should be added or
+   *                             not.
+   * @return List of string representing room names which are the neighbors.
+   */
   List<String> getRoomNeighbours(boolean includeInvisibleRooms);
 
   /**
@@ -67,6 +73,12 @@ public interface RoomInterface extends Comparable<RoomInterface> {
    */
   void setRoomNeighbours(List<RoomInterface> neighbours);
 
+  /**
+   * Get the available weapons in the room.
+   * @param includeDamageValues Boolean representing whether we should include the damage values
+   *                            or not along with the weapon name.
+   * @return List of weapons available in the room.
+   */
   List<String> getAvailableWeapons(boolean includeDamageValues);
 
   /**
@@ -121,6 +133,11 @@ public interface RoomInterface extends Comparable<RoomInterface> {
    */
   void removePlayerFromRoom(PlayerInterface player);
 
+  /**
+   * Get the neighboring room if the specified room is a neighbor.
+   * @param neighboringRoomName Name of the room whose object is required.
+   * @return Room object if the specified room is neighbor of the current room.
+   */
   RoomInterface getNeighboringRoom(String neighboringRoomName);
 
 }

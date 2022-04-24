@@ -21,6 +21,9 @@ import org.junit.Test;
 import view.DefaultGameViewInterface;
 import view.MainGameViewInterface;
 
+/**
+ * JUnit test class for testing the controller using mock views and mock models.
+ */
 public class ControllerTest {
 
   @Test(expected = IllegalArgumentException.class)

@@ -2,10 +2,17 @@ package controller.commands;
 
 import model.world.WorldInterface;
 
+/**
+ * Command for picking a weapon for the player.
+ */
 public class PickWeapon extends AbstractCommands {
 
   private String weaponName;
 
+  /**
+   * Constructor for setting up the pick weapon command.
+   * @param weaponName Name of the weapon that should be picked.
+   */
   public PickWeapon(String weaponName) {
     if (weaponName == null || "".equals(weaponName)) {
       throw new IllegalArgumentException("Weapon name is invalid");

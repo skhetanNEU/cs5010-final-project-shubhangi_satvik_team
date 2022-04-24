@@ -4,10 +4,17 @@ import controller.FeatureInterface;
 import java.util.List;
 import view.MainGameViewInterface;
 
+/**
+ * Mock class for the main game view class with command cancelling.
+ */
 public class MockMainGameViewCommandCancelled implements MainGameViewInterface {
 
   private StringBuilder out;
 
+  /**
+   * Constructor for setting up the mock class for main game view.
+   * @param out StringBuilder for appending the actions.
+   */
   public MockMainGameViewCommandCancelled(StringBuilder out) {
     this.out = out;
     this.out.append("MainGameView constructor called\n");

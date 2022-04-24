@@ -3,13 +3,33 @@ package model.players;
 import java.util.Collections;
 import java.util.List;
 import model.random.RandomClass;
+import model.random.RandomGenerator;
 import model.room.RoomInterface;
 import model.weapon.WeaponInterface;
 
+/**
+ * Class for a computer player in the game.
+ */
+
 public class ComputerPlayer extends AbstractPlayer {
 
-  public ComputerPlayer(String playerName, int weaponLimit, RoomInterface currentRoom) {
+  private RandomGenerator random;
+
+  /**
+   * Constructor for setting up a computer player.
+   * @param playerName Name of the player.
+   * @param weaponLimit Maximum number of weapons that can be carried by the player. It is -1 if
+   *                    there is no limit.
+   * @param currentRoom Room where the player should be added.
+   * @param random Random generator option to randomly generate options for computer player.
+   */
+  public ComputerPlayer(String playerName, int weaponLimit, RoomInterface currentRoom,
+                        RandomGenerator random) {
     super(playerName, weaponLimit, currentRoom);
+    if (random == null) {
+      throw new IllegalArgumentException("Random Generator is null");
+    }
+    this.random = random;
   }
 
   /**
@@ -51,7 +71,7 @@ public class ComputerPlayer extends AbstractPlayer {
     }
 
     String randomlySelectedNeighbor = neighborsOfCurrentRoom
-            .get(new RandomClass().getRandomWithinBound(neighborsOfCurrentRoom.size()));
+            .get(random.getRandomWithinBound(neighborsOfCurrentRoom.size()));
     currentRoom.removePlayerFromRoom(this);
     RoomInterface newRoom = currentRoom.getNeighboringRoom(randomlySelectedNeighbor);
     newRoom.addPlayerToRoom(this);
@@ -68,7 +88,7 @@ public class ComputerPlayer extends AbstractPlayer {
       throw new IllegalArgumentException("Room does not have any weapons.");
     }
     String randomlySelectedWeapon =
-            weaponsInRoom.get(new RandomClass().getRandomWithinBound(weaponsInRoom.size()));
+            weaponsInRoom.get(random.getRandomWithinBound(weaponsInRoom.size()));
     WeaponInterface weapon = currentRoom.getWeaponByWeaponName(randomlySelectedWeapon);
     addWeaponToPlayer(weapon);
     currentRoom.removeWeaponFromRoom(weapon);

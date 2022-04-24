@@ -5,11 +5,19 @@ import java.util.ArrayList;
 import java.util.List;
 import model.world.WorldInterface;
 
+/**
+ * Mock class for model for human player.
+ */
 public class MockWorldHuman implements WorldInterface {
 
   private StringBuilder log;
   private final String uniqueCode;
 
+  /**
+   * Constructor for setting up the mock class for model for human player.
+   * @param log StringBuilder for appending the actions.
+   * @param uniqueCode Unique code for verifying that the correct method is called.
+   */
   public MockWorldHuman(StringBuilder log, String uniqueCode) {
     this.log = log;
     this.uniqueCode = uniqueCode;

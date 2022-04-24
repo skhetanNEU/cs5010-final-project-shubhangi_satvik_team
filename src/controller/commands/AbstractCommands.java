@@ -1,5 +1,10 @@
 package controller.commands;
 
+/**
+ * Abstract class for reusing the code that will be used for all the game
+ * commands.
+ *
+ */
 public abstract class AbstractCommands implements CommandsInterface {
 
   protected StringBuilder commandResult;
