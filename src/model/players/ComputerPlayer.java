@@ -27,7 +27,7 @@ public class ComputerPlayer extends AbstractPlayer {
                         RandomGenerator random) {
     super(playerName, weaponLimit, currentRoom);
     if (random == null) {
-      throw new IllegalArgumentException("Random Generator is null");
+      throw new IllegalArgumentException("Random Generator cannot be null.");
     }
     this.random = random;
   }

@@ -50,7 +50,8 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
 
   /**
    * Constructor for setting up the main game view.
-   * @param model Model of the game.
+   *
+   * @param model    Model of the game.
    * @param listener Features object using which we can assign the listeners for each event.
    * @param roomList List of all the rooms in the world.
    */
@@ -160,6 +161,10 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
   @Override
   public void addFeatures(FeatureInterface features) {
 
+    if (features == null) {
+      throw new IllegalArgumentException("Listener cannot be null.");
+    }
+
     currentConfiguration.addActionListener(l -> features.playGame(null));
     newConfiguration.addActionListener(l -> {
       File chosen = chooseFile();
@@ -231,6 +236,12 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
 
   @Override
   public void showCommandOutcome(String title, String outcome, boolean isLookAround) {
+    if (title == null || "".equals(title)) {
+      throw new IllegalArgumentException("Title cannot be null;");
+    }
+    if (outcome == null || "".equals(outcome)) {
+      throw new IllegalArgumentException("Outcome cannot be null;");
+    }
 
     if (isLookAround) {
       UIManager.put("OptionPane.background", Color.decode("#D6DBDF"));
@@ -318,8 +329,8 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
 
   @Override
   public String showMovePetDialog(List<String> roomList) {
-    if (roomList == null) {
-      throw new IllegalArgumentException("Room list cannot be null.");
+    if (roomList == null || roomList.size() == 0) {
+      throw new IllegalArgumentException("Room list cannot be null/empty.");
     }
 
     UIManager.put("OptionPane.background", Color.decode("#006064"));
@@ -516,6 +527,9 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
     }
 
     private boolean addPlayer(FeatureInterface listener) {
+      if (listener == null) {
+        throw new IllegalArgumentException("Listener cannot be null.");
+      }
       String outcome = listener.addPlayer(playerNameField.getText(),
               roomList[playerStartRoomField.getSelectedIndex()],
               playerWeaponLimitField.getText(),
@@ -530,6 +544,9 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
     }
 
     public void addClickListener(FeatureInterface listener) {
+      if (listener == null) {
+        throw new IllegalArgumentException("Listener cannot be null.");
+      }
 
       clear.addMouseListener(new MouseAdapter() {
         @Override

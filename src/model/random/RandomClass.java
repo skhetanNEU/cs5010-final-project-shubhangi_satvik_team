@@ -14,7 +14,6 @@ public class RandomClass implements RandomGenerator {
 
   /**
    * Constructor for a true random class.
-   *
    */
   public RandomClass() {
     this.isTrueRandom = true;
@@ -41,6 +40,9 @@ public class RandomClass implements RandomGenerator {
 
   @Override
   public int getRandomWithinBound(int bound) {
+    if (bound < 0) {
+      throw new IllegalArgumentException("Upper bound cannot be negative.");
+    }
     if (isTrueRandom) {
       return r.nextInt(bound);
     }

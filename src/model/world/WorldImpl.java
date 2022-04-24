@@ -45,7 +45,7 @@ public class WorldImpl implements WorldInterface {
   private int dfsStartRoom;
   private final Stack<Integer> dfsStack;
   private final Set<Integer> dfsVisited;
-  private BufferedImage worldView;
+  private final BufferedImage worldView;
   private BufferedImage playersView;
   private final int zoomFactor;
   private final RandomGenerator random;
@@ -82,18 +82,18 @@ public class WorldImpl implements WorldInterface {
       throw new IllegalArgumentException("Target player name cannot be null/empty.");
     } else if (numRooms <= 0) {
       throw new IllegalArgumentException("Number of rooms cannot be non-positive.");
-    } else if (roomCoordinates == null) {
-      throw new IllegalArgumentException("Room coordinates cannot be null.");
-    } else if (roomNames == null) {
-      throw new IllegalArgumentException("Room names cannot be null.");
+    } else if (roomCoordinates == null || roomCoordinates.size() == 0) {
+      throw new IllegalArgumentException("Room coordinates cannot be null/empty.");
+    } else if (roomNames == null || roomNames.size() == 0) {
+      throw new IllegalArgumentException("Room names cannot be null/empty.");
     } else if (numWeapons <= 0) {
       throw new IllegalArgumentException("Number of weapons cannot be non-positive.");
-    } else if (weaponRoomIds == null) {
-      throw new IllegalArgumentException("Weapon room id cannot be null.");
-    } else if (weaponDamageValues == null) {
-      throw new IllegalArgumentException("Weapon damage values cannot be null.");
-    } else if (weaponNames == null) {
-      throw new IllegalArgumentException("Weapon room names cannot be null.");
+    } else if (weaponRoomIds == null || weaponRoomIds.size() == 0) {
+      throw new IllegalArgumentException("Weapon room id cannot be null/empty.");
+    } else if (weaponDamageValues == null || weaponDamageValues.size() == 0) {
+      throw new IllegalArgumentException("Weapon damage values cannot be null/empty.");
+    } else if (weaponNames == null || weaponNames.size() == 0) {
+      throw new IllegalArgumentException("Weapon room names cannot be null/empty.");
     } else if (targetPetName == null || "".equals(targetPetName)) {
       throw new IllegalArgumentException("Target pet name cannot be null/empty.");
     } else if (random == null) {
@@ -161,7 +161,15 @@ public class WorldImpl implements WorldInterface {
    */
   private void initializeRooms(List<List<Integer>> roomCoordinates, List<String> roomNames,
                                List<Integer> worldCoordinates) throws IllegalArgumentException {
-
+    if (roomCoordinates == null || roomCoordinates.size() == 0) {
+      throw new IllegalArgumentException("Room coordinates cannot be null/empty.");
+    }
+    if (roomNames == null || roomNames.size() == 0) {
+      throw new IllegalArgumentException("Room names cannot be null/empty.");
+    }
+    if (worldCoordinates == null || worldCoordinates.size() == 0) {
+      throw new IllegalArgumentException("World coordinates cannot be null/empty.");
+    }
     for (int i = 0; i < roomNames.size(); i++) {
       String name = roomNames.get(i);
       List<Integer> coordinates = roomCoordinates.get(i);
@@ -185,6 +193,15 @@ public class WorldImpl implements WorldInterface {
   private void initializeWeapons(int numRooms, List<String> weaponNames,
                                  List<Integer> weaponDamageValues, List<Integer> weaponRoomIds)
           throws IllegalArgumentException {
+    if (numRooms <= 0) {
+      throw new IllegalArgumentException("Number of rooms cannot be non-positive.");
+    } else if (weaponRoomIds == null || weaponRoomIds.size() == 0) {
+      throw new IllegalArgumentException("Weapon room id cannot be null/empty.");
+    } else if (weaponDamageValues == null || weaponDamageValues.size() == 0) {
+      throw new IllegalArgumentException("Weapon damage values cannot be null/empty.");
+    } else if (weaponNames == null || weaponNames.size() == 0) {
+      throw new IllegalArgumentException("Weapon room names cannot be null/empty.");
+    }
     for (int i = 0; i < weaponNames.size(); i++) {
       String weaponName = weaponNames.get(i);
       int weaponRoomId = weaponRoomIds.get(i);
@@ -200,13 +217,19 @@ public class WorldImpl implements WorldInterface {
     }
   }
 
-
   /**
    * Helper class that initializes the target pet.
    *
    * @param targetPlayerName represents the name of the pet
    */
   private void initializeTargetPlayer(String targetPlayerName, int targetPlayerHealth) {
+    if (targetPlayerHealth <= 0) {
+      throw new IllegalArgumentException("Target player health cannot be non-positive.");
+    } else if (targetPlayerName == null || "".equals(targetPlayerName)) {
+      throw new IllegalArgumentException("Target player name cannot be null/empty.");
+    } else if (this.rooms.size() == 0) {
+      throw new IllegalArgumentException("Number of rooms cannot be non-positive.");
+    }
     this.targetPlayer = new TargetPlayerImpl(
             targetPlayerName, targetPlayerHealth, this.rooms.get(0)
     );
@@ -218,6 +241,11 @@ public class WorldImpl implements WorldInterface {
    * @param targetPetName represents the name of the player
    */
   private void initializeTargetPet(String targetPetName) {
+    if (targetPetName == null || "".equals(targetPetName)) {
+      throw new IllegalArgumentException("Target pet name cannot be null/empty.");
+    } else if (this.rooms.size() == 0) {
+      throw new IllegalArgumentException("Number of rooms cannot be non-positive.");
+    }
     this.targetPet = new PetImpl(targetPetName, this.rooms.get(0));
   }
 
@@ -280,6 +308,11 @@ public class WorldImpl implements WorldInterface {
    */
   private void validateRoomWithWorld(List<Integer> coordinates, List<Integer> worldCoordinates)
           throws IllegalArgumentException {
+    if (worldCoordinates == null || worldCoordinates.size() != 2) {
+      throw new IllegalArgumentException("World coordinates cannot be null/empty;");
+    } else if (coordinates == null || coordinates.size() != 4) {
+      throw new IllegalArgumentException("Room coordinates cannot be null/empty;");
+    }
     int worldRow = worldCoordinates.get(0);
     int worldCol = worldCoordinates.get(1);
     int row1 = coordinates.get(0);
@@ -329,6 +362,9 @@ public class WorldImpl implements WorldInterface {
    * @param playerName name of the player
    */
   private void checkIfPlayerAlreadyExistsWithSameName(String playerName) {
+    if (playerName == null || "".equals(playerName)) {
+      throw new IllegalArgumentException("Player name cannot be null/empty.");
+    }
     for (PlayerInterface player : this.players) {
       if (player.getPlayerName().equalsIgnoreCase(playerName)) {
         throw new IllegalArgumentException("Player with same name already exists.");
@@ -480,6 +516,9 @@ public class WorldImpl implements WorldInterface {
    * @throws IllegalArgumentException if room does not exist with that name.
    */
   private RoomInterface getRoomByRoomName(String roomName) throws IllegalArgumentException {
+    if (roomName == null || "".equals(roomName)) {
+      throw new IllegalArgumentException("Room name cannot be null/empty.");
+    }
     for (RoomInterface room : this.rooms) {
       if (room.getRoomName().equalsIgnoreCase(roomName.trim())) {
         return room;
