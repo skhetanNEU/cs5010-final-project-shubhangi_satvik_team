@@ -19,7 +19,7 @@ import model.world.ReadOnlyWorldInterface;
 public class GameBoard extends JPanel {
 
   private final ReadOnlyWorldInterface model;
-
+  
   /**
    * Constructor for setting up the game board.
    * @param model Model based on which the board should be presented.

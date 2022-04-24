@@ -13,7 +13,6 @@ import model.weapon.WeaponInterface;
 public abstract class AbstractPlayer implements PlayerInterface {
 
   protected static final WeaponInterface weaponPoke = new WeaponImpl(99999, "Poke", 1);
-
   protected final String playerName;
   protected final int weaponLimit;
   protected RoomInterface currentRoom;
