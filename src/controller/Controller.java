@@ -26,7 +26,7 @@ public class Controller implements FeatureInterface {
   private MainGameViewInterface gameView;
   private final DefaultGameViewInterface preGameView;
   private final String defaultConfigurationFilePath;
-  private int maxNumberOfTurns;
+  private final int maxNumberOfTurns;
 
   public Controller(DefaultGameViewInterface preGameView,
                     String worldConfigurationPath, int maxNumberOfTurns) {
@@ -50,7 +50,7 @@ public class Controller implements FeatureInterface {
   public Controller(DefaultGameViewInterface preGameView,
                     MainGameViewInterface gameView,
                     WorldInterface model,
-                    String worldConfigurationPath) {
+                    String worldConfigurationPath, int maxNumberOfTurns) {
     if (preGameView == null) {
       throw new IllegalArgumentException("Pre Game View cannot be null.");
     } else if (gameView == null) {
@@ -59,12 +59,15 @@ public class Controller implements FeatureInterface {
       throw new IllegalArgumentException("Model cannot be null.");
     } else if (worldConfigurationPath == null || "".equals(worldConfigurationPath)) {
       throw new IllegalArgumentException("Configuration file path is null/empty.");
+    } else if (maxNumberOfTurns <= 0) {
+      throw new IllegalArgumentException("Number of turns cannot be non-positive.");
     }
 
     this.preGameView = preGameView;
     quitGame();
 
     this.defaultConfigurationFilePath = worldConfigurationPath;
+    this.maxNumberOfTurns = maxNumberOfTurns;
     this.model = model;
 
     this.gameView = gameView;
@@ -99,7 +102,7 @@ public class Controller implements FeatureInterface {
               .build();
       gameView = new MainGameView(model, this, model.getListOfRooms());
       new Controller(this.preGameView, this.gameView, this.model,
-              this.defaultConfigurationFilePath);
+              this.defaultConfigurationFilePath, this.maxNumberOfTurns);
     } catch (FileNotFoundException e) {
       preGameView.showCommandOutcome("ERROR", "File not found", false);
     } catch (IllegalArgumentException iae) {

@@ -67,10 +67,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    new Controller(null, gameView, model, filePath);
+    new Controller(null, gameView, model, filePath, maxNumberOfTurns);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -78,10 +79,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    new Controller(preGameView, null, model, filePath);
+    new Controller(preGameView, null, model, filePath, maxNumberOfTurns);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -89,10 +91,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    new Controller(preGameView, gameView, null, filePath);
+    new Controller(preGameView, gameView, null, filePath, maxNumberOfTurns);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -100,10 +103,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    new Controller(preGameView, gameView, model, null);
+    new Controller(preGameView, gameView, model, null, maxNumberOfTurns);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -111,10 +115,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    new Controller(preGameView, gameView, model, "");
+    new Controller(preGameView, gameView, model, "", maxNumberOfTurns);
   }
 
   @Test
@@ -205,10 +210,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    new Controller(preGameView, gameView, model, filePath);
+    new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
   }
 
   @Test
@@ -216,20 +222,21 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.playGame(null);
 
     assertEquals("PreGameView constructor called\n"
-            + "MainGameView constructor called\n"
-            + "PreGameView close() called\n"
-            + "MainGameView makeVisible() called\n"
-            + "MainGameView addFeatures() called\n"
-            + "PreGameView showAttackTargetDialog() called\n"
-            + "Parameters: ERROR, Number of turns cannot be non-positive., false\n",
+                    + "MainGameView constructor called\n"
+                    + "PreGameView close() called\n"
+                    + "MainGameView makeVisible() called\n"
+                    + "MainGameView addFeatures() called\n"
+                    + "PreGameView showAttackTargetDialog() called\n"
+                    + "Parameters: ERROR, Number of turns cannot be non-positive., false\n",
             logView.toString());
 
   }
@@ -239,20 +246,21 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.playGame(new File(filePath));
 
     assertEquals("PreGameView constructor called\n"
-            + "MainGameView constructor called\n"
-            + "PreGameView close() called\n"
-            + "MainGameView makeVisible() called\n"
-            + "MainGameView addFeatures() called\n"
-            + "PreGameView showAttackTargetDialog() called\n"
-            + "Parameters: ERROR, Number of turns cannot be non-positive., false\n",
+                    + "MainGameView constructor called\n"
+                    + "PreGameView close() called\n"
+                    + "MainGameView makeVisible() called\n"
+                    + "MainGameView addFeatures() called\n"
+                    + "PreGameView showAttackTargetDialog() called\n"
+                    + "Parameters: ERROR, Number of turns cannot be non-positive., false\n",
             logView.toString());
 
   }
@@ -262,10 +270,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.playGame(new File("res/test.txt"));
 
@@ -284,10 +293,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.quitGame();
 
@@ -305,10 +315,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     assertEquals("Player name cannot be empty", c.addPlayer(null, "testRoom", "2", false));
 
@@ -324,10 +335,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     assertEquals("Player name cannot be empty", c.addPlayer("", "testRoom", "2", true));
 
@@ -343,10 +355,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     assertEquals("Room name cannot be empty", c.addPlayer("testPlayer", null, "2", false));
 
@@ -362,10 +375,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     assertEquals("Room name cannot be empty", c.addPlayer("testPlayer", "", "2", true));
 
@@ -381,10 +395,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     assertEquals("Maximum number of weapons should be -1 or positive",
             c.addPlayer("testPlayer", "testRoom", "-2", false));
@@ -401,10 +416,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     assertEquals("Maximum number of weapons should be -1 or positive",
             c.addPlayer("testPlayer", "testRoom", "0", true));
@@ -421,10 +437,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     assertEquals("Maximum number of weapons must be a number",
             c.addPlayer("testPlayer", "testRoom", "s", true));
@@ -441,10 +458,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.addPlayer("testPlayer", "Ross's Museum", "2", false);
 
@@ -466,10 +484,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.addPlayer("testPlayer", "Ross's Museum", "10", true);
 
@@ -491,10 +510,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.lookAround();
 
@@ -525,20 +545,21 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHumanGameOver(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.lookAround();
 
     assertEquals("PreGameView constructor called\n"
-            + "MainGameView constructor called\n"
-            + "PreGameView close() called\n"
-            + "MainGameView makeVisible() called\n"
-            + "MainGameView addFeatures() called\n"
-            + "MainGameView showCommandOutcome() called\n"
-            + "Parameters: Game Over!, No more turns allowed. Start a new game., false\n",
+                    + "MainGameView constructor called\n"
+                    + "PreGameView close() called\n"
+                    + "MainGameView makeVisible() called\n"
+                    + "MainGameView addFeatures() called\n"
+                    + "MainGameView showCommandOutcome() called\n"
+                    + "Parameters: Game Over!, No more turns allowed. Start a new game., false\n",
             logView.toString());
 
     assertEquals("Model isGameOver() called\n", logModel.toString());
@@ -549,10 +570,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.handleRoomClick(-2, 3);
 
@@ -575,10 +597,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.handleRoomClick(2, -3);
 
@@ -601,10 +624,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHumanPlayerClicked(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.handleRoomClick(2, 3);
 
@@ -630,10 +654,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.handleRoomClick(2, 3);
 
@@ -664,10 +689,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHumanInvalidRoomClicked(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.handleRoomClick(2, 3);
 
@@ -695,20 +721,21 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHumanGameOver(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.handleRoomClick(2, 4);
 
     assertEquals("PreGameView constructor called\n"
-            + "MainGameView constructor called\n"
-            + "PreGameView close() called\n"
-            + "MainGameView makeVisible() called\n"
-            + "MainGameView addFeatures() called\n"
-            + "MainGameView showCommandOutcome() called\n"
-            + "Parameters: Game Over!, No more turns allowed. Start a new game., false\n",
+                    + "MainGameView constructor called\n"
+                    + "PreGameView close() called\n"
+                    + "MainGameView makeVisible() called\n"
+                    + "MainGameView addFeatures() called\n"
+                    + "MainGameView showCommandOutcome() called\n"
+                    + "Parameters: Game Over!, No more turns allowed. Start a new game., false\n",
             logView.toString());
 
     assertEquals("Model isGameOver() called\n", logModel.toString());
@@ -719,10 +746,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameViewCommandCancelled(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.pickWeapon();
 
@@ -748,10 +776,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameViewCommandReturnEmpty(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.pickWeapon();
 
@@ -777,10 +806,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.pickWeapon();
 
@@ -812,20 +842,21 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHumanGameOver(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.pickWeapon();
 
     assertEquals("PreGameView constructor called\n"
-            + "MainGameView constructor called\n"
-            + "PreGameView close() called\n"
-            + "MainGameView makeVisible() called\n"
-            + "MainGameView addFeatures() called\n"
-            + "MainGameView showCommandOutcome() called\n"
-            + "Parameters: Game Over!, No more turns allowed. Start a new game., false\n",
+                    + "MainGameView constructor called\n"
+                    + "PreGameView close() called\n"
+                    + "MainGameView makeVisible() called\n"
+                    + "MainGameView addFeatures() called\n"
+                    + "MainGameView showCommandOutcome() called\n"
+                    + "Parameters: Game Over!, No more turns allowed. Start a new game., false\n",
             logView.toString());
 
     assertEquals("Model isGameOver() called\n", logModel.toString());
@@ -836,10 +867,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameViewCommandCancelled(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.attackTarget();
 
@@ -865,10 +897,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameViewCommandReturnEmpty(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.attackTarget();
 
@@ -894,10 +927,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHumanAttackSuccessful(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.attackTarget();
 
@@ -930,10 +964,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHumanAttackUnsucessful(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.attackTarget();
 
@@ -963,20 +998,21 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHumanGameOver(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.attackTarget();
 
     assertEquals("PreGameView constructor called\n"
-            + "MainGameView constructor called\n"
-            + "PreGameView close() called\n"
-            + "MainGameView makeVisible() called\n"
-            + "MainGameView addFeatures() called\n"
-            + "MainGameView showCommandOutcome() called\n"
-            + "Parameters: Game Over!, No more turns allowed. Start a new game., false\n",
+                    + "MainGameView constructor called\n"
+                    + "PreGameView close() called\n"
+                    + "MainGameView makeVisible() called\n"
+                    + "MainGameView addFeatures() called\n"
+                    + "MainGameView showCommandOutcome() called\n"
+                    + "Parameters: Game Over!, No more turns allowed. Start a new game., false\n",
             logView.toString());
 
     assertEquals("Model isGameOver() called\n", logModel.toString());
@@ -987,10 +1023,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameViewCommandCancelled(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.movePet();
 
@@ -1016,10 +1053,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameViewCommandReturnEmpty(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.movePet();
 
@@ -1045,10 +1083,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHuman(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.movePet();
 
@@ -1080,20 +1119,21 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldHumanGameOver(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.movePet();
 
     assertEquals("PreGameView constructor called\n"
-            + "MainGameView constructor called\n"
-            + "PreGameView close() called\n"
-            + "MainGameView makeVisible() called\n"
-            + "MainGameView addFeatures() called\n"
-            + "MainGameView showCommandOutcome() called\n"
-            + "Parameters: Game Over!, No more turns allowed. Start a new game., false\n",
+                    + "MainGameView constructor called\n"
+                    + "PreGameView close() called\n"
+                    + "MainGameView makeVisible() called\n"
+                    + "MainGameView addFeatures() called\n"
+                    + "MainGameView showCommandOutcome() called\n"
+                    + "Parameters: Game Over!, No more turns allowed. Start a new game., false\n",
             logView.toString());
 
     assertEquals("Model isGameOver() called\n", logModel.toString());
@@ -1104,10 +1144,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldComputer(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.checkAndPlayTurnForComputerPlayer();
 
@@ -1139,10 +1180,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldComputerCommandThrowsException(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.checkAndPlayTurnForComputerPlayer();
 
@@ -1174,10 +1216,11 @@ public class ControllerTest {
     StringBuilder logView = new StringBuilder();
     StringBuilder logModel = new StringBuilder();
     String filePath = "res/FriendsWorld.txt";
+    int maxNumberOfTurns = 23;
     DefaultGameViewInterface preGameView = new MockPreGameView(logView);
     MainGameViewInterface gameView = new MockMainGameView(logView);
     WorldInterface model = new MockWorldComputerGameOver(logModel, "1234");
-    FeatureInterface c = new Controller(preGameView, gameView, model, filePath);
+    FeatureInterface c = new Controller(preGameView, gameView, model, filePath, maxNumberOfTurns);
 
     c.checkAndPlayTurnForComputerPlayer();
 
