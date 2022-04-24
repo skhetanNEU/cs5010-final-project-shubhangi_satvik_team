@@ -27,6 +27,7 @@ public class Controller implements FeatureInterface {
   private final DefaultGameViewInterface preGameView;
   private final String defaultConfigurationFilePath;
   private final int maxNumberOfTurns;
+  private boolean gameOverMessageDisplayed;
 
   public Controller(DefaultGameViewInterface preGameView,
                     String worldConfigurationPath, int maxNumberOfTurns) {
@@ -45,6 +46,7 @@ public class Controller implements FeatureInterface {
     this.preGameView = preGameView;
     this.preGameView.addFeatures(this);
     this.preGameView.makeVisible();
+    this.gameOverMessageDisplayed = false;
   }
 
   public Controller(DefaultGameViewInterface preGameView,
@@ -76,12 +78,14 @@ public class Controller implements FeatureInterface {
   }
 
   private void showGameOverMessage() {
-    if (model.isGameOver()) {
-      String message = model.getWinner() != null
+    if (model.isGameOver() && !gameOverMessageDisplayed) {
+      String expected = "Game not over. No winner yet!";
+      String message = expected.equals(model.getWinner())
               ? String.format("Player %s has killed the target and won the game", model.getWinner())
               : "Target has escaped alive!";
       gameView.refresh();
       gameView.showCommandOutcome("Game Over!", message, false);
+      gameOverMessageDisplayed = true;
     }
   }
 
