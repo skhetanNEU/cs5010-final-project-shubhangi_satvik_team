@@ -564,6 +564,15 @@ public class WorldImpl implements WorldInterface {
   }
 
   @Override
+  public String getRoomInformation(String roomName){
+    if (roomName == null || "".equals(roomName)) {
+      throw new IllegalArgumentException("ERROR: Room name cannot be null/empty");
+    }
+    RoomInterface room = getRoomByRoomName(roomName);
+    return room.toString();
+  }
+
+  @Override
   public List<String> getCurrentPlayerWeapons() {
     return currentTurn == null
             ? new ArrayList<>()
@@ -684,7 +693,7 @@ public class WorldImpl implements WorldInterface {
                               boolean isComputerPlayer, String startingRoomName) {
     if (playerName == null || "".equals(playerName)) {
       throw new IllegalArgumentException("Player name cannot be null/empty.");
-    } else if (weaponLimit < 0 && weaponLimit != -1) {
+    } else if (weaponLimit <= 0 && weaponLimit != -1) {
       throw new IllegalArgumentException("Player weapon limit cannot be negative.");
     } else if (startingRoomName == null || "".equals(startingRoomName)) {
       throw new IllegalArgumentException("Player start room name cannot be null/empty");
@@ -792,9 +801,11 @@ public class WorldImpl implements WorldInterface {
       targetPlayer.reduceTargetPlayerHealth(damageOnTarget);
     }
 
-    moveTargetPlayer();
-    movePetAfterTurnDfs();
-    currentTurn = getNextTurnPlayer();
+    if(!isGameOver()){
+      moveTargetPlayer();
+      movePetAfterTurnDfs();
+      currentTurn = getNextTurnPlayer();
+    }
     remainingTurns -= 1;
     return damageOnTarget != -1
             ? "Attack on target was successful."
@@ -834,7 +845,7 @@ public class WorldImpl implements WorldInterface {
     if (isGameOver()) {
       return getCurrentPlayerName();
     }
-    return null;
+    return "Game not over. No winner yet!";
   }
 
   @Override
