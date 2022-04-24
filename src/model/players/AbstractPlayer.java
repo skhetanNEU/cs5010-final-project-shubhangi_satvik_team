@@ -19,7 +19,7 @@ public abstract class AbstractPlayer implements PlayerInterface {
   public AbstractPlayer(String playerName, int weaponLimit, RoomInterface currentRoom) {
     if (playerName == null || "".equals(playerName)) {
       throw new IllegalArgumentException("Player name cannot be null/empty.");
-    } else if (weaponLimit < 0 && weaponLimit != -1) {
+    } else if (weaponLimit <= 0 && weaponLimit != -1) {
       throw new IllegalArgumentException("Player weapon limit cannot be negative.");
     } else if (currentRoom == null) {
       throw new IllegalArgumentException("Player current room cannot be null.");

@@ -1,3 +1,5 @@
+import model.random.RandomClass;
+import model.random.RandomGenerator;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,6 +35,8 @@ public class WorldImplTest {
   private List<Integer> weaponDamageValues;
   private List<String> weaponNames;
   private String targetPetName;
+  private int maxNumberOfTurns;
+  private RandomGenerator random;
 
   /**
    * Method to initialize the variables for world used in the test cases before they are run.
@@ -79,9 +83,11 @@ public class WorldImplTest {
             + "2 3 Pan\n"
             + "1 1 Rod\n"
             + "2 2 Rope");
+    maxNumberOfTurns = 20;
+    random = new RandomClass();
     testWorld = WorldImpl.getBuilder()
-            .parseInputFile(validFile)
-            .build();
+            .parseInputFile(validFile).setMaxTurns(maxNumberOfTurns).build();
+
   }
 
   @Test
@@ -90,7 +96,8 @@ public class WorldImplTest {
     new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName);
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName,
+            random, maxNumberOfTurns);
 
   }
 
@@ -99,7 +106,8 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, "",
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random,
+            maxNumberOfTurns));
   }
 
   @Test
@@ -107,7 +115,8 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, null,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames,
+            targetPetName, random, maxNumberOfTurns));
   }
 
   @Test
@@ -115,7 +124,7 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(null, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
   }
 
   @Test
@@ -123,7 +132,8 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(new ArrayList<>(), worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random,
+            maxNumberOfTurns));
   }
 
   @Test
@@ -131,7 +141,7 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             0, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
   }
 
   @Test
@@ -139,7 +149,7 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             -10, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
   }
 
   @Test
@@ -147,7 +157,7 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, null,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
   }
 
   @Test
@@ -155,7 +165,7 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, "",
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
   }
 
   @Test
@@ -163,7 +173,7 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             0, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
   }
 
   @Test
@@ -171,7 +181,7 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             -10, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
   }
 
   @Test
@@ -179,7 +189,7 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, null, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
   }
 
   @Test
@@ -187,7 +197,7 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, null,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
   }
 
   @Test
@@ -195,7 +205,7 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            0, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName));
+            0, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
   }
 
   @Test
@@ -203,7 +213,7 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            -20, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName));
+            -20, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
   }
 
   @Test
@@ -211,7 +221,7 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, null, weaponDamageValues, weaponNames, targetPetName));
+            numWeapons, null, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
   }
 
   @Test
@@ -219,7 +229,7 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, null, weaponNames, targetPetName));
+            numWeapons, weaponRoomIds, null, weaponNames, targetPetName, random, maxNumberOfTurns));
   }
 
   @Test
@@ -227,7 +237,7 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, null, targetPetName));
+            numWeapons, weaponRoomIds, weaponDamageValues, null, targetPetName, random, maxNumberOfTurns));
   }
 
   @Test
@@ -235,7 +245,7 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, ""));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, "", random, maxNumberOfTurns));
   }
 
   @Test
@@ -243,8 +253,35 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, null));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, null, random, maxNumberOfTurns));
   }
+
+    @Test
+    public void testWorldConstructor_Unsuccessful_RandomNull() {
+        assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
+                targetPlayerHealth, targetPlayerName,
+                numRooms, roomCoordinates, roomNames,
+                numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, null,
+                maxNumberOfTurns));
+    }
+
+    @Test
+    public void testWorldConstructor_Unsuccessful_InvalidMaxNumberOfTurns() {
+        assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
+                targetPlayerHealth, targetPlayerName,
+                numRooms, roomCoordinates, roomNames,
+                numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random,
+                -1));
+    }
+
+    @Test
+    public void testWorldConstructor_Unsuccessful_ZeroMaxNumberOfTurns() {
+        assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
+                targetPlayerHealth, targetPlayerName,
+                numRooms, roomCoordinates, roomNames,
+                numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random,
+                0));
+    }
 
   @Test
   public void testWorldConstructor_Unsuccessful_SameNameRooms() {
@@ -258,7 +295,8 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, exactRoomsRoomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random,
+            maxNumberOfTurns));
   }
 
   @Test
@@ -267,7 +305,8 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, sameWeaponNames, targetPetName));
+            numWeapons, weaponRoomIds, weaponDamageValues, sameWeaponNames, targetPetName, random
+            , maxNumberOfTurns));
   }
 
   @Test
@@ -278,11 +317,13 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, incorrectWeaponRoomIds, weaponDamageValues, weaponNames, targetPetName));
+            numWeapons, incorrectWeaponRoomIds, weaponDamageValues, weaponNames, targetPetName,
+            random, maxNumberOfTurns));
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinates, roomNames,
-            numWeapons, incorrectWeaponRoomIds2, weaponDamageValues, weaponNames, targetPetName));
+            numWeapons, incorrectWeaponRoomIds2, weaponDamageValues, weaponNames, targetPetName,
+            random, maxNumberOfTurns));
   }
 
   @Test
@@ -297,7 +338,7 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, roomCoordinatesIncorrect, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random, maxNumberOfTurns));
   }
 
   @Test
@@ -312,14 +353,15 @@ public class WorldImplTest {
     assertThrows(IllegalArgumentException.class, () -> new WorldImpl(worldCoordinates, worldName,
             targetPlayerHealth, targetPlayerName,
             numRooms, overlappingRoomCoordinates, roomNames,
-            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName));
+            numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName, random,
+            maxNumberOfTurns));
   }
 
   @Test
   public void testGetListOfAllRooms() {
     List<String> expected = new ArrayList<>(Arrays.asList(
             "Billiard Room", "Dining Hall", "Kitchen", "Nursery", "Parlor"));
-    assertEquals(expected, testWorld.getListOfAllRooms());
+    assertEquals(expected, testWorld.getListOfRooms());
   }
 
   @Test
@@ -328,38 +370,20 @@ public class WorldImplTest {
   }
 
   @Test
-  public void testCheckIfPlayersExistToPlayGame_NoPlayers() {
-    assertThrows(IllegalArgumentException.class, () -> testWorld.checkIfPlayersExistToPlayGame());
-  }
-
-  @Test
-  public void testCheckIfPlayersExistToPlayGame_OnePlayerExist() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
-    testWorld.checkIfPlayersExistToPlayGame();
-  }
-
-  @Test
-  public void testCheckIfPlayersExistToPlayGame_ManyPlayerExist() {
-    testWorld.addPlayerToGame("Human", false, 0, false, "Kitchen");
-    testWorld.addPlayerToGame("Computer", true, 2, true, "Kitchen");
-    testWorld.checkIfPlayersExistToPlayGame();
-  }
-
-  @Test
   public void testGetCurrentPlayerName_NoPlayers() {
-    assertThrows(IllegalArgumentException.class, () -> testWorld.getCurrentPlayerName());
+    assertEquals("-", testWorld.getCurrentPlayerName());
   }
 
   @Test
   public void testGetCurrentPlayerName_OnePlayerExist() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
     assertEquals("Test", testWorld.getCurrentPlayerName());
   }
 
   @Test
   public void testGetCurrentPlayerName_ManyPlayerExist() {
-    testWorld.addPlayerToGame("Human", false, 0, false, "Kitchen");
-    testWorld.addPlayerToGame("Computer", true, 2, true, "Kitchen");
+    testWorld.addPlayerToGame("Human", 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Computer", 2, true, "Kitchen");
     assertEquals("Human", testWorld.getCurrentPlayerName());
   }
 
@@ -370,543 +394,228 @@ public class WorldImplTest {
 
   @Test
   public void testIsCurrentPlayerComputer_CurrentPlayerComputer() {
-    testWorld.addPlayerToGame("Test", true, 2, true, "Kitchen");
+    testWorld.addPlayerToGame("Test", 2, true, "Kitchen");
     assertTrue(testWorld.isCurrentPlayerComputer());
   }
 
   @Test
   public void testIsCurrentPlayerComputer_CurrentPlayerHuman() {
-    testWorld.addPlayerToGame("Test", false, 0, false, "Kitchen");
+    testWorld.addPlayerToGame("Test", 1, false, "Kitchen");
     assertFalse(testWorld.isCurrentPlayerComputer());
   }
 
   @Test
   public void testGetCurrentPlayerWeapons_ZeroWeapons_Computer() {
-    testWorld.addPlayerToGame("Computer", true, 2, true, "Nursery");
-    assertEquals("Poke with damage value 1", testWorld.getCurrentPlayerWeapons());
+    testWorld.addPlayerToGame("Computer", 2, true, "Nursery");
+    assertEquals("Poke (Damage: 1)", String.join("",testWorld.getCurrentPlayerWeapons()));
   }
 
   @Test
   public void testGetCurrentPlayerWeapons_ZeroWeapons_Human() {
-    testWorld.addPlayerToGame("Human", false, 0, false, "Kitchen");
-    assertEquals("Poke with damage value 1", testWorld.getCurrentPlayerWeapons());
+    testWorld.addPlayerToGame("Human", 2, false,  "Kitchen");
+    assertEquals("Poke (Damage: 1)", String.join("",testWorld.getCurrentPlayerWeapons()));
   }
 
   @Test
   public void testGetCurrentPlayerWeapons_OneWeapon_Computer() {
-    testWorld.addPlayerToGame("Computer", true, 2, true, "Billiard Room");
-    testWorld.pickWeapon("loud noise");
-    assertEquals("Loud Noise with damage value 2", testWorld.getCurrentPlayerWeapons());
+    testWorld.addPlayerToGame("Computer", 2, true, "Billiard Room");
+    testWorld.pickWeapon(null);
+    assertEquals("Loud Noise (Damage: 2)", String.join(",",testWorld.getCurrentPlayerWeapons()));
   }
 
   @Test
   public void testGetCurrentPlayerWeapons_OneWeapon_Human() {
-    testWorld.addPlayerToGame("Human", false, 0, false, "Kitchen");
+    testWorld.addPlayerToGame("Human", 1,false, "Kitchen");
     testWorld.pickWeapon("pan");
-    assertEquals("Pan with damage value 3, Poke with damage value 1",
-            testWorld.getCurrentPlayerWeapons());
+    assertEquals("Pan (Damage: 3),Poke (Damage: 1)",
+            String.join(",",testWorld.getCurrentPlayerWeapons()));
   }
 
   @Test
   public void testGetCurrentPlayerWeapons_ManyWeapons_Computer() {
-    testWorld.addPlayerToGame("Computer", true, 2, true, "Kitchen");
-    testWorld.pickWeapon("pan");
-    testWorld.pickWeapon("rope");
-    assertEquals("Pan with damage value 3, Rope with damage value 2",
-            testWorld.getCurrentPlayerWeapons());
+      RandomClass predictableRandom = new RandomClass(0);
+      testWorld = new WorldImpl(worldCoordinates, worldName,
+              targetPlayerHealth, targetPlayerName,
+              numRooms, roomCoordinates, roomNames,
+              numWeapons, weaponRoomIds, weaponDamageValues, weaponNames, targetPetName,
+              predictableRandom, maxNumberOfTurns);
+    testWorld.addPlayerToGame("Computer", 2, true, "Kitchen");
+    testWorld.pickWeapon(null);
+    testWorld.pickWeapon(null);
+    assertEquals("Pan (Damage: 3)Rope (Damage: 2)",
+            String.join("",testWorld.getCurrentPlayerWeapons()));
   }
 
   @Test
   public void testGetCurrentPlayerWeapons_ManyWeapons_Human() {
-    testWorld.addPlayerToGame("Human", false, 0, false, "Kitchen");
+    testWorld.addPlayerToGame("Human", 2, false, "Kitchen");
     testWorld.pickWeapon("pan");
     testWorld.pickWeapon("rope");
-    assertEquals("Pan with damage value 3, Rope with damage value 2, Poke with damage value 1",
-            testWorld.getCurrentPlayerWeapons());
-  }
-
-  @Test
-  public void testGetCurrentPlayerWeaponWithMostDamage_ZeroWeapons_Computer() {
-    testWorld.addPlayerToGame("Computer", true, 2, true, "Nursery");
-    assertEquals("Poke", testWorld.getCurrentPlayerWeaponWithMostDamage());
-  }
-
-  @Test
-  public void testGetCurrentPlayerWeaponWithMostDamage_ZeroWeapons_Human() {
-    testWorld.addPlayerToGame("Human", false, 0, false, "Kitchen");
-    assertEquals("Poke", testWorld.getCurrentPlayerWeaponWithMostDamage());
-  }
-
-  @Test
-  public void testGetCurrentPlayerWeaponWithMostDamage_OneWeapon_Computer() {
-    testWorld.addPlayerToGame("Computer", true, 2, true, "Billiard Room");
-    testWorld.pickWeapon("loud noise");
-    assertEquals("Loud Noise", testWorld.getCurrentPlayerWeaponWithMostDamage());
-  }
-
-  @Test
-  public void testGetCurrentPlayerWeaponWithMostDamage_OneWeapon_Human() {
-    testWorld.addPlayerToGame("Human", false, 0, false, "Kitchen");
-    testWorld.pickWeapon("pan");
-    assertEquals("Pan", testWorld.getCurrentPlayerWeaponWithMostDamage());
-  }
-
-  @Test
-  public void testGetCurrentPlayerWeaponWithMostDamage_ManyWeapons_Computer() {
-    testWorld.addPlayerToGame("Computer", true, 2, true, "Kitchen");
-    testWorld.pickWeapon("pan");
-    testWorld.pickWeapon("rope");
-    assertEquals("Pan", testWorld.getCurrentPlayerWeaponWithMostDamage());
-  }
-
-  @Test
-  public void testGetCurrentPlayerWeaponWithMostDamage_ManyWeapons_Human() {
-    testWorld.addPlayerToGame("Human", false, 0, false, "Kitchen");
-    testWorld.pickWeapon("pan");
-    testWorld.pickWeapon("rope");
-    assertEquals("Pan", testWorld.getCurrentPlayerWeaponWithMostDamage());
+    assertEquals("Pan (Damage: 3),Rope (Damage: 2),Poke (Damage: 1)",
+            String.join(",",testWorld.getCurrentPlayerWeapons()));
   }
 
   @Test
   public void testGetCurrentPlayerRoomName_Human() {
-    testWorld.addPlayerToGame("Human", false, 0, false, "Kitchen");
-    assertEquals("Kitchen", testWorld.getCurrentPlayerRoomName());
+    testWorld.addPlayerToGame("Human", 2, false, "Kitchen");
+    String expected = "Name: Kitchen\n"
+            + "Neighbours: Dining Hall, Parlor\n"
+            + "Weapons: Pan (Damage: 3), Rope (Damage: 2)\n"
+            + "Players: Human\n"
+            + "Is Target Present: No\n"
+            + "Is Pet Present: No";
+    assertEquals(expected, testWorld.getCurrentPlayerRoomInformation());
   }
 
   @Test
   public void testGetCurrentPlayerRoomName_Computer() {
-    testWorld.addPlayerToGame("Computer", true, 2, true, "Nursery");
-    assertEquals("Nursery", testWorld.getCurrentPlayerRoomName());
-  }
-
-  @Test
-  public void testGetCurrentPlayerRoomNeighbours_ZeroNeighbours() {
-    testWorld.addPlayerToGame("test human 1", true, 1, false, "Nursery");
-    assertEquals("No neighbours", testWorld.getCurrentPlayerRoomNeighbours());
-  }
-
-  @Test
-  public void testGetCurrentPlayerRoomNeighbours_OneNeighbours() {
-    testWorld.addPlayerToGame("test human 1", true, 1, false, "Billiard Room");
-    assertEquals("Dining Hall", testWorld.getCurrentPlayerRoomNeighbours());
-  }
-
-  @Test
-  public void testGetCurrentPlayerRoomNeighbours_ManyNeighbours() {
-    testWorld.addPlayerToGame("test human 1", true, 1, false, "Kitchen");
-    assertEquals("Dining Hall, Parlor", testWorld.getCurrentPlayerRoomNeighbours());
+    testWorld.addPlayerToGame("Computer", 2, true, "Nursery");
+    String expected = "Name: Nursery\n"
+            + "Neighbours: -\n"
+            + "Weapons: -\n"
+            + "Players: Computer\n"
+            + "Is Target Present: No\n"
+            + "Is Pet Present: No";
+    assertEquals(expected, testWorld.getCurrentPlayerRoomInformation());
   }
 
   @Test
   public void testGetCurrentPlayerRoomWeapons_WithoutDamage_ZeroWeapons() {
-    testWorld.addPlayerToGame("test human 1", true, 1, false, "Nursery");
-    assertEquals("No weapons", testWorld.getCurrentPlayerRoomWeapons(false));
+    testWorld.addPlayerToGame("test human 1", 1, true, "Nursery");
+    assertEquals("", String.join("",testWorld.getCurrentPlayerRoomWeapons()));
   }
 
   @Test
   public void testGetCurrentPlayerRoomWeapons_WithoutDamage_ManyWeapons() {
-    testWorld.addPlayerToGame("test human 1", true, 1, false, "Kitchen");
-    assertEquals("Pan, Rope", testWorld.getCurrentPlayerRoomWeapons(false));
+    testWorld.addPlayerToGame("test human 1", 1, true,  "Kitchen");
+    assertEquals("Pan (Damage: 3),Rope (Damage: 2)",
+            String.join(",",testWorld.getCurrentPlayerRoomWeapons()));
   }
 
   @Test
   public void testGetCurrentPlayerRoomWeapons_WithDamage_ZeroWeapons() {
-    testWorld.addPlayerToGame("test human 1", true, 1, false, "Nursery");
-    assertEquals("No weapons", testWorld.getCurrentPlayerRoomWeapons(true));
+    testWorld.addPlayerToGame("test human 1", 1, true,"Nursery");
+    assertEquals("", String.join("",testWorld.getCurrentPlayerRoomWeapons()));
   }
 
   @Test
   public void testGetCurrentPlayerRoomWeapons_WithDamage_ManyWeapons() {
-    testWorld.addPlayerToGame("test human 1", true, 1, false, "Kitchen");
-    assertEquals("Pan with damage value 3, Rope with damage value 2",
-            testWorld.getCurrentPlayerRoomWeapons(true));
-  }
-
-  @Test
-  public void testIsCurrentPlayerSeen_PetAndOtherPlayerInSame() {
-    testWorld.addPlayerToGame("Human", false, 0, false, "Billiard Room");
-    testWorld.addPlayerToGame("Computer", true, 2, true, "Billiard Room");
-    assertEquals("Name: Billiard Room\n"
-            + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: Human, Computer\n"
-            + "Is Target Present: Yes\n"
-            + "Is Pet Present: Yes", testWorld.getRoomInformation("Billiard Room"));
-    assertTrue(testWorld.isCurrentPlayerSeenByPlayersInVisibleRooms());
-  }
-
-  @Test
-  public void testIsCurrentPlayerSeen_OtherPlayerInSame() {
-    testWorld.addPlayerToGame("Human", false, 0, false, "Nursery");
-    testWorld.addPlayerToGame("Computer", true, 2, true, "Nursery");
-    assertEquals("Name: Nursery\n"
-            + "Neighbours: No neighbours\n"
-            + "Weapons: No weapons\n"
-            + "Players: Human, Computer\n"
-            + "Is Target Present: No\n"
-            + "Is Pet Present: No", testWorld.getRoomInformation("Nursery"));
-    assertTrue(testWorld.isCurrentPlayerSeenByPlayersInVisibleRooms());
-  }
-
-  @Test
-  public void testIsCurrentPlayerSeen_OtherPlayerInSame_PetInOther() {
-    testWorld.addPlayerToGame("Human", false, 0, false, "Dining Hall");
-    testWorld.addPlayerToGame("Computer", true, 2, true, "Dining Hall");
-    assertEquals("Name: Dining Hall\n"
-            + "Neighbours: Kitchen, Parlor\n"
-            + "Weapons: Rod with damage value 1\n"
-            + "Players: Human, Computer\n"
-            + "Is Target Present: No\n"
-            + "Is Pet Present: No", testWorld.getRoomInformation("Dining Hall"));
-    assertEquals("Name: Billiard Room\n"
-            + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: No players\n"
-            + "Is Target Present: Yes\n"
-            + "Is Pet Present: Yes", testWorld.getRoomInformation("Billiard Room"));
-    assertTrue(testWorld.isCurrentPlayerSeenByPlayersInVisibleRooms());
-  }
-
-  @Test
-  public void testIsCurrentPlayerSeen_PetInSame_OtherPlayerInOther() {
-    testWorld.addPlayerToGame("Human", false, 0, false, "Billiard Room");
-    testWorld.addPlayerToGame("Computer", true, 2, true, "Dining Hall");
-    assertEquals("Name: Dining Hall\n"
-            + "Neighbours: Kitchen, Parlor\n"
-            + "Weapons: Rod with damage value 1\n"
-            + "Players: Computer\n"
-            + "Is Target Present: No\n"
-            + "Is Pet Present: No", testWorld.getRoomInformation("Dining Hall"));
-    assertEquals("Name: Billiard Room\n"
-            + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: Human\n"
-            + "Is Target Present: Yes\n"
-            + "Is Pet Present: Yes", testWorld.getRoomInformation("Billiard Room"));
-    assertFalse(testWorld.isCurrentPlayerSeenByPlayersInVisibleRooms());
-  }
-
-  @Test
-  public void testIsCurrentPlayerSeen_OtherPlayerInOther() {
-    testWorld.addPlayerToGame("Human", false, 0, false, "Parlor");
-    testWorld.addPlayerToGame("Computer", true, 2, true, "Kitchen");
-    assertEquals("Name: Parlor\n"
-            + "Neighbours: Dining Hall, Kitchen\n"
-            + "Weapons: No weapons\n"
-            + "Players: Human\n"
-            + "Is Target Present: No\n"
-            + "Is Pet Present: No", testWorld.getRoomInformation("Parlor"));
-    assertEquals("Name: Kitchen\n"
-            + "Neighbours: Dining Hall, Parlor\n"
-            + "Weapons: Pan with damage value 3, Rope with damage value 2\n"
-            + "Players: Computer\n"
-            + "Is Target Present: No\n"
-            + "Is Pet Present: No", testWorld.getRoomInformation("Kitchen"));
-    assertTrue(testWorld.isCurrentPlayerSeenByPlayersInVisibleRooms());
-  }
-
-  @Test
-  public void testIsCurrentPlayerSeen_PetAndOtherPlayerInOther() {
-    testWorld.addPlayerToGame("Human", false, 0, false, "Dining Hall");
-    testWorld.addPlayerToGame("Computer", true, 2, true, "Billiard Room");
-    assertEquals("Name: Dining Hall\n"
-            + "Neighbours: Kitchen, Parlor\n"
-            + "Weapons: Rod with damage value 1\n"
-            + "Players: Human\n"
-            + "Is Target Present: No\n"
-            + "Is Pet Present: No", testWorld.getRoomInformation("Dining Hall"));
-    assertEquals("Name: Billiard Room\n"
-            + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: Computer\n"
-            + "Is Target Present: Yes\n"
-            + "Is Pet Present: Yes", testWorld.getRoomInformation("Billiard Room"));
-    assertFalse(testWorld.isCurrentPlayerSeenByPlayersInVisibleRooms());
-  }
-
-  @Test
-  public void testIsCurrentPlayerSeen_WithoutPetAndOtherPlayer() {
-    testWorld.addPlayerToGame("Human", false, 0, false, "Kitchen");
-    testWorld.addPlayerToGame("Computer", true, 2, true, "Billiard Room");
-    assertEquals("Name: Kitchen\n"
-            + "Neighbours: Dining Hall, Parlor\n"
-            + "Weapons: Pan with damage value 3, Rope with damage value 2\n"
-            + "Players: Human\n"
-            + "Is Target Present: No\n"
-            + "Is Pet Present: No", testWorld.getRoomInformation("Kitchen"));
-    assertEquals("Name: Billiard Room\n"
-            + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: Computer\n"
-            + "Is Target Present: Yes\n"
-            + "Is Pet Present: Yes", testWorld.getRoomInformation("Billiard Room"));
-    assertFalse(testWorld.isCurrentPlayerSeenByPlayersInVisibleRooms());
-  }
-
-  @Test
-  public void testIsCurrentPlayerSeen_PetInOther() {
-    testWorld.addPlayerToGame("Computer", true, 2, true, "Billiard Room");
-    testWorld.addPlayerToGame("Human", false, 0, false, "Kitchen");
-    assertEquals("Name: Kitchen\n"
-            + "Neighbours: Dining Hall, Parlor\n"
-            + "Weapons: Pan with damage value 3, Rope with damage value 2\n"
-            + "Players: Human\n"
-            + "Is Target Present: No\n"
-            + "Is Pet Present: No", testWorld.getRoomInformation("Kitchen"));
-    assertEquals("Name: Billiard Room\n"
-            + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: Computer\n"
-            + "Is Target Present: Yes\n"
-            + "Is Pet Present: Yes", testWorld.getRoomInformation("Billiard Room"));
-    assertFalse(testWorld.isCurrentPlayerSeenByPlayersInVisibleRooms());
-  }
-
-  @Test
-  public void testIsTargetInSameRoom_Yes() {
-    testWorld.addPlayerToGame("Computer", true, 2, true, "Billiard Room");
-    assertTrue(testWorld.isTargetInSameRoom());
-
-  }
-
-  @Test
-  public void testIsTargetInSameRoom_No() {
-    testWorld.addPlayerToGame("Computer", true, 2, true, "Kitchen");
-    assertFalse(testWorld.isTargetInSameRoom());
-  }
-
-  @Test
-  public void testGetRoomInformation_Unsuccessful_EmptyRoomName() {
-    assertThrows(IllegalArgumentException.class, () -> testWorld.getRoomInformation(""));
-  }
-
-  @Test
-  public void testGetRoomInformation_Unsuccessful_NullRoomName() {
-    assertThrows(IllegalArgumentException.class, () -> testWorld.getRoomInformation(null));
-  }
-
-  @Test
-  public void testGetRoomInformation_Unsuccessful_RoomDoesNotExist() {
-    assertThrows(IllegalArgumentException.class, () -> testWorld.getRoomInformation("testRoom"));
-  }
-
-  @Test
-  public void testGetRoomInformation_Successful_ZeroNeighboursWeaponsPlayers() {
-    assertEquals("Name: Nursery\n"
-                    + "Neighbours: No neighbours\n"
-                    + "Weapons: No weapons\n"
-                    + "Players: No players\n"
-                    + "Is Target Present: No\n"
-                    + "Is Pet Present: No",
-            testWorld.getRoomInformation("Nursery"));
-  }
-
-  @Test
-  public void testGetRoomInformation_Successful_OneNeighboursWeaponsPlayers() {
-    testWorld.addPlayerToGame("test human 1", true, 1, false, "Billiard Room");
-    assertEquals("Name: Billiard Room\n"
-                    + "Neighbours: Dining Hall\n"
-                    + "Weapons: Loud Noise with damage value 2\n"
-                    + "Players: test human 1\n"
-                    + "Is Target Present: Yes\n"
-                    + "Is Pet Present: Yes",
-            testWorld.getRoomInformation("Billiard Room"));
-  }
-
-  @Test
-  public void testGetRoomInformation_Successful_MoreThanOneNeighboursWeaponsPlayers() {
-    testWorld.addPlayerToGame("test human 1", true, 1, false, "Kitchen");
-    testWorld.addPlayerToGame("test comp 1", false, 0, true, "Kitchen");
-
-    assertEquals("Name: Kitchen\n"
-                    + "Neighbours: Dining Hall, Parlor\n"
-                    + "Weapons: Pan with damage value 3, Rope with damage value 2\n"
-                    + "Players: test human 1, test comp 1\n"
-                    + "Is Target Present: No\n"
-                    + "Is Pet Present: No",
-            testWorld.getRoomInformation("Kitchen"));
-  }
-
-  @Test
-  public void testGetPlayerInformation_EmptyPlayerName() {
-    testWorld.addPlayerToGame("test human 1", true, 1, false, "Kitchen");
-    testWorld.addPlayerToGame("test comp 1", false, 0, true, "Kitchen");
-    assertThrows(IllegalArgumentException.class, () -> testWorld.getPlayerInformation(""));
-  }
-
-  @Test
-  public void testGetPlayerInformation_NullPlayerName() {
-    testWorld.addPlayerToGame("test human 1", true, 1, false, "Kitchen");
-    testWorld.addPlayerToGame("test comp 1", false, 0, true, "Kitchen");
-    assertThrows(IllegalArgumentException.class, () -> testWorld.getPlayerInformation(null));
-  }
-
-  @Test
-  public void testGetPlayerInformation_PlayerDoesNotExist() {
-    testWorld.addPlayerToGame("test human 1", true, 1, false, "Kitchen");
-    testWorld.addPlayerToGame("test comp 1", false, 0, true, "Kitchen");
-    assertThrows(IllegalArgumentException.class, () ->
-            testWorld.getPlayerInformation("test player"));
-  }
-
-  @Test
-  public void testGetPlayerInformation_PlayerExists_HumanPlayerHasLimit() {
-    testWorld.addPlayerToGame("test human 1", true, 1, false, "Kitchen");
-    testWorld.pickWeapon("pan");
-    assertEquals("Name: test human 1\n"
-                    + "Player Type: Human\n"
-                    + "Current Room: Kitchen\n"
-                    + "Weapons: Pan with damage value 3",
-            testWorld.getPlayerInformation("test human 1"));
-  }
-
-  @Test
-  public void testGetPlayerInformation_PlayerExists_HumanPlayerNoLimit() {
-    testWorld.addPlayerToGame("test human 1", false, 0, false, "Kitchen");
-    assertEquals("Name: test human 1\n"
-                    + "Player Type: Human\n"
-                    + "Current Room: Kitchen\n"
-                    + "Weapons: No weapons",
-            testWorld.getPlayerInformation("test human 1"));
-  }
-
-  @Test
-  public void testGetPlayerInformation_PlayerExists_ComputerPlayerHasLimit() {
-    testWorld.addPlayerToGame("test comp 1", true, 2, true, "Kitchen");
-    assertEquals("Name: test comp 1\n"
-                    + "Player Type: Computer\n"
-                    + "Current Room: Kitchen\n"
-                    + "Weapons: No weapons",
-            testWorld.getPlayerInformation("test comp 1"));
-  }
-
-  @Test
-  public void testGetPlayerInformation_PlayerExists_ComputerPlayerNoLimit() {
-    testWorld.addPlayerToGame("test comp 1", false, 0, true, "Kitchen");
-    testWorld.pickWeapon("pan");
-    assertEquals("Name: test comp 1\n"
-                    + "Player Type: Computer\n"
-                    + "Current Room: Kitchen\n"
-                    + "Weapons: Pan with damage value 3",
-            testWorld.getPlayerInformation("test comp 1"));
-  }
-
-  @Test
-  public void testGetPlayerInformation_Unsuccessful_TargetPlayer() {
-    assertThrows(IllegalArgumentException.class,
-            () -> testWorld.getPlayerInformation("Doctor Lucky"));
+    testWorld.addPlayerToGame("test human 1", 1, true,  "Kitchen");
+    assertEquals("Pan (Damage: 3)Rope (Damage: 2)",
+            String.join("",testWorld.getCurrentPlayerRoomWeapons()));
   }
 
   @Test
   public void testAddPlayerToGame_Unsuccessful_NameEmpty_Human() {
     assertThrows(IllegalArgumentException.class, () ->
-            testWorld.addPlayerToGame("", true, 2, false, "Kitchen"));
+            testWorld.addPlayerToGame("", 2, false,"Kitchen"));
   }
 
   @Test
   public void testAddPlayerToGame_Unsuccessful_NameEmpty_Computer() {
     assertThrows(IllegalArgumentException.class, () ->
-            testWorld.addPlayerToGame("", true, 2, true, "Kitchen"));
+            testWorld.addPlayerToGame("", 2, true, "Kitchen"));
   }
 
   @Test
   public void testAddPlayerToGame_Unsuccessful_NameNull_Human() {
     assertThrows(IllegalArgumentException.class, () ->
-            testWorld.addPlayerToGame(null, true, 2, false, "Kitchen"));
+            testWorld.addPlayerToGame(null, 2, false,  "Kitchen"));
   }
 
   @Test
   public void testAddPlayerToGame_Unsuccessful_NameNull_Computer() {
     assertThrows(IllegalArgumentException.class, () ->
-            testWorld.addPlayerToGame(null, true, 2, true, "Kitchen"));
+            testWorld.addPlayerToGame(null, 2, true, "Kitchen"));
   }
 
   @Test
   public void testAddPlayerToGame_Unsuccessful_LimitNegative_Human() {
     assertThrows(IllegalArgumentException.class, () ->
-            testWorld.addPlayerToGame("Test", true, -2, false, "Kitchen"));
+            testWorld.addPlayerToGame("Test", -2, false, "Kitchen"));
   }
 
   @Test
   public void testAddPlayerToGame_Unsuccessful_LimitNegative_Computer() {
     assertThrows(IllegalArgumentException.class, () ->
-            testWorld.addPlayerToGame("Test", true, -2, true, "Kitchen"));
+            testWorld.addPlayerToGame("Test", -2, true, "Kitchen"));
   }
 
   @Test
   public void testAddPlayerToGame_Unsuccessful_RoomNull_Human() {
     assertThrows(IllegalArgumentException.class, () ->
-            testWorld.addPlayerToGame("Test", true, -2, false, null));
+            testWorld.addPlayerToGame("Test", 1, false, null));
   }
 
   @Test
   public void testAddPlayerToGame_Unsuccessful_RoomNull_Computer() {
     assertThrows(IllegalArgumentException.class, () ->
-            testWorld.addPlayerToGame("Test", true, 2, true, null));
+            testWorld.addPlayerToGame("Test", 1, true, null));
   }
 
   @Test
   public void testAddPlayerToGame_Unsuccessful_RoomEmpty_Human() {
     assertThrows(IllegalArgumentException.class, () ->
-            testWorld.addPlayerToGame("Test", true, 2, false, ""));
+            testWorld.addPlayerToGame("Test", 1, true, ""));
   }
 
   @Test
   public void testAddPlayerToGame_Unsuccessful_RoomEmpty_Computer() {
     assertThrows(IllegalArgumentException.class, () ->
-            testWorld.addPlayerToGame("Test", true, 2, true, ""));
+            testWorld.addPlayerToGame("Test", 1, true, ""));
   }
 
   @Test
   public void testAddPlayerToGame_Unsuccessful_SameName() {
-    testWorld.addPlayerToGame("Test", true, 2, true, "Kitchen");
+    testWorld.addPlayerToGame("Test", 1, true, "Kitchen");
     assertThrows(IllegalArgumentException.class, () ->
-            testWorld.addPlayerToGame("Test", true, 2, false, "Library"));
+            testWorld.addPlayerToGame("Test", 1, true, "Library"));
   }
 
   @Test
   public void testAddPlayerToGame_Unsuccessful_RoomNotExist() {
     assertThrows(IllegalArgumentException.class, () ->
-            testWorld.addPlayerToGame("Test", true, 2, false, "TestRoom"));
+            testWorld.addPlayerToGame("Test", 1, true, "TestRoom"));
   }
 
   @Test
   public void testAddPlayerToGame_ValidHuman() {
-    testWorld.addPlayerToGame("Test", false, 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test", 1, false, "Kitchen");
     assertEquals("Name: Test\n"
-            + "Player Type: Human\n"
             + "Current Room: Kitchen\n"
-            + "Weapons: No weapons", testWorld.getPlayerInformation("Test"));
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
   }
 
   @Test
   public void testAddPlayerToGame_ValidComputer() {
-    testWorld.addPlayerToGame("Test2", true, 2, true, "Kitchen");
+    testWorld.addPlayerToGame("Test2", 1, true, "Kitchen");
     assertEquals("Name: Test2\n"
-            + "Player Type: Computer\n"
             + "Current Room: Kitchen\n"
-            + "Weapons: No weapons", testWorld.getPlayerInformation("Test2"));
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
   }
 
   @Test
   public void testLookAround_NoNeighboursNoWeapons() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Nursery");
-    assertEquals("------Current Room Details------\n"
+    testWorld.addPlayerToGame("Test", 2, true, "Nursery");
+    assertEquals("-----Look Around Details------\n"
+            + "------Current Room Details------\n"
             + "Name: Nursery\n"
-            + "Neighbours: No neighbours\n"
-            + "Weapons: No weapons\n"
+            + "Neighbours: -\n"
+            + "Weapons: -\n"
             + "Players: Test\n"
             + "Is Target Present: No\n"
-            + "Is Pet Present: No\n\n", testWorld.lookAroundSpace());
+            + "Is Pet Present: No\n"
+            + "\n", testWorld.lookAroundSpace());
   }
 
   @Test
   public void testLookAround_HasOneNeighboursOneWeapon() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Billiard Room");
-    assertEquals("------Current Room Details------\n"
+    testWorld.addPlayerToGame("Test", 2, true, "Billiard Room");
+    assertEquals("-----Look Around Details------\n"
+            + "------Current Room Details------\n"
             + "Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
+            + "Weapons: Loud Noise (Damage: 2)\n"
             + "Players: Test\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes\n"
@@ -915,24 +624,25 @@ public class WorldImplTest {
             + "\n"
             + "Name: Dining Hall\n"
             + "Neighbours: Kitchen, Parlor\n"
-            + "Weapons: Rod with damage value 1\n"
-            + "Players: No players\n"
+            + "Weapons: Rod (Damage: 1)\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No\n", testWorld.lookAroundSpace());
   }
 
   @Test
   public void testLookAround_VariableNeighboursManyWeapons() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Dining Hall");
-    testWorld.addPlayerToGame("Test2", true, 2, false, "Billiard Room");
-    testWorld.addPlayerToGame("Test3", true, 2, false, "Kitchen");
-    testWorld.addPlayerToGame("Test4", true, 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test", 2, false, "Dining Hall");
+    testWorld.addPlayerToGame("Test2", 2, false, "Billiard Room");
+    testWorld.addPlayerToGame("Test3", 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test4", 2, false, "Kitchen");
 
 
-    assertEquals("------Current Room Details------\n"
+    assertEquals("-----Look Around Details------\n"
+            + "------Current Room Details------\n"
             + "Name: Dining Hall\n"
             + "Neighbours: Kitchen, Parlor\n"
-            + "Weapons: Rod with damage value 1\n"
+            + "Weapons: Rod (Damage: 1)\n"
             + "Players: Test\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No\n"
@@ -941,26 +651,27 @@ public class WorldImplTest {
             + "\n"
             + "Name: Kitchen\n"
             + "Neighbours: Dining Hall, Parlor\n"
-            + "Weapons: Pan with damage value 3, Rope with damage value 2\n"
+            + "Weapons: Pan (Damage: 3), Rope (Damage: 2)\n"
             + "Players: Test3, Test4\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No\n"
             + "\n"
             + "Name: Parlor\n"
             + "Neighbours: Dining Hall, Kitchen\n"
-            + "Weapons: No weapons\n"
-            + "Players: No players\n"
+            + "Weapons: -\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No\n", testWorld.lookAroundSpace());
   }
 
   @Test
   public void testLookAround_NeighbourWithPetDoesNotShow() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Dining Hall");
-    assertEquals("------Current Room Details------\n"
+    testWorld.addPlayerToGame("Test", 2, true, "Dining Hall");
+    assertEquals("-----Look Around Details------\n"
+            + "------Current Room Details------\n"
             + "Name: Dining Hall\n"
             + "Neighbours: Kitchen, Parlor\n"
-            + "Weapons: Rod with damage value 1\n"
+            + "Weapons: Rod (Damage: 1)\n"
             + "Players: Test\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No\n"
@@ -969,24 +680,25 @@ public class WorldImplTest {
             + "\n"
             + "Name: Kitchen\n"
             + "Neighbours: Dining Hall, Parlor\n"
-            + "Weapons: Pan with damage value 3, Rope with damage value 2\n"
-            + "Players: No players\n"
+            + "Weapons: Pan (Damage: 3), Rope (Damage: 2)\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No\n"
             + "\n"
             + "Name: Parlor\n"
             + "Neighbours: Dining Hall, Kitchen\n"
-            + "Weapons: No weapons\n"
-            + "Players: No players\n"
+            + "Weapons: -\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No\n", testWorld.lookAroundSpace());
 
     // Pet moved to other room using DFS - previously hidden room now shows up in neighbouring rooms
 
-    assertEquals("------Current Room Details------\n"
+    assertEquals("-----Look Around Details------\n"
+            + "------Current Room Details------\n"
             + "Name: Dining Hall\n"
             + "Neighbours: Billiard Room, Kitchen, Parlor\n"
-            + "Weapons: Rod with damage value 1\n"
+            + "Weapons: Rod (Damage: 1)\n"
             + "Players: Test\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes\n"
@@ -994,129 +706,149 @@ public class WorldImplTest {
             + "------Neighboring Room Details------\n"
             + "\n"
             + "Name: Billiard Room\n"
-            + "Neighbours: No neighbours\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: No players\n"
+            + "Neighbours: -\n"
+            + "Weapons: Loud Noise (Damage: 2)\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No\n"
             + "\n"
             + "Name: Kitchen\n"
             + "Neighbours: Parlor\n"
-            + "Weapons: Pan with damage value 3, Rope with damage value 2\n"
-            + "Players: No players\n"
+            + "Weapons: Pan (Damage: 3), Rope (Damage: 2)\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No\n"
             + "\n"
             + "Name: Parlor\n"
             + "Neighbours: Kitchen\n"
-            + "Weapons: No weapons\n"
-            + "Players: No players\n"
+            + "Weapons: -\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No\n", testWorld.lookAroundSpace());
   }
 
   @Test
-  public void testMovePlayer_RoomEmpty() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
-    assertThrows(IllegalArgumentException.class, () -> testWorld.movePlayer(""));
-  }
-
-  @Test
-  public void testMovePlayer_RoomNull() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
-    assertThrows(IllegalArgumentException.class, () -> testWorld.movePlayer(null));
+  public void testLookAroundWithTargetInSameRoom(){
 
   }
 
   @Test
-  public void testMovePlayer_RoomSameAsCurrentRoom() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
-    assertThrows(IllegalArgumentException.class, () -> testWorld.movePlayer("Kitchen"));
-
+  public void testMovePlayer_NegativeXCoordinate() {
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
+    assertThrows(IllegalArgumentException.class, () -> testWorld.handleRoomClick(-1, 10));
   }
 
-  @Test
-  public void testMovePlayer_RoomDoesNotExist() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
-    assertThrows(IllegalArgumentException.class, () -> testWorld.movePlayer("TestRoom"));
-  }
+    @Test
+    public void testMovePlayer_NegativeYCoordinate() {
+        testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
+        assertThrows(IllegalArgumentException.class, () -> testWorld.handleRoomClick(10, -1));
+    }
+
+    @Test
+    public void testMovePlayer_InvalidXCoordinate() {
+        testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
+        assertThrows(IllegalArgumentException.class, () -> testWorld.handleRoomClick(100, 10));
+    }
+
+    @Test
+    public void testMovePlayer_InvalidYCoordinate() {
+        testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
+        assertThrows(IllegalArgumentException.class, () -> testWorld.handleRoomClick(10, 100));
+    }
+
+    @Test
+    public void testMovePlayer_NotANeighbor() {
+        testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
+        assertThrows(IllegalArgumentException.class, () -> testWorld.handleRoomClick(17,22));
+    }
+
+    @Test
+    public void testMovePlayer_SameRoom() {
+        testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
+        assertThrows(IllegalArgumentException.class, () -> testWorld.handleRoomClick(18,7));
+    }
+
+    @Test
+    public void testMovePlayer_InvisibleNeighbor() {
+        testWorld.addPlayerToGame("Test", 2, false, "Dining Hall");
+        assertThrows(IllegalArgumentException.class, () -> testWorld.handleRoomClick(18,26));
+    }
+
+    @Test
+    public void testMovePlayer_VisibleNeighbor() {
+        testWorld.addPlayerToGame("Test", 2, false, "Dining Hall");
+        assertThrows(IllegalArgumentException.class, () -> testWorld.handleRoomClick(12,8));
+    }
+
 
   @Test
-  public void testMovePlayer_RoomNotNeighbour() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
-    assertThrows(IllegalArgumentException.class, () -> testWorld.movePlayer("Billiard Room"));
-  }
-
-  @Test
-  public void testMovePlayer_VisibleNeighbour() {
-    testWorld.addPlayerToGame("Test2", true, 2, false, "Dining Hall");
-    testWorld.movePlayer("Parlor");
-    assertEquals("Name: Parlor\n"
-            + "Neighbours: Kitchen\n"
-            + "Weapons: No weapons\n"
-            + "Players: Test2\n"
-            + "Is Target Present: No\n"
-            + "Is Pet Present: No", testWorld.getRoomInformation("Parlor"));
-  }
-
-  @Test
-  public void testMovePlayer_InvisibleNeighbour() {
-    testWorld.addPlayerToGame("Test2", true, 2, false, "Dining Hall");
-    assertThrows(IllegalArgumentException.class, () -> testWorld.movePlayer("Billiard Room"));
-    assertEquals("Name: Billiard Room\n"
-            + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: No players\n"
-            + "Is Target Present: Yes\n"
-            + "Is Pet Present: Yes", testWorld.getRoomInformation("Billiard Room"));
-  }
-
-  @Test
-  public void testPickWeapon_WeaponNameEmpty() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
+  public void testPickWeapon_WeaponNameEmpty_Human() {
+    testWorld.addPlayerToGame("Test", 2, false,"Kitchen");
     assertThrows(IllegalArgumentException.class, () -> testWorld.pickWeapon(""));
   }
 
   @Test
-  public void testPickWeapon_WeaponNameNull() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
+  public void testPickWeapon_WeaponNameNull_Human() {
+    testWorld.addPlayerToGame("Test",2, false, "Kitchen");
     assertThrows(IllegalArgumentException.class, () -> testWorld.pickWeapon(null));
   }
 
   @Test
-  public void testPickWeapon_NoWeaponsInRoom() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Nursery");
+  public void testPickWeapon_NoWeaponsInRoom_Human() {
+    testWorld.addPlayerToGame("Test", 2, false, "Nursery");
     assertThrows(IllegalArgumentException.class, () -> testWorld.pickWeapon("Shovel"));
   }
 
   @Test
-  public void testPickWeapon_WeaponNotInCurrentRoom() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
+  public void testPickWeapon_WeaponNotInCurrentRoom_Human() {
+    testWorld.addPlayerToGame("Test", 2, false,  "Kitchen");
     assertThrows(IllegalArgumentException.class, () -> testWorld.pickWeapon("Rod"));
   }
 
   @Test
-  public void testPickWeapon_WeaponLimitReached() {
-    testWorld.addPlayerToGame("Test", true, 1, false, "Kitchen");
+  public void testPickWeapon_WeaponLimitReached_Human() {
+    testWorld.addPlayerToGame("Test", 1, false, "Kitchen");
     testWorld.pickWeapon("Pan");
     assertThrows(IllegalArgumentException.class, () -> testWorld.pickWeapon("Rope"));
   }
 
   @Test
-  public void testPickWeapon_WeaponInCurrentRoom() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
+  public void testPickWeapon_WeaponInCurrentRoom_Human() {
+    testWorld.addPlayerToGame("Test", 2, false,  "Kitchen");
     testWorld.pickWeapon("Pan");
-    assertEquals("Name: Test\n"
-            + "Player Type: Human\n"
-            + "Current Room: Kitchen\n"
-            + "Weapons: Pan with damage value 3", testWorld.getPlayerInformation("Test"));
     assertEquals("Name: Kitchen\n"
             + "Neighbours: Parlor\n"
-            + "Weapons: Rope with damage value 2\n"
+            + "Weapons: Rope (Damage: 2)\n"
             + "Players: Test\n"
             + "Is Target Present: No\n"
-            + "Is Pet Present: No", testWorld.getRoomInformation("Kitchen"));
+            + "Is Pet Present: No", testWorld.getCurrentPlayerRoomInformation());
   }
+
+    @Test
+    public void testPickWeapon_NoWeaponsInRoom_Computer() {
+        testWorld.addPlayerToGame("Test", 2, true, "Nursery");
+        assertThrows(IllegalArgumentException.class, () -> testWorld.pickWeapon(null));
+    }
+
+    @Test
+    public void testPickWeapon_WeaponLimitReached_Computer() {
+        testWorld.addPlayerToGame("Test", 1, true, "Kitchen");
+        testWorld.pickWeapon(null);
+        assertThrows(IllegalArgumentException.class, () -> testWorld.pickWeapon(null));
+    }
+
+    @Test
+    public void testPickWeapon_WeaponInCurrentRoom_Computer() {
+        testWorld.addPlayerToGame("Test", 2, true,  "Billiard Room");
+        testWorld.pickWeapon(null);
+        assertEquals("Name: Billiard Room\n"
+                + "Neighbours: -\n"
+                + "Weapons: -\n"
+                + "Players: Test\n"
+                + "Is Target Present: No\n"
+                + "Is Pet Present: No", testWorld.getCurrentPlayerRoomInformation());
+
+    }
 
   @Test
   public void testMovePet_Unsuccessful_RoomEmpty() {
@@ -1130,259 +862,230 @@ public class WorldImplTest {
 
   @Test
   public void testMovePet_Successful_SameRoom() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
     assertEquals("Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: No players\n"
+            + "Weapons: Loud Noise (Damage: 2)\n"
+            + "Players: -\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Billiard Room"));
     testWorld.movePet("Billiard Room");
     assertEquals("Name: Billiard Room\n"
-            + "Neighbours: No neighbours\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: No players\n"
+            + "Neighbours: -\n"
+            + "Weapons: Loud Noise (Damage: 2)\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Billiard Room"));
     assertEquals("Name: Dining Hall\n"
             + "Neighbours: Billiard Room, Kitchen, Parlor\n"
-            + "Weapons: Rod with damage value 1\n"
-            + "Players: No players\n"
+            + "Weapons: Rod (Damage: 1)\n"
+            + "Players: -\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Dining Hall"));
   }
 
   @Test
   public void testMovePet_Successful_NotNeighbourOfPetsCurrentRoom() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
     assertEquals("Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: No players\n"
+            + "Weapons: Loud Noise (Damage: 2)\n"
+            + "Players: -\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Billiard Room"));
     testWorld.movePet("Nursery");
     assertEquals("Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: No players\n"
+            + "Weapons: Loud Noise (Damage: 2)\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Billiard Room"));
     assertEquals("Name: Nursery\n"
-            + "Neighbours: No neighbours\n"
-            + "Weapons: No weapons\n"
-            + "Players: No players\n"
+            + "Neighbours: -\n"
+            + "Weapons: -\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Nursery"));
   }
 
   @Test
   public void testMovePet_Successful_NeighbourOfPetsCurrentRoom() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
     assertEquals("Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: No players\n"
+            + "Weapons: Loud Noise (Damage: 2)\n"
+            + "Players: -\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Billiard Room"));
     testWorld.movePet("Dining Hall");
     assertEquals("Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: No players\n"
+            + "Weapons: Loud Noise (Damage: 2)\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Billiard Room"));
     assertEquals("Name: Dining Hall\n"
             + "Neighbours: Kitchen, Parlor\n"
-            + "Weapons: Rod with damage value 1\n"
-            + "Players: No players\n"
+            + "Weapons: Rod (Damage: 1)\n"
+            + "Players: -\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Dining Hall"));
   }
 
   @Test
   public void testMovePet_Successful_ToIsolatedRoom() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
     assertEquals("Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: No players\n"
+            + "Weapons: Loud Noise (Damage: 2)\n"
+            + "Players: -\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Billiard Room"));
     testWorld.movePet("Nursery");
     assertEquals("Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: No players\n"
+            + "Weapons: Loud Noise (Damage: 2)\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Billiard Room"));
     assertEquals("Name: Nursery\n"
-            + "Neighbours: No neighbours\n"
-            + "Weapons: No weapons\n"
-            + "Players: No players\n"
+            + "Neighbours: -\n"
+            + "Weapons: -\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Nursery"));
   }
 
   @Test
   public void testAttackTargetPlayer_Unsuccessful_WeaponEmpty_Human() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
-    assertThrows(IllegalArgumentException.class, () -> testWorld.attackTargetPlayer(""));
-  }
-
-  @Test
-  public void testAttackTargetPlayer_Unsuccessful_WeaponEmpty_Computer() {
-    testWorld.addPlayerToGame("Test", true, 2, true, "Kitchen");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
     assertThrows(IllegalArgumentException.class, () -> testWorld.attackTargetPlayer(""));
   }
 
   @Test
   public void testAttackTargetPlayer_Unsuccessful_WeaponNull_Human() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
-    assertThrows(IllegalArgumentException.class, () -> testWorld.attackTargetPlayer(null));
-  }
-
-  @Test
-  public void testAttackTargetPlayer_Unsuccessful_WeaponNull_Computer() {
-    testWorld.addPlayerToGame("Test", true, 2, true, "Kitchen");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
     assertThrows(IllegalArgumentException.class, () -> testWorld.attackTargetPlayer(null));
   }
 
   @Test
   public void testAttackTargetPlayer_Unsuccessful_WeaponNotWithPlayer_Human() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Dining Hall");
-    testWorld.pickWeapon("Rod");
-    assertThrows(IllegalArgumentException.class, () -> testWorld.attackTargetPlayer("rope"));
-  }
-
-  @Test
-  public void testAttackTargetPlayer_Unsuccessful_WeaponNotWithPlayer_Computer() {
-    testWorld.addPlayerToGame("Test", true, 2, true, "Dining Hall");
+    testWorld.addPlayerToGame("Test",  2, false, "Dining Hall");
     testWorld.pickWeapon("Rod");
     assertThrows(IllegalArgumentException.class, () -> testWorld.attackTargetPlayer("rope"));
   }
 
   @Test
   public void testAttackTargetPlayer_Unsuccessful_TargetNotInSameRoom_Human() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
     testWorld.pickWeapon("pan");
     assertEquals("Name: Kitchen\n"
             + "Neighbours: Parlor\n"
-            + "Weapons: Rope with damage value 2\n"
+            + "Weapons: Rope (Damage: 2)\n"
             + "Players: Test\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Kitchen"));
     testWorld.attackTargetPlayer("pan");
     assertEquals("Name: Test\n"
-            + "Player Type: Human\n"
             + "Current Room: Kitchen\n"
-            + "Weapons: No weapons", testWorld.getPlayerInformation("Test"));
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 2\n"
             + "Current Room: Kitchen", testWorld.getTargetPlayerDetails());
   }
 
   @Test
   public void testAttackTargetPlayer_Unsuccessful_TargetNotInSameRoom_Computer() {
-    testWorld.addPlayerToGame("Test", true, 2, true, "Kitchen");
-    testWorld.pickWeapon("pan");
-    assertEquals("Name: Kitchen\n"
-            + "Neighbours: Parlor\n"
-            + "Weapons: Rope with damage value 2\n"
-            + "Players: Test\n"
-            + "Is Target Present: No\n"
-            + "Is Pet Present: No", testWorld.getRoomInformation("Kitchen"));
-    testWorld.attackTargetPlayer("pan");
-    assertEquals("Name: Test\n"
-            + "Player Type: Computer\n"
-            + "Current Room: Kitchen\n"
-            + "Weapons: No weapons", testWorld.getPlayerInformation("Test"));
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    testWorld.addPlayerToGame("Computer", 2, true, "Billiard Room");
+    testWorld.pickWeapon(null);
+
+    testWorld.lookAroundSpace();
+    testWorld.lookAroundSpace();
+    testWorld.lookAroundSpace();
+
+    assertEquals("Attack on target was not successful.", testWorld.attackTargetPlayer(null));
+    assertEquals("Name: Computer\n"
+            + "Current Room: Billiard Room\n"
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 2\n"
-            + "Current Room: Kitchen", testWorld.getTargetPlayerDetails());
+            + "Current Room: Billiard Room", testWorld.getTargetPlayerDetails());
   }
 
   @Test
   public void testAttackTargetPlayer_Successful_KillsTarget_Human() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
     testWorld.lookAroundSpace();
     testWorld.pickWeapon("Rope");
     assertEquals("Name: Kitchen\n"
             + "Neighbours: Dining Hall, Parlor\n"
-            + "Weapons: Pan with damage value 3\n"
+            + "Weapons: Pan (Damage: 3)\n"
             + "Players: Test\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Kitchen"));
     testWorld.attackTargetPlayer("Rope");
     assertEquals("Name: Test\n"
-            + "Player Type: Human\n"
             + "Current Room: Kitchen\n"
-            + "Weapons: No weapons", testWorld.getPlayerInformation("Test"));
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 0\n"
-            + "Current Room: Nursery", testWorld.getTargetPlayerDetails());
+            + "Current Room: Kitchen", testWorld.getTargetPlayerDetails());
   }
 
   @Test
   public void testAttackTargetPlayer_Successful_KillsTarget_Computer() {
-    testWorld.addPlayerToGame("Test", true, 2, true, "Kitchen");
-    testWorld.pickWeapon("pan");
+    testWorld.addPlayerToGame("Test", 2, true, "Billiard Room");
+    testWorld.pickWeapon(null);
     testWorld.lookAroundSpace();
-    assertEquals("Name: Kitchen\n"
-            + "Neighbours: Dining Hall, Parlor\n"
-            + "Weapons: Rope with damage value 2\n"
-            + "Players: Test\n"
-            + "Is Target Present: Yes\n"
-            + "Is Pet Present: Yes", testWorld.getRoomInformation("Kitchen"));
-    testWorld.attackTargetPlayer("pan");
+    testWorld.lookAroundSpace();
+    testWorld.lookAroundSpace();
+    testWorld.lookAroundSpace();
+
+
+    testWorld.attackTargetPlayer(null);
     assertEquals("Name: Test\n"
-            + "Player Type: Computer\n"
-            + "Current Room: Kitchen\n"
-            + "Weapons: No weapons", testWorld.getPlayerInformation("Test"));
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
-            + "Health: 0\n"
-            + "Current Room: Nursery", testWorld.getTargetPlayerDetails());
+            + "Current Room: Billiard Room\n"
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
+    assertEquals(
+            "Name: Doctor Lucky\n"
+                    + "Health: 0\n"
+                    + "Current Room: Billiard Room", testWorld.getTargetPlayerDetails());
   }
 
   @Test
   public void testAttackTargetPlayer_Unsuccessful_SameRoomPetAndPlayers_NeighbourNoPetNoPlayers() {
 
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
-    testWorld.addPlayerToGame("Test2", true, 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test2", 2, false, "Kitchen");
 
     testWorld.pickWeapon("Pan");
     testWorld.lookAroundSpace();
 
     assertEquals("Name: Kitchen\n"
             + "Neighbours: Dining Hall, Parlor\n"
-            + "Weapons: Rope with damage value 2\n"
+            + "Weapons: Rope (Damage: 2)\n"
             + "Players: Test, Test2\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Kitchen"));
 
-    assertFalse(testWorld.attackTargetPlayer("pan"));
+    assertEquals("Attack on target was not successful.", testWorld.attackTargetPlayer("pan"));
+    testWorld.lookAroundSpace();
 
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 2\n"
-            + "Current Room: Nursery", testWorld.getTargetPlayerDetails());
+            + "Current Room: Parlor", testWorld.getTargetPlayerDetails());
     assertEquals("Name: Test\n"
-            + "Player Type: Human\n"
             + "Current Room: Kitchen\n"
-            + "Weapons: No weapons", testWorld.getPlayerInformation("Test"));
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
   }
 
   @Test
   public void testAttackTargetPlayer_Unsuccessful_SameRoomPetAndPlayers_NeighbourOnlyPlayers() {
     // Neighbours: players, no pet
 
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
-    testWorld.addPlayerToGame("Test2", true, 2, false, "Parlor");
-    testWorld.addPlayerToGame("Test3", true, 2, false, "Dining Hall");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test2", 2, false, "Parlor");
+    testWorld.addPlayerToGame("Test3", 2, false, "Dining Hall");
 
     testWorld.pickWeapon("Pan");
     testWorld.lookAroundSpace();
@@ -1392,42 +1095,42 @@ public class WorldImplTest {
     testWorld.lookAroundSpace();
     testWorld.lookAroundSpace();
 
-    testWorld.movePlayer("Parlor");
+    testWorld.handleRoomClick(276,210);
     testWorld.lookAroundSpace();
     testWorld.lookAroundSpace();
 
 
     assertEquals("Name: Dining Hall\n"
             + "Neighbours: Billiard Room, Kitchen\n"
-            + "Weapons: Rod with damage value 1\n"
+            + "Weapons: Rod (Damage: 1)\n"
             + "Players: Test3\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Dining Hall"));
 
     assertEquals("Name: Parlor\n"
             + "Neighbours: Dining Hall, Kitchen\n"
-            + "Weapons: No weapons\n"
+            + "Weapons: -\n"
             + "Players: Test2, Test\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Parlor"));
 
-    assertFalse(testWorld.attackTargetPlayer("pan"));
+    assertEquals("Attack on target was not successful.", testWorld.attackTargetPlayer("pan"));
+    testWorld.lookAroundSpace();
+    testWorld.lookAroundSpace();
 
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 2\n"
-            + "Current Room: Billiard Room", testWorld.getTargetPlayerDetails());
+            + "Current Room: Kitchen", testWorld.getTargetPlayerDetails());
     assertEquals("Name: Test\n"
-            + "Player Type: Human\n"
             + "Current Room: Parlor\n"
-            + "Weapons: No weapons", testWorld.getPlayerInformation("Test"));
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
   }
 
   @Test
   public void testAttackTargetPlayer_Unsuccessful_SameRoomPlayersOnly_NeighbourNoPetNoPlayers() {
 
-    testWorld.addPlayerToGame("Test", true, 2, false, "Billiard Room");
-    testWorld.addPlayerToGame("Test2", true, 2, false, "Billiard Room");
+    testWorld.addPlayerToGame("Test", 2, false, "Billiard Room");
+    testWorld.addPlayerToGame("Test2", 2, false, "Billiard Room");
 
     testWorld.pickWeapon("Loud Noise");
     testWorld.lookAroundSpace();
@@ -1446,75 +1149,75 @@ public class WorldImplTest {
 
     assertEquals("Name: Dining Hall\n"
             + "Neighbours: Billiard Room, Parlor\n"
-            + "Weapons: Rod with damage value 1\n"
-            + "Players: No players\n"
+            + "Weapons: Rod (Damage: 1)\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Dining Hall"));
 
     assertEquals("Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: No weapons\n"
+            + "Weapons: -\n"
             + "Players: Test, Test2\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Billiard Room"));
 
-    assertFalse(testWorld.attackTargetPlayer("loud noise"));
+    assertEquals("Attack on target was not successful.", testWorld.attackTargetPlayer("loud "
+            + "noise"));
+    testWorld.lookAroundSpace();
 
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 2\n"
-            + "Current Room: Dining Hall", testWorld.getTargetPlayerDetails());
+            + "Current Room: Kitchen", testWorld.getTargetPlayerDetails());
     assertEquals("Name: Test\n"
-            + "Player Type: Human\n"
             + "Current Room: Billiard Room\n"
-            + "Weapons: No weapons", testWorld.getPlayerInformation("Test"));
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
   }
 
   @Test
   public void testAttackTargetPlayer_Unsuccessful_SameRoomPlayersOnly_NeighbourPetOnly() {
 
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
-    testWorld.addPlayerToGame("Test2", true, 2, false, "Dining Hall");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test2",  2, false, "Dining Hall");
 
     testWorld.lookAroundSpace();
     testWorld.pickWeapon("rod");
     testWorld.lookAroundSpace();
-    testWorld.movePlayer("Kitchen");
+    testWorld.handleRoomClick(420,186);
     testWorld.lookAroundSpace();
     testWorld.lookAroundSpace();
     testWorld.lookAroundSpace();
 
     assertEquals("Name: Dining Hall\n"
             + "Neighbours: Billiard Room, Kitchen, Parlor\n"
-            + "Weapons: No weapons\n"
-            + "Players: No players\n"
+            + "Weapons: -\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Dining Hall"));
 
     assertEquals("Name: Kitchen\n"
             + "Neighbours: Parlor\n"
-            + "Weapons: Pan with damage value 3, Rope with damage value 2\n"
+            + "Weapons: Pan (Damage: 3), Rope (Damage: 2)\n"
             + "Players: Test, Test2\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Kitchen"));
 
-    assertFalse(testWorld.attackTargetPlayer("rod"));
+    assertEquals("Attack on target was not successful.", testWorld.attackTargetPlayer("rod"));
+    testWorld.lookAroundSpace();
 
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals(
+            "Name: Doctor Lucky\n"
             + "Health: 2\n"
-            + "Current Room: Nursery", testWorld.getTargetPlayerDetails());
+            + "Current Room: Parlor", testWorld.getTargetPlayerDetails());
     assertEquals("Name: Test2\n"
-            + "Player Type: Human\n"
             + "Current Room: Kitchen\n"
-            + "Weapons: No weapons", testWorld.getPlayerInformation("Test2"));
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
   }
 
   @Test
   public void testAttackTargetPlayer_Unsuccessful_SameRoomPlayersOnly_NeighbourPlayersOnly() {
 
-    testWorld.addPlayerToGame("Test", true, 2, false, "Billiard Room");
-    testWorld.addPlayerToGame("Test2", true, 2, false, "Dining Hall");
+    testWorld.addPlayerToGame("Test",  2, false, "Billiard Room");
+    testWorld.addPlayerToGame("Test2",  2, false, "Dining Hall");
 
     testWorld.pickWeapon("loud noise");
     testWorld.lookAroundSpace();
@@ -1529,36 +1232,36 @@ public class WorldImplTest {
 
     assertEquals("Name: Dining Hall\n"
             + "Neighbours: Billiard Room, Parlor\n"
-            + "Weapons: Rod with damage value 1\n"
+            + "Weapons: Rod (Damage: 1)\n"
             + "Players: Test2\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Dining Hall"));
 
     assertEquals("Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: No weapons\n"
+            + "Weapons: -\n"
             + "Players: Test\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Billiard Room"));
 
-    assertFalse(testWorld.attackTargetPlayer("loud noise"));
+    assertEquals("Attack on target was not successful.", testWorld.attackTargetPlayer("loud "
+            + "noise"));
+    testWorld.lookAroundSpace();
 
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 2\n"
-            + "Current Room: Dining Hall", testWorld.getTargetPlayerDetails());
+            + "Current Room: Kitchen", testWorld.getTargetPlayerDetails());
     assertEquals("Name: Test\n"
-            + "Player Type: Human\n"
             + "Current Room: Billiard Room\n"
-            + "Weapons: No weapons", testWorld.getPlayerInformation("Test"));
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
   }
 
   @Test
   public void testAttackTargetPlayer_Unsuccessful_SameRoomPlayersOnly_NeighbourPetAndPlayers() {
 
-    testWorld.addPlayerToGame("Test2", true, 2, false, "Billiard Room");
-    testWorld.addPlayerToGame("Test3", true, 2, false, "Dining Hall");
-    testWorld.addPlayerToGame("Test", true, 2, false, "Billiard Room");
+    testWorld.addPlayerToGame("Test2", 2, false, "Billiard Room");
+    testWorld.addPlayerToGame("Test3", 2, false, "Dining Hall");
+    testWorld.addPlayerToGame("Test", 2, false, "Billiard Room");
 
     testWorld.lookAroundSpace();
     testWorld.lookAroundSpace();
@@ -1568,103 +1271,101 @@ public class WorldImplTest {
 
     assertEquals("Name: Dining Hall\n"
             + "Neighbours: Billiard Room, Kitchen, Parlor\n"
-            + "Weapons: Rod with damage value 1\n"
+            + "Weapons: Rod (Damage: 1)\n"
             + "Players: Test3\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Dining Hall"));
 
     assertEquals("Name: Billiard Room\n"
-            + "Neighbours: No neighbours\n"
-            + "Weapons: No weapons\n"
+            + "Neighbours: -\n"
+            + "Weapons: -\n"
             + "Players: Test2, Test\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Billiard Room"));
 
-    assertFalse(testWorld.attackTargetPlayer("loud noise"));
+    assertEquals("Attack on target was not successful.", testWorld.attackTargetPlayer("loud "
+            + "noise"));
+    testWorld.lookAroundSpace();
+    testWorld.lookAroundSpace();
 
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 2\n"
-            + "Current Room: Dining Hall", testWorld.getTargetPlayerDetails());
+            + "Current Room: Nursery", testWorld.getTargetPlayerDetails());
     assertEquals("Name: Test\n"
-            + "Player Type: Human\n"
             + "Current Room: Billiard Room\n"
-            + "Weapons: No weapons", testWorld.getPlayerInformation("Test"));
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
   }
 
   @Test
   public void testAttackTargetPlayer_Successful_SameRoomPetOnly_NeighbourNoPetNoPlayers() {
 
-    testWorld.addPlayerToGame("Test", true, 2, false, "Dining Hall");
+    testWorld.addPlayerToGame("Test", 2, false, "Dining Hall");
 
     testWorld.pickWeapon("rod");
 
     assertEquals("Name: Dining Hall\n"
             + "Neighbours: Billiard Room, Kitchen, Parlor\n"
-            + "Weapons: No weapons\n"
+            + "Weapons: -\n"
             + "Players: Test\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Dining Hall"));
 
     assertEquals("Name: Billiard Room\n"
-            + "Neighbours: No neighbours\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: No players\n"
+            + "Neighbours: -\n"
+            + "Weapons: Loud Noise (Damage: 2)\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Billiard Room"));
 
-    assertTrue(testWorld.attackTargetPlayer("rod"));
+    assertEquals("Attack on target was successful.", testWorld.attackTargetPlayer("rod"));
 
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 1\n"
             + "Current Room: Kitchen", testWorld.getTargetPlayerDetails());
     assertEquals("Name: Test\n"
-            + "Player Type: Human\n"
             + "Current Room: Dining Hall\n"
-            + "Weapons: No weapons", testWorld.getPlayerInformation("Test"));
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
   }
 
   @Test
   public void testAttackTargetPlayer_Successful_SameRoomPetOnly_NeighbourPlayersOnly() {
 
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
-    testWorld.addPlayerToGame("Test2", true, 2, false, "Dining Hall");
+    testWorld.addPlayerToGame("Test",  2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test2",  2, false, "Dining Hall");
 
     testWorld.pickWeapon("pan");
     testWorld.lookAroundSpace();
 
     assertEquals("Name: Dining Hall\n"
             + "Neighbours: Billiard Room, Parlor\n"
-            + "Weapons: Rod with damage value 1\n"
+            + "Weapons: Rod (Damage: 1)\n"
             + "Players: Test2\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Dining Hall"));
 
     assertEquals("Name: Kitchen\n"
             + "Neighbours: Dining Hall, Parlor\n"
-            + "Weapons: Rope with damage value 2\n"
+            + "Weapons: Rope (Damage: 2)\n"
             + "Players: Test\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Kitchen"));
 
-    assertTrue(testWorld.attackTargetPlayer("pan"));
+    assertEquals("Attack on target was successful.", testWorld.attackTargetPlayer("pan"));
+    testWorld.lookAroundSpace();
 
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 0\n"
             + "Current Room: Nursery", testWorld.getTargetPlayerDetails());
-    assertEquals("Name: Test\n"
-            + "Player Type: Human\n"
-            + "Current Room: Kitchen\n"
-            + "Weapons: No weapons", testWorld.getPlayerInformation("Test"));
+    assertEquals("Name: Test2\n"
+            + "Current Room: Dining Hall\n"
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
   }
 
   @Test
   public void testAttackTargetPlayer_Unsuccessful_SameRoomNoPetNoPlayers_NeighbourPlayersOnly() {
 
-    testWorld.addPlayerToGame("Test", true, 2, false, "Billiard Room");
-    testWorld.addPlayerToGame("Test2", true, 2, false, "Dining Hall");
+    testWorld.addPlayerToGame("Test",  2, false, "Billiard Room");
+    testWorld.addPlayerToGame("Test2",  2, false, "Dining Hall");
 
     testWorld.pickWeapon("loud noise");
     testWorld.lookAroundSpace();
@@ -1679,70 +1380,68 @@ public class WorldImplTest {
 
     assertEquals("Name: Dining Hall\n"
             + "Neighbours: Billiard Room, Parlor\n"
-            + "Weapons: Rod with damage value 1\n"
+            + "Weapons: Rod (Damage: 1)\n"
             + "Players: Test2\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Dining Hall"));
 
     assertEquals("Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: No weapons\n"
+            + "Weapons: -\n"
             + "Players: Test\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Billiard Room"));
 
-    assertFalse(testWorld.attackTargetPlayer("loud noise"));
+    assertEquals("Attack on target was not successful.", testWorld.attackTargetPlayer("loud "
+            + "noise"));
+    testWorld.lookAroundSpace();
 
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 2\n"
-            + "Current Room: Dining Hall", testWorld.getTargetPlayerDetails());
+            + "Current Room: Kitchen", testWorld.getTargetPlayerDetails());
     assertEquals("Name: Test\n"
-            + "Player Type: Human\n"
             + "Current Room: Billiard Room\n"
-            + "Weapons: No weapons", testWorld.getPlayerInformation("Test"));
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
   }
 
   @Test
   public void testAttackTargetPlayer_Successful_SameRoomNoPetNoPlayers_NeighbourPetOnly() {
 
-    testWorld.addPlayerToGame("Test", true, 2, false, "Dining Hall");
+    testWorld.addPlayerToGame("Test", 2, false, "Dining Hall");
 
     testWorld.pickWeapon("rod");
-    testWorld.movePlayer("Parlor");
+    testWorld.handleRoomClick(276,210);
     testWorld.lookAroundSpace();
     testWorld.lookAroundSpace();
 
     assertEquals("Name: Kitchen\n"
             + "Neighbours: Dining Hall, Parlor\n"
-            + "Weapons: Pan with damage value 3, Rope with damage value 2\n"
-            + "Players: No players\n"
+            + "Weapons: Pan (Damage: 3), Rope (Damage: 2)\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Kitchen"));
 
     assertEquals("Name: Parlor\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: No weapons\n"
+            + "Weapons: -\n"
             + "Players: Test\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Parlor"));
 
-    assertTrue(testWorld.attackTargetPlayer("rod"));
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals("Attack on target was successful.", testWorld.attackTargetPlayer("rod"));
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 1\n"
             + "Current Room: Billiard Room", testWorld.getTargetPlayerDetails());
     assertEquals("Name: Test\n"
-            + "Player Type: Human\n"
             + "Current Room: Parlor\n"
-            + "Weapons: No weapons", testWorld.getPlayerInformation("Test"));
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
   }
 
   @Test
   public void testAttackTargetPlayer_Unsuccessful_SameRoomNoPetNoPlayers_NeighbourPetAndPlayers() {
 
-    testWorld.addPlayerToGame("Test", true, 2, false, "Dining Hall");
-    testWorld.addPlayerToGame("Test2", true, 2, false, "Billiard Room");
+    testWorld.addPlayerToGame("Test", 2, false, "Dining Hall");
+    testWorld.addPlayerToGame("Test2", 2, false, "Billiard Room");
 
     testWorld.lookAroundSpace();
     testWorld.pickWeapon("loud noise");
@@ -1752,34 +1451,34 @@ public class WorldImplTest {
 
     assertEquals("Name: Dining Hall\n"
             + "Neighbours: Billiard Room, Kitchen, Parlor\n"
-            + "Weapons: Rod with damage value 1\n"
+            + "Weapons: Rod (Damage: 1)\n"
             + "Players: Test\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Dining Hall"));
 
     assertEquals("Name: Billiard Room\n"
-            + "Neighbours: No neighbours\n"
-            + "Weapons: No weapons\n"
+            + "Neighbours: -\n"
+            + "Weapons: -\n"
             + "Players: Test2\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Billiard Room"));
 
-    assertFalse(testWorld.attackTargetPlayer("loud noise"));
+    assertEquals("Attack on target was not successful.", testWorld.attackTargetPlayer("loud "
+            + "noise"));
+    testWorld.lookAroundSpace();
 
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 2\n"
-            + "Current Room: Dining Hall", testWorld.getTargetPlayerDetails());
+            + "Current Room: Kitchen", testWorld.getTargetPlayerDetails());
     assertEquals("Name: Test2\n"
-            + "Player Type: Human\n"
             + "Current Room: Billiard Room\n"
-            + "Weapons: No weapons", testWorld.getPlayerInformation("Test2"));
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
   }
 
   @Test
   public void testAttackTargetPlayer_Successful_SameRoomNoPetNoPlayers_NeighbourNoPetNoPlayers() {
 
-    testWorld.addPlayerToGame("Test", true, 2, false, "Billiard Room");
+    testWorld.addPlayerToGame("Test", 2, false, "Billiard Room");
 
     testWorld.pickWeapon("loud noise");
     testWorld.lookAroundSpace();
@@ -1794,93 +1493,86 @@ public class WorldImplTest {
 
     assertEquals("Name: Kitchen\n"
             + "Neighbours: Dining Hall, Parlor\n"
-            + "Weapons: Pan with damage value 3, Rope with damage value 2\n"
-            + "Players: No players\n"
+            + "Weapons: Pan (Damage: 3), Rope (Damage: 2)\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Kitchen"));
 
     assertEquals("Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: No weapons\n"
+            + "Weapons: -\n"
             + "Players: Test\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Billiard Room"));
 
-    assertTrue(testWorld.attackTargetPlayer("loud noise"));
+    assertEquals("Attack on target was successful.", testWorld.attackTargetPlayer("loud noise"));
 
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 0\n"
-            + "Current Room: Dining Hall", testWorld.getTargetPlayerDetails());
+            + "Current Room: Billiard Room", testWorld.getTargetPlayerDetails());
     assertEquals("Name: Test\n"
-            + "Player Type: Human\n"
             + "Current Room: Billiard Room\n"
-            + "Weapons: No weapons", testWorld.getPlayerInformation("Test"));
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
   }
 
   @Test
   public void testAttackTargetPlayer_Successful_AttackWithPoke_Computer() {
 
-    testWorld.addPlayerToGame("Test", true, 2, true, "Billiard Room");
+    testWorld.addPlayerToGame("Test", 2, true, "Billiard Room");
 
     assertEquals("Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
+            + "Weapons: Loud Noise (Damage: 2)\n"
             + "Players: Test\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Billiard Room"));
 
-    assertTrue(testWorld.attackTargetPlayer("poke"));
+    assertEquals("Attack on target was successful.", testWorld.attackTargetPlayer(null));
 
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 1\n"
             + "Current Room: Dining Hall", testWorld.getTargetPlayerDetails());
     assertEquals("Name: Test\n"
-            + "Player Type: Computer\n"
             + "Current Room: Billiard Room\n"
-            + "Weapons: No weapons", testWorld.getPlayerInformation("Test"));
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
   }
 
   @Test
   public void testAttackTargetPlayer_Successful_AttackWithPoke_Human() {
 
-    testWorld.addPlayerToGame("Test", true, 2, false, "Billiard Room");
+    testWorld.addPlayerToGame("Test", 2, false, "Billiard Room");
 
     assertEquals("Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
+            + "Weapons: Loud Noise (Damage: 2)\n"
             + "Players: Test\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Billiard Room"));
 
-    assertTrue(testWorld.attackTargetPlayer("poke"));
+    assertEquals("Attack on target was successful.", testWorld.attackTargetPlayer("poke"));
 
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 1\n"
             + "Current Room: Dining Hall", testWorld.getTargetPlayerDetails());
     assertEquals("Name: Test\n"
-            + "Player Type: Human\n"
             + "Current Room: Billiard Room\n"
-            + "Weapons: No weapons", testWorld.getPlayerInformation("Test"));
+            + "Weapons: -", testWorld.getCurrentPlayerInformation());
   }
 
   @Test
   public void testAttackTargetPlayer_Computer_MultipleWeapons() {
-    testWorld.addPlayerToGame("Test", true, 2, true, "Kitchen");
-    testWorld.pickWeapon("rope"); // Damage value 2
-    testWorld.pickWeapon("pan"); // Damage value 3
+    testWorld.addPlayerToGame("Test", 2, true, "Kitchen");
+    testWorld.pickWeapon(null); // Damage value 2
+    testWorld.pickWeapon(null); // Damage value 3
     assertEquals("Name: Test\n"
-                    + "Player Type: Computer\n"
                     + "Current Room: Kitchen\n"
-                    + "Weapons: Pan with damage value 3, Rope with damage value 2",
-            testWorld.getPlayerInformation("Test"));
-    testWorld.attackTargetPlayer(testWorld.getCurrentPlayerWeaponWithMostDamage());
+                    + "Weapons: Pan (Damage: 3), Rope (Damage: 2)",
+
+            testWorld.getCurrentPlayerInformation());
+    testWorld.attackTargetPlayer(null);
     assertEquals("Name: Test\n"
-            + "Player Type: Computer\n"
             + "Current Room: Kitchen\n"
-            + "Weapons: Rope with damage value 2", testWorld.getPlayerInformation("Test"));
+            + "Weapons: Rope (Damage: 2)", testWorld.getCurrentPlayerInformation());
   }
 
   @Test
@@ -1890,99 +1582,93 @@ public class WorldImplTest {
 
   @Test
   public void testIsGameOver_Yes_TargetKilled_Human() {
-    testWorld.addPlayerToGame("Human", true, 2, false, "Kitchen");
-    testWorld.addPlayerToGame("Computer", true, 2, true, "Billiard Room");
+    testWorld.addPlayerToGame("Human", 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Computer", 2, true, "Billiard Room");
     testWorld.pickWeapon("pan");
     testWorld.lookAroundSpace();
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 2\n"
             + "Current Room: Kitchen", testWorld.getTargetPlayerDetails());
     testWorld.attackTargetPlayer("pan");
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 0\n"
-            + "Current Room: Nursery", testWorld.getTargetPlayerDetails());
+            + "Current Room: Kitchen", testWorld.getTargetPlayerDetails());
     assertTrue(testWorld.isGameOver());
-    assertEquals("Human", testWorld.getWinnerName());
+    assertEquals("Human", testWorld.getWinner());
   }
 
   @Test
   public void testIsGameOver_Yes_TargetKilled_Computer() {
-    testWorld.addPlayerToGame("Computer", true, 2, true, "Kitchen");
-    testWorld.addPlayerToGame("Human", true, 2, false, "Billiard Room");
-    testWorld.pickWeapon("pan");
+    testWorld.addPlayerToGame("Computer", 2, true, "Kitchen");
+    testWorld.addPlayerToGame("Human", 2, false, "Billiard Room");
+    testWorld.pickWeapon(null);
     testWorld.lookAroundSpace();
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 2\n"
             + "Current Room: Kitchen", testWorld.getTargetPlayerDetails());
-    testWorld.attackTargetPlayer("pan");
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    testWorld.attackTargetPlayer(null);
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 0\n"
-            + "Current Room: Nursery", testWorld.getTargetPlayerDetails());
+            + "Current Room: Kitchen", testWorld.getTargetPlayerDetails());
     assertTrue(testWorld.isGameOver());
-    assertEquals("Computer", testWorld.getWinnerName());
+    assertEquals("Computer", testWorld.getWinner());
   }
 
   @Test
   public void testGetWinnerName_NoWinner() {
-    assertEquals("Game not over. No winner yet!", testWorld.getWinnerName());
+    testWorld.addPlayerToGame("Human", 2, false, "Kitchen");
+    assertEquals("Game not over. No winner yet!", testWorld.getWinner());
   }
 
   @Test
   public void testGetWinnerName_Human() {
-    testWorld.addPlayerToGame("Human", true, 2, false, "Kitchen");
-    testWorld.addPlayerToGame("Computer", true, 2, true, "Billiard Room");
+    testWorld.addPlayerToGame("Human", 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Computer", 2, true, "Billiard Room");
     testWorld.pickWeapon("pan");
     testWorld.lookAroundSpace();
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals(
+            "Name: Doctor Lucky\n"
             + "Health: 2\n"
             + "Current Room: Kitchen", testWorld.getTargetPlayerDetails());
     testWorld.attackTargetPlayer("pan");
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
-            + "Health: 0\n"
-            + "Current Room: Nursery", testWorld.getTargetPlayerDetails());
-    assertEquals("Human", testWorld.getWinnerName());
+    assertEquals(
+            "Name: Doctor Lucky\n"
+                    + "Health: 0\n"
+                    + "Current Room: Kitchen", testWorld.getTargetPlayerDetails());
+    assertEquals("Human", testWorld.getWinner());
   }
 
   @Test
   public void testGetWinnerName_Computer() {
-    testWorld.addPlayerToGame("Computer", true, 2, true, "Kitchen");
-    testWorld.addPlayerToGame("Human", true, 2, false, "Billiard Room");
-    testWorld.pickWeapon("pan");
+    testWorld.addPlayerToGame("Computer", 2, true, "Kitchen");
+    testWorld.addPlayerToGame("Human", 2, false, "Billiard Room");
+    testWorld.pickWeapon(null);
     testWorld.lookAroundSpace();
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 2\n"
             + "Current Room: Kitchen", testWorld.getTargetPlayerDetails());
-    testWorld.attackTargetPlayer("pan");
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    testWorld.attackTargetPlayer(null);
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 0\n"
-            + "Current Room: Nursery", testWorld.getTargetPlayerDetails());
-    assertEquals("Computer", testWorld.getWinnerName());
+            + "Current Room: Kitchen", testWorld.getTargetPlayerDetails());
+    assertEquals("Computer", testWorld.getWinner());
   }
 
   @Test
   public void testGetTargetPlayerDetails() {
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 2\n"
             + "Current Room: Billiard Room", testWorld.getTargetPlayerDetails());
   }
 
   @Test
   public void testPetMovesInDfs_IfNotMovedInBetween() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
 
     assertEquals("Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: No players\n"
+            + "Weapons: Loud Noise (Damage: 2)\n"
+            + "Players: -\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Billiard Room"));
 
@@ -1990,8 +1676,8 @@ public class WorldImplTest {
 
     assertEquals("Name: Dining Hall\n"
             + "Neighbours: Billiard Room, Kitchen, Parlor\n"
-            + "Weapons: Rod with damage value 1\n"
-            + "Players: No players\n"
+            + "Weapons: Rod (Damage: 1)\n"
+            + "Players: -\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Dining Hall"));
 
@@ -1999,7 +1685,7 @@ public class WorldImplTest {
 
     assertEquals("Name: Kitchen\n"
             + "Neighbours: Dining Hall, Parlor\n"
-            + "Weapons: Pan with damage value 3, Rope with damage value 2\n"
+            + "Weapons: Pan (Damage: 3), Rope (Damage: 2)\n"
             + "Players: Test\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Kitchen"));
@@ -2008,8 +1694,8 @@ public class WorldImplTest {
 
     assertEquals("Name: Parlor\n"
             + "Neighbours: Dining Hall, Kitchen\n"
-            + "Weapons: No weapons\n"
-            + "Players: No players\n"
+            + "Weapons: -\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Parlor"));
 
@@ -2017,7 +1703,7 @@ public class WorldImplTest {
 
     assertEquals("Name: Kitchen\n"
             + "Neighbours: Dining Hall, Parlor\n"
-            + "Weapons: Pan with damage value 3, Rope with damage value 2\n"
+            + "Weapons: Pan (Damage: 3), Rope (Damage: 2)\n"
             + "Players: Test\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Kitchen"));
@@ -2026,8 +1712,8 @@ public class WorldImplTest {
 
     assertEquals("Name: Dining Hall\n"
             + "Neighbours: Billiard Room, Kitchen, Parlor\n"
-            + "Weapons: Rod with damage value 1\n"
-            + "Players: No players\n"
+            + "Weapons: Rod (Damage: 1)\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Dining Hall"));
 
@@ -2035,8 +1721,8 @@ public class WorldImplTest {
 
     assertEquals("Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: No players\n"
+            + "Weapons: Loud Noise (Damage: 2)\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Billiard Room"));
 
@@ -2044,20 +1730,20 @@ public class WorldImplTest {
 
     assertEquals("Name: Dining Hall\n"
             + "Neighbours: Billiard Room, Kitchen, Parlor\n"
-            + "Weapons: Rod with damage value 1\n"
-            + "Players: No players\n"
+            + "Weapons: Rod (Damage: 1)\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Dining Hall"));
   }
 
   @Test
   public void testPetMovesInDfs_RestartsAfterPetMovedByPlayer() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
 
     assertEquals("Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: No players\n"
+            + "Weapons: Loud Noise (Damage: 2)\n"
+            + "Players: -\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Billiard Room"));
 
@@ -2065,8 +1751,8 @@ public class WorldImplTest {
 
     assertEquals("Name: Dining Hall\n"
             + "Neighbours: Billiard Room, Kitchen, Parlor\n"
-            + "Weapons: Rod with damage value 1\n"
-            + "Players: No players\n"
+            + "Weapons: Rod (Damage: 1)\n"
+            + "Players: -\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Dining Hall"));
 
@@ -2074,7 +1760,7 @@ public class WorldImplTest {
 
     assertEquals("Name: Kitchen\n"
             + "Neighbours: Dining Hall, Parlor\n"
-            + "Weapons: Pan with damage value 3, Rope with damage value 2\n"
+            + "Weapons: Pan (Damage: 3), Rope (Damage: 2)\n"
             + "Players: Test\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Kitchen"));
@@ -2083,8 +1769,8 @@ public class WorldImplTest {
 
     assertEquals("Name: Parlor\n"
             + "Neighbours: Dining Hall, Kitchen\n"
-            + "Weapons: No weapons\n"
-            + "Players: No players\n"
+            + "Weapons: -\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Parlor"));
 
@@ -2092,24 +1778,24 @@ public class WorldImplTest {
 
     assertEquals("Name: Dining Hall\n"
             + "Neighbours: Kitchen, Parlor\n"
-            + "Weapons: Rod with damage value 1\n"
-            + "Players: No players\n"
+            + "Weapons: Rod (Damage: 1)\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Dining Hall"));
 
     assertEquals("Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: No players\n"
+            + "Weapons: Loud Noise (Damage: 2)\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Billiard Room"));
 
     testWorld.lookAroundSpace();
 
     assertEquals("Name: Billiard Room\n"
-            + "Neighbours: No neighbours\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: No players\n"
+            + "Neighbours: -\n"
+            + "Weapons: Loud Noise (Damage: 2)\n"
+            + "Players: -\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Billiard Room"));
 
@@ -2117,7 +1803,7 @@ public class WorldImplTest {
 
     assertEquals("Name: Kitchen\n"
             + "Neighbours: Dining Hall, Parlor\n"
-            + "Weapons: Pan with damage value 3, Rope with damage value 2\n"
+            + "Weapons: Pan (Damage: 3), Rope (Damage: 2)\n"
             + "Players: Test\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Kitchen"));
@@ -2126,58 +1812,58 @@ public class WorldImplTest {
 
     assertEquals("Name: Parlor\n"
             + "Neighbours: Kitchen\n"
-            + "Weapons: No weapons\n"
-            + "Players: No players\n"
+            + "Weapons: -\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Parlor"));
   }
 
   @Test
   public void testPetMovesInDfs_PetMovedToIsolatedRoom() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
 
     assertEquals("Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: No players\n"
+            + "Weapons: Loud Noise (Damage: 2)\n"
+            + "Players: -\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Billiard Room"));
 
 
     assertEquals("Name: Nursery\n"
-            + "Neighbours: No neighbours\n"
-            + "Weapons: No weapons\n"
-            + "Players: No players\n"
+            + "Neighbours: -\n"
+            + "Weapons: -\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Nursery"));
 
     testWorld.movePet("Nursery");
 
     assertEquals("Name: Nursery\n"
-            + "Neighbours: No neighbours\n"
-            + "Weapons: No weapons\n"
-            + "Players: No players\n"
+            + "Neighbours: -\n"
+            + "Weapons: -\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Nursery"));
 
     testWorld.lookAroundSpace();
 
     assertEquals("Name: Nursery\n"
-            + "Neighbours: No neighbours\n"
-            + "Weapons: No weapons\n"
-            + "Players: No players\n"
+            + "Neighbours: -\n"
+            + "Weapons: -\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Nursery"));
   }
 
   @Test
   public void testPetMovesAfterLookAround() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
 
     assertEquals("Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: No players\n"
+            + "Weapons: Loud Noise (Damage: 2)\n"
+            + "Players: -\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Billiard Room"));
 
@@ -2185,41 +1871,41 @@ public class WorldImplTest {
 
     assertEquals("Name: Dining Hall\n"
             + "Neighbours: Billiard Room, Kitchen, Parlor\n"
-            + "Weapons: Rod with damage value 1\n"
-            + "Players: No players\n"
+            + "Weapons: Rod (Damage: 1)\n"
+            + "Players: -\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Dining Hall"));
   }
 
   @Test
   public void testPetMovesAfterMovePlayer() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
 
     assertEquals("Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: No players\n"
+            + "Weapons: Loud Noise (Damage: 2)\n"
+            + "Players: -\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Billiard Room"));
 
-    testWorld.movePlayer("Parlor");
+    testWorld.handleRoomClick(276,210);
 
     assertEquals("Name: Dining Hall\n"
             + "Neighbours: Billiard Room, Kitchen, Parlor\n"
-            + "Weapons: Rod with damage value 1\n"
-            + "Players: No players\n"
+            + "Weapons: Rod (Damage: 1)\n"
+            + "Players: -\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Dining Hall"));
   }
 
   @Test
   public void testPetMovesAfterPickWeapon() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
 
     assertEquals("Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: No players\n"
+            + "Weapons: Loud Noise (Damage: 2)\n"
+            + "Players: -\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Billiard Room"));
 
@@ -2227,8 +1913,8 @@ public class WorldImplTest {
 
     assertEquals("Name: Dining Hall\n"
             + "Neighbours: Billiard Room, Kitchen, Parlor\n"
-            + "Weapons: Rod with damage value 1\n"
-            + "Players: No players\n"
+            + "Weapons: Rod (Damage: 1)\n"
+            + "Players: -\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Dining Hall"));
 
@@ -2236,14 +1922,14 @@ public class WorldImplTest {
 
   @Test
   public void testPetMovesAfterAttackTarget() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
 
     testWorld.pickWeapon("pan");
     testWorld.lookAroundSpace();
 
     assertEquals("Name: Kitchen\n"
             + "Neighbours: Dining Hall, Parlor\n"
-            + "Weapons: Rope with damage value 2\n"
+            + "Weapons: Rope (Damage: 2)\n"
             + "Players: Test\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Kitchen"));
@@ -2251,22 +1937,22 @@ public class WorldImplTest {
     testWorld.attackTargetPlayer("pan");
 
     assertEquals("Name: Parlor\n"
-            + "Neighbours: Dining Hall, Kitchen\n"
-            + "Weapons: No weapons\n"
-            + "Players: No players\n"
+            + "Neighbours: Dining Hall\n"
+            + "Weapons: -\n"
+            + "Players: -\n"
             + "Is Target Present: No\n"
-            + "Is Pet Present: Yes", testWorld.getRoomInformation("Parlor"));
+            + "Is Pet Present: No", testWorld.getRoomInformation("Parlor"));
 
   }
 
   @Test
   public void testPetMovesAfterMovePet() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
 
     assertEquals("Name: Billiard Room\n"
             + "Neighbours: Dining Hall\n"
-            + "Weapons: Loud Noise with damage value 2\n"
-            + "Players: No players\n"
+            + "Weapons: Loud Noise (Damage: 2)\n"
+            + "Players: -\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Billiard Room"));
 
@@ -2274,98 +1960,86 @@ public class WorldImplTest {
 
     assertEquals("Name: Kitchen\n"
             + "Neighbours: Parlor\n"
-            + "Weapons: Pan with damage value 3, Rope with damage value 2\n"
+            + "Weapons: Pan (Damage: 3), Rope (Damage: 2)\n"
             + "Players: Test\n"
             + "Is Target Present: No\n"
             + "Is Pet Present: No", testWorld.getRoomInformation("Kitchen"));
 
     assertEquals("Name: Dining Hall\n"
             + "Neighbours: Billiard Room, Kitchen, Parlor\n"
-            + "Weapons: Rod with damage value 1\n"
-            + "Players: No players\n"
+            + "Weapons: Rod (Damage: 1)\n"
+            + "Players: -\n"
             + "Is Target Present: Yes\n"
             + "Is Pet Present: Yes", testWorld.getRoomInformation("Dining Hall"));
-
-
   }
 
   @Test
   public void testTargetPlayerMovesAfterPlayerMoves() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Billiard Room");
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    testWorld.addPlayerToGame("Test", 2, false, "Billiard Room");
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 2\n"
             + "Current Room: Billiard Room", testWorld.getTargetPlayerDetails());
-    testWorld.movePlayer("Dining Hall");
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    testWorld.handleRoomClick(426,372);
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 2\n"
             + "Current Room: Dining Hall", testWorld.getTargetPlayerDetails());
   }
 
   @Test
   public void testTargetPlayerMovesAfterPlayerPicksWeapon() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Billiard Room");
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    testWorld.addPlayerToGame("Test", 2, false, "Billiard Room");
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 2\n"
             + "Current Room: Billiard Room", testWorld.getTargetPlayerDetails());
     testWorld.pickWeapon("loud noise");
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 2\n"
             + "Current Room: Dining Hall", testWorld.getTargetPlayerDetails());
   }
 
   @Test
   public void testTargetPlayerMovesAfterLookAround() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Billiard Room");
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    testWorld.addPlayerToGame("Test", 2, false, "Billiard Room");
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 2\n"
             + "Current Room: Billiard Room", testWorld.getTargetPlayerDetails());
     testWorld.lookAroundSpace();
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 2\n"
             + "Current Room: Dining Hall", testWorld.getTargetPlayerDetails());
   }
 
   @Test
   public void testTargetPlayerMovesAfterPetMoves() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Billiard Room");
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    testWorld.addPlayerToGame("Test", 2, false, "Billiard Room");
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 2\n"
             + "Current Room: Billiard Room", testWorld.getTargetPlayerDetails());
     testWorld.movePet("Nursery");
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 2\n"
             + "Current Room: Dining Hall", testWorld.getTargetPlayerDetails());
   }
 
   @Test
   public void testTargetPlayerMovesAfterAttackTarget() {
-    testWorld.addPlayerToGame("Test", true, 2, false, "Kitchen");
+    testWorld.addPlayerToGame("Test", 2, false, "Kitchen");
     testWorld.pickWeapon("pan");
     testWorld.lookAroundSpace();
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 2\n"
             + "Current Room: Kitchen", testWorld.getTargetPlayerDetails());
     testWorld.attackTargetPlayer("pan");
-    assertEquals("---------- Target Player Details ----------\n"
-            + "Name: Doctor Lucky\n"
+    assertEquals("Name: Doctor Lucky\n"
             + "Health: 0\n"
-            + "Current Room: Nursery", testWorld.getTargetPlayerDetails());
+            + "Current Room: Kitchen", testWorld.getTargetPlayerDetails());
   }
 
   @Test
   public void testTurnAlternateBetweenPlayersInOrderAndEachPlayerGetsOneTurn() {
-    testWorld.addPlayerToGame("P1", true, 2, false, "Kitchen");
-    testWorld.addPlayerToGame("P2", false, 0, true, "Billiard room");
-    testWorld.addPlayerToGame("P3", true, 2, false, "Dining Hall");
+    testWorld.addPlayerToGame("P1", 2, false, "Kitchen");
+    testWorld.addPlayerToGame("P2", 2, true, "Billiard room");
+    testWorld.addPlayerToGame("P3", 2, false, "Dining Hall");
 
     assertEquals("P1", testWorld.getCurrentPlayerName());
     testWorld.lookAroundSpace();
@@ -2375,32 +2049,26 @@ public class WorldImplTest {
     testWorld.lookAroundSpace();
 
     assertEquals("P1", testWorld.getCurrentPlayerName());
-    testWorld.movePlayer("Dining Hall");
+    testWorld.handleRoomClick(426,372);
     assertEquals("P2", testWorld.getCurrentPlayerName());
-    testWorld.movePlayer("Dining Hall");
+    testWorld.handleRoomClick(426,372);
     assertEquals("P3", testWorld.getCurrentPlayerName());
-    testWorld.movePlayer("Billiard Room");
+    testWorld.handleRoomClick(420,642);
 
     assertEquals("P1", testWorld.getCurrentPlayerName());
     testWorld.lookAroundSpace();
     assertEquals("P2", testWorld.getCurrentPlayerName());
-    testWorld.pickWeapon("rod");
+    testWorld.pickWeapon(null);
     assertEquals("P3", testWorld.getCurrentPlayerName());
     testWorld.pickWeapon("loud noise");
 
     assertEquals("P1", testWorld.getCurrentPlayerName());
     testWorld.movePet("Dining Hall");
     assertEquals("P2", testWorld.getCurrentPlayerName());
-    testWorld.movePet("Kitchen");
+    testWorld.movePet("Dining Hall");
     assertEquals("P3", testWorld.getCurrentPlayerName());
     testWorld.movePet("Billiard Room");
 
-    assertEquals("P1", testWorld.getCurrentPlayerName());
-    testWorld.lookAroundSpace();
-    assertEquals("P2", testWorld.getCurrentPlayerName());
-    testWorld.attackTargetPlayer("rod");
-    assertEquals("P3", testWorld.getCurrentPlayerName());
-    testWorld.attackTargetPlayer("loud noise");
 
     assertEquals("P1", testWorld.getCurrentPlayerName());
   }

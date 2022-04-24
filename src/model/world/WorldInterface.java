@@ -39,6 +39,8 @@ public interface WorldInterface extends ReadOnlyWorldInterface {
 
   String handleRoomClick(int x, int y);
 
+  String getRoomInformation(String roomName);
+
   /**
    * Retrieves the details of the player which includes the name, list of available weapons
    * and the current location of the player.
@@ -86,4 +88,5 @@ public interface WorldInterface extends ReadOnlyWorldInterface {
    * @return if the current player is a computer player
    */
   boolean isCurrentPlayerComputer();
+
 }

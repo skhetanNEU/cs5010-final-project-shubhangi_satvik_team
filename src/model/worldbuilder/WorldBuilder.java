@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+
+import model.random.RandomClass;
 import model.random.RandomGenerator;
 import model.world.WorldImpl;
 
@@ -45,6 +47,7 @@ public class WorldBuilder {
     weaponDamageValues = new ArrayList<>();
     weaponNames = new ArrayList<>();
     maxTurns = 0;
+    random = new RandomClass();
   }
 
   /**
