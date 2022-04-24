@@ -16,9 +16,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;
-
 import javax.imageio.ImageIO;
-
 import model.pet.PetImpl;
 import model.pet.PetInterface;
 import model.players.ComputerPlayer;
