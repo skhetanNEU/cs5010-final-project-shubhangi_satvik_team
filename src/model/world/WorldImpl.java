@@ -686,10 +686,15 @@ public class WorldImpl implements WorldInterface {
             BufferedImage.TYPE_INT_ARGB);
     Graphics g = playersView.getGraphics();
 
+    String currentDirectory = System.getProperty("user.dir");
+    String fileSeparator = System.getProperty("file.separator");
+    String filePath = currentDirectory + fileSeparator + "res" + fileSeparator + "images"
+            + fileSeparator;
+
     // Show all players at all times
     Set<String> roomsWithPlayers = new HashSet<>();
     try {
-      BufferedImage others = ImageIO.read(new File("res/images/OtherPlayers.png"));
+      BufferedImage others = ImageIO.read(new File(filePath + "OtherPlayers.png"));
       Image scaledOther = others.getScaledInstance(30, 20, Image.SCALE_SMOOTH);
 
       for (PlayerInterface p : this.players) {
@@ -717,8 +722,8 @@ public class WorldImpl implements WorldInterface {
       List<Integer> roomCoordinates = getRoomViewCoordinates(currentRoom);
 
       try {
-        BufferedImage player = ImageIO.read(new File("res/images/CurrentPlayer.png"));
-        BufferedImage weapons = ImageIO.read(new File("res/images/Weapons.png"));
+        BufferedImage player = ImageIO.read(new File(filePath + "CurrentPlayer.png"));
+        BufferedImage weapons = ImageIO.read(new File(filePath + "Weapons.png"));
 
         Image scaledPlayer = player.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         Image scaledWeapon = weapons.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
@@ -753,7 +758,7 @@ public class WorldImpl implements WorldInterface {
 
     // Show target player to world
     try {
-      BufferedImage target = ImageIO.read(new File("res/images/TargetPlayer.png"));
+      BufferedImage target = ImageIO.read(new File(filePath + "TargetPlayer.png"));
       Image scaledTarget = target.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
       List<Integer> targetRoomCoordinates = getRoomViewCoordinates(
               targetPlayer.getTargetPlayerRoom());

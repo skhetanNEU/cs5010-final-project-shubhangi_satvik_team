@@ -30,6 +30,7 @@ public class GameMessages extends JPanel {
 
   /**
    * Constructor for setting up the game messages.
+   *
    * @param model Model of the game.
    * @throws IllegalArgumentException when the model is null.
    */
@@ -43,9 +44,15 @@ public class GameMessages extends JPanel {
 
   /**
    * Initialize the game messages.
+   *
    * @throws IllegalArgumentException when it is unable to read the image file.
    */
   private void initialize() throws IllegalArgumentException {
+
+    String currentDirectory = System.getProperty("user.dir");
+    String fileSeparator = System.getProperty("file.separator");
+    String filePath = currentDirectory + fileSeparator + "res" + fileSeparator + "images"
+            + fileSeparator;
 
     setLayout(new BorderLayout());
     setBackground(Color.decode("#2C3E50"));
@@ -76,7 +83,7 @@ public class GameMessages extends JPanel {
 
     try {
       // Key for target player
-      BufferedImage target = ImageIO.read(new File("res/images/TargetPlayer.png"));
+      BufferedImage target = ImageIO.read(new File(filePath + "TargetPlayer.png"));
       Image resultingTarget = target.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
       JLabel targetPic = new JLabel(new ImageIcon(resultingTarget));
       targetPic.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
@@ -96,7 +103,7 @@ public class GameMessages extends JPanel {
       content.add(targetKey, c);
 
       // Key for current player
-      BufferedImage player = ImageIO.read(new File("res/images/CurrentPlayer.png"));
+      BufferedImage player = ImageIO.read(new File(filePath + "CurrentPlayer.png"));
       Image resultingPlayer = player.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
       JLabel playerPic = new JLabel(new ImageIcon(resultingPlayer));
       playerPic.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
@@ -116,7 +123,7 @@ public class GameMessages extends JPanel {
       content.add(currentPlayerKey, c);
 
       // Key for room weapons
-      BufferedImage weapon = ImageIO.read(new File("res/images/Weapons.png"));
+      BufferedImage weapon = ImageIO.read(new File(filePath + "Weapons.png"));
       Image resultingWeapon = weapon.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
       JLabel weaponPic = new JLabel(new ImageIcon(resultingWeapon));
       weaponPic.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
@@ -136,7 +143,7 @@ public class GameMessages extends JPanel {
       content.add(weaponKey, c);
 
       // Key for other players
-      BufferedImage other = ImageIO.read(new File("res/images/OtherPlayers.png"));
+      BufferedImage other = ImageIO.read(new File(filePath + "OtherPlayers.png"));
       Image resultingOther = other.getScaledInstance(50, 30, Image.SCALE_SMOOTH);
       JLabel otherPic = new JLabel(new ImageIcon(resultingOther));
       otherPic.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
