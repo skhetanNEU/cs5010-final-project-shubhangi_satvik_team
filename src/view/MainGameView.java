@@ -126,6 +126,7 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
 
   /**
    * Choose the configuration file.
+   *
    * @return File object for the configuration file chosen
    */
   private File chooseFile() {
@@ -248,10 +249,10 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
   @Override
   public void showCommandOutcome(String title, String outcome, boolean isLookAround) {
     if (title == null || "".equals(title)) {
-      throw new IllegalArgumentException("Title cannot be null;");
+      showCommandOutcome("ERROR", "Outcome title cannot be null/empty.", false);
     }
     if (outcome == null || "".equals(outcome)) {
-      throw new IllegalArgumentException("Outcome cannot be null;");
+      showCommandOutcome("ERROR", "Outcome result cannot be null/empty.", false);
     }
 
     if (isLookAround) {
@@ -461,6 +462,7 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
 
     /**
      * Constructor for setting up the dialog for adding players.
+     *
      * @param frame Main game view frame.
      * @param rooms List of rooms present in the world.
      * @throws IllegalArgumentException When the list of rooms is null.
@@ -551,6 +553,7 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
 
     /**
      * Adds the player to the world.
+     *
      * @param listener Listener object for the event.
      * @return Boolean representing whether the addition of player was successful or not.
      */
@@ -573,6 +576,7 @@ public class MainGameView extends JFrame implements MainGameViewInterface {
 
     /**
      * Adding the click listener for the form.
+     *
      * @param listener Listener object for the event.
      */
     public void addClickListener(FeatureInterface listener) {

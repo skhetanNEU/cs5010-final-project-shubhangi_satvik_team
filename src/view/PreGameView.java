@@ -98,6 +98,7 @@ public class PreGameView extends JFrame implements DefaultGameViewInterface {
 
   /**
    * Choose the configuration file for the game.
+   *
    * @return File object made out of choosing the file.
    */
   private File chooseFile() {
@@ -172,10 +173,10 @@ public class PreGameView extends JFrame implements DefaultGameViewInterface {
   public void showCommandOutcome(String title, String outcome, boolean isLookAround) {
 
     if (title == null || "".equals(title)) {
-      throw new IllegalArgumentException("Title cannot be null;");
+      showCommandOutcome("ERROR", "Outcome title cannot be null/empty.", false);
     }
     if (outcome == null || "".equals(outcome)) {
-      throw new IllegalArgumentException("Outcome cannot be null;");
+      showCommandOutcome("ERROR", "Outcome result cannot be null/empty.", false);
     }
 
     UIManager.put("OptionPane.background", Color.decode("#FCF3CF"));

@@ -14,7 +14,6 @@ import model.world.WorldInterface;
 import org.junit.Before;
 import org.junit.Test;
 
-
 /**
  * A JUnit test class for the WorldImpl class.
  */
@@ -2092,7 +2091,7 @@ public class WorldImplTest {
   @Test
   public void testPlayerIconClicked_Successful() {
     testWorld.addPlayerToGame("P1", 2, false, "Billiard Room");
-    assertTrue(testWorld.isPlayerIconClicked(472, 694));
+    assertTrue(testWorld.isPlayerIconClicked(501, 694));
   }
 
   @Test
