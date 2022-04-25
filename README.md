@@ -120,7 +120,7 @@ Requirements for Milestone 4 are mainly about creating the View using which we c
 
 ### How to Run
 
-java -jar ./res//Milestone-4.jar [text file path] [number of turns]
+java -jar ./res/Milestone-4.jar [text file path] [number of turns]
 
 
 
@@ -131,7 +131,7 @@ Run the jar file (Refer "How to Run") with the command line arguments.
 Consider the following example:
 
 <pre>
-java -jar ./res//Milestone-4.jar ./res/FriendsWorld.txt 20
+java -jar ./res/Milestone-4.jar ./res/FriendsWorld.txt 20
 </pre>
 
 ./res/FriendsWorld.txt is the name of the input text file used to create the world.
