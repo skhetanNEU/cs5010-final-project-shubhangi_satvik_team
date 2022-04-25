@@ -14,7 +14,8 @@ This repo represents the coursework for CS 5010, the Fall 2022 Edition!
 
 This is a game based on the board game "Kill Doctor Lucky" which consists of multiple, room, weapons along with players and a target. The aim of the game is to kill the target character and win the game.
 
-###### 1. Determine the neighbors of a space. Spaces that share a "wall" are neighbors.
+###### Requirements to be implemented for Milestone 1:
+1. Determine the neighbors of a space. Spaces that share a "wall" are neighbors.
 2. Display information about a specified space in the world. In addition to the name of the space, this information should include what items are in the space and what spaces can be seen from the specified space.
 3. Move the target character around the world. The target character starts in space 0 and moves from space to space in order using the ordered, 0-indexed list of spaces found in the world specification.
 4. Create a graphical representation of the world in the form of a BufferedImage.
@@ -22,7 +23,7 @@ This is a game based on the board game "Kill Doctor Lucky" which consists of mul
 ###### Requirements to be implemented for Milestone 2:
 1. Add a controller to the game to take the inputs from the user.
 2. There is a limit on the number of turns that can be played.
-3. Allow players to be added to the game. Players must have unique names. 
+3. Allow players to be added to the game. Players must have unique names.
 4. There should be 2 types of player - Human controlled and Computer controlled.
 5. Allow players to take turns. They should get their turns in the order they were added.
 6. Turn of a player includes:
@@ -39,26 +40,26 @@ This is a game based on the board game "Kill Doctor Lucky" which consists of mul
 1. User is displayed the details of the target player at the start of every turn (name, health and location)
 2. User is displayed the details of the current player at the start of every turn (name, weapons, current room)
 3. Look around command should display the details of the players current room and the details of the neighbours of the current room.
-4. A target pet is added to the world. 
+4. A target pet is added to the world.
    1. It enters the same space as the target player
    2. It makes the room in which it is present invisible to the players of the game.
    3. Players can choose to move the pet to any room in the world (not necessarily a neighbour)
    4. Extra Credit: Like the target player, the target pet moves after every turn in a DFS manner.
 5. Players can choose to attack the target player.
    1. For a human player, it can choose to attack at any time in the game. The attack is unsuccessful if the target is not in the same room or if the attack was seen by some other players. It will however still be counted as a turn.
-   2. For a computer player, if the target player is in the same room and the player cannot be seen by any other players in visible rooms, the player then prioritizes to attack. If not, a random turn is chosen for the player. 
-   3. A weapon used for attack irrespective of whether is successful or not, the weapon is removed as an evidence. 
+   2. For a computer player, if the target player is in the same room and the player cannot be seen by any other players in visible rooms, the player then prioritizes to attack. If not, a random turn is chosen for the player.
+   3. A weapon used for attack irrespective of whether is successful or not, the weapon is removed as an evidence.
    4. If a player does not have any weapons it can choose to attack using poke which has damage value of 1.
    5. Computer player chooses the weapon that does most damage.
 
 ###### Requirements to be implemented for Milestone 4:
-Requirements for Milestone 4 are mainly about creating the View using which we can play the game. Some of the requirements for that are - 
+Requirements for Milestone 4 are mainly about creating the View using which we can play the game. Some of the requirements for that are -
 
-1. Start by showing an about screen that welcomes the user to the game. In addition to the welcome message, this screen should provide credits to those who worked on the assignment.
-2. Provide an option for starting a new game with a new world specification, starting a new game with the current world specification, and quitting the game through a JMenu (Links to an external site.).
-3. The JFrame that you use should be able to be resized and still present a reasonable layout as long as the size if the window is at least 300 x 300. To accomplish this, embrace Java's layout managers to place components on the screen.
-4. When the game begins, the majority of the program's screen should show the graphical representation of the world along with a graphical representation of the the target character (but not the pet) and any players that have been added to the game. Each of these graphical representations should be overlaid on top of the graphical representation of the world in such a way to show their current location. Your program should support graphical representations of the target, and up to 10 players (in any combination of human and computer).
-5. Any world that is bigger than the area allocated to it on the screen should provide the ability to scroll the view.
+1. Start game by showing a screen to welcome the user to the game along with credits to the creators of the assignment.
+2. Have a JMenu that provide options to start a new game with a new world specification, starting a new game with the default world specification, and quitting the game.
+3. Have a resizable JFrame with a reasonable layout in a minimum screen size of 300x300.
+4. Majority of the screen should show the graphical representation of the world along with the target character and any players that have been added to the game.
+5. If world is bigger than the area allocated to it on the screen, provide the ability to scroll the view.
 6. Clearly indicate whose turn it is on the screen along with any information about where they are in the world.
 7. Provide an option for getting the player's description by clicking on the player's graphical representation.
 8. Provide an option for moving the player though the world using a mouse click. A player should not be able to make invalid moves.
@@ -97,7 +98,7 @@ Requirements for Milestone 4 are mainly about creating the View using which we c
 - Pick weapon for human player.
 - Move to a room for human player.
 - Look around for human player.
-- Move Pet for human player. 
+- Move Pet for human player.
 - Attack target player for human player by choice of weapon.
 - Randomized turns for computer players with priority given to attack if conditions feasible.
 
@@ -146,8 +147,8 @@ java -jar ./res/CS5010-Project.jar ./res/FriendsWorld.txt 20
 2. Prints the neighbours of Bowling Alley
 3. Prints the neighbours of Living Room
 4. Prints the neighbours of Gym
-5. Tries to get the neighbours of testRoom1 but since the room does not exist in the world, 
-it displays the appropriate message.
+5. Tries to get the neighbours of testRoom1 but since the room does not exist in the world,
+   it displays the appropriate message.
 6. Prints the current details of the target player
 7. Moves the target player 3 times from room 0 to room 3 in order
 8. Prints the current details of the target player
@@ -170,10 +171,10 @@ it displays the appropriate message.
 ###### /res/Milestone2/Milestone 2 - ExampleRun.txt
 1. Displays message that welcomes user to the world.
 2. Shows the number of turns left and asks the user to add players to take turns in the game.
-3. Menu is displayed to the user to select an action. 
-4. User selects 4 to add a human player and option chosen is displayed. 
+3. Menu is displayed to the user to select an action.
+4. User selects 4 to add a human player and option chosen is displayed.
 5. User then enters the name, whether player has limit, the limit on weapons and the name of start room.
-6. Message is displayed showing that human player was successfully added. 
+6. Message is displayed showing that human player was successfully added.
 7. Shows the number of turns left and shows that next turn of taken will be for human player.
 8. Menu is displayed to the user to select an action.
 9. User selects 5 to add a computer player and option chosen is displayed.
@@ -182,16 +183,16 @@ it displays the appropriate message.
 12. Shows the number of turns left and shows that next turn of taken will be for human player.
 13. Menu is displayed to the user to select an action.
 14. User selects 6 to take a turn and look around and option chosen is displayed.
-15. Details of the current room and the neighbouring rooms are displayed. 
+15. Details of the current room and the neighbouring rooms are displayed.
 16. Shows the number of turns left (now 5) and shows that next turn of taken will be for computer player.
 17. Menu is displayed to the user to select an action.
 18. User selects 9 to take a random turn for the computer player
-19. Random turn chosen is displayed as Move player and the player is moved to gym. 
+19. Random turn chosen is displayed as Move player and the player is moved to gym.
 20. Shows the number of turns left(now 4) and shows that next turn of taken will be for human player.
 21. Menu is displayed to the user to select an action.
 22. User selects 7 to take a turn and move the player and option chosen is displayed.
 23. User then enters the name of the destination room.
-24. Message is displayed showing that human player was successfully moved to gym. 
+24. Message is displayed showing that human player was successfully moved to gym.
 25. Shows the number of turns left(now 3) and shows that next turn of taken will be for computer player.
 26. Menu is displayed to the user to select an action.
 27. User selects 9 to take a random turn for the computer player.
@@ -215,13 +216,13 @@ it displays the appropriate message.
 45. Shows the number of turns left(still 1) and shows that next turn of taken will be for computer player.
 46. Menu is displayed to the user to select an action.
 47. User now selects 1 to view the world. Option chosen is displayed.
-48. Message is displayed telling that view of the world is saved as a png file. 
+48. Message is displayed telling that view of the world is saved as a png file.
 49. Shows the number of turns left(still 1) and shows that next turn of taken will be for computer player.
 50. Menu is displayed to the user to select an action.
-51. User now selects 9 to take random turn for computer player. 
+51. User now selects 9 to take random turn for computer player.
 52. Random option chosen is displayed as Move player.
 53. Message is shown telling that computer player has moved to gym.
-54. Shows the number of turns left(now 0). 
+54. Shows the number of turns left(now 0).
 55. Since turns is 0, game has ended and the appropriate message is shown.
 
 #### Milestone 3
@@ -233,9 +234,9 @@ Used sample text file (/res/ExampleRunMansion.txt) for example runs to easily re
 3. Game menu displayed - Turns left 3 - Current turn for 'human player 1' - User chooses option 4 and adds human player 2 to bathroom
 4. Game menu displayed - Turns left 3 - Current turn for 'human player 1' - User chooses option 8 and picks a weapon pan from kitchen
 5. Game menu displayed - Turns left 2 - Current turn for 'human player 2' - User chooses option 2 and views its room details (target and pet present)
-6. Game menu displayed - Turns left 2 - Current turn for 'human player 2' - User chooses option 10 and attacks target with poke (damage value 1) - attack successful and player health decreased by 1 
+6. Game menu displayed - Turns left 2 - Current turn for 'human player 2' - User chooses option 10 and attacks target with poke (damage value 1) - attack successful and player health decreased by 1
 7. Game menu displayed - Turns left 1 - Current turn for 'human player 1' - User chooses option 9 and moves pet to kitchen
-8. No more turns left - Target player escaped - Game ended 
+8. No more turns left - Target player escaped - Game ended
 
 ###### /res/Milestone3/ExampleRun2 - HumanPlayerWins-LookAroundWithPetInNeighbour.txt
 1. Displays the welcome message
@@ -257,7 +258,7 @@ Used sample text file (/res/ExampleRunMansion.txt) for example runs to easily re
 8. Turns left 15 - Target player dead - Game over - Game winner is 'computer player 1'
 
 ###### /res/Milestone3/ExampleRun4 - PetDFS.txt
-**DFS order to be followed**: Bedroom - Bathroom - Kitchen - Bathroom - Bedroom - Bathroom - Kitchen - Bathroom - Bedroom 
+**DFS order to be followed**: Bedroom - Bathroom - Kitchen - Bathroom - Bedroom - Bathroom - Kitchen - Bathroom - Bedroom
 1. Displays the welcome message
 2. Game menu displayed - Turns left 20 - No players in game - User chooses option 4 and adds human player 1 to bedroom
 3. Game menu displayed - Turns left 20 - Current turn for 'human player 1' - User chooses option 4 and adds human player to bedroom
@@ -268,7 +269,7 @@ Used sample text file (/res/ExampleRunMansion.txt) for example runs to easily re
 8. Game menu displayed - Turns left 18 - Current turn for 'human player 1' - User chooses option 2 (current room details) - Pet is present in Kitchen
 9. Game menu displayed - Turns left 18 - Current turn for 'human player 1' - User chooses option 7 (move player) and moves to Bathroom
 10. Game menu displayed - Turns left 17 - Current turn for 'human player 1' - User chooses option 2 (current room details) - Pet is present in Bathroom
-11. Game menu displayed - Turns left 17 - Current turn for 'human player 1' - User chooses option 7 (move player) and moves to Bedroom 
+11. Game menu displayed - Turns left 17 - Current turn for 'human player 1' - User chooses option 7 (move player) and moves to Bedroom
 12. Game menu displayed - Turns left 16 - Current turn for 'human player 1' - User chooses option 2 (current room details) - Pet is present in Bedroom
 13. Game menu displayed - Turns left 16 - Current turn for 'human player 1' - User chooses option 7 (move player) and moves to Bathroom
 14. Game menu displayed - Turns left 15 - Current turn for 'human player 1' - User chooses option 2 (current room details) - Pet is present in Bathroom
@@ -291,11 +292,11 @@ The video submission showcasing the demo of the game will be added soon.
 #### Milestone 1
 In the modified design,
 1. Created a builder class, WorldBuilder, to parse the input file.
-2. Created helper method in WorldImpl to check for overlapping rooms. 
-3. Created helper method in WorldImpl to check for invalid rooms coordinates in accordance 
+2. Created helper method in WorldImpl to check for overlapping rooms.
+3. Created helper method in WorldImpl to check for invalid rooms coordinates in accordance
    with world coordinates.
 4. Created helper method in WorldImpl to get room object by room name instead of room id.
-5. Removed currently not required getter methods in PlayerImpl and WeaponImpl 
+5. Removed currently not required getter methods in PlayerImpl and WeaponImpl
 6. Created helper method in RoomImpl to check for invalid rooms coordinates.
 
 #### Milestone 2
@@ -339,7 +340,23 @@ In the modified design,
 
 
 #### Milestone 4
+###### In the modified design for view,
+1. Popup classes for pick weapon, attack target and move pet  have been removed. Instead normal methods have been added to the MainGameView to show the popup using JOptionPane.
+2. MainGameView interface now extends the DefaultGameViewInterface.
+3. An additional method has been added to show the outcome of the user's move.
 
+###### In the modified design for controller,
+1. GetTargetInformation command class has been removed
+2. Method has been added to check and play turn for computer player and to show game over message.
+
+###### In the modified design for model,
+1. Interface added for WorldBuilder class.
+2. Simplified ReadOnlyInterface to include only those methods that view calls to get information about target, current player, current player room and the buffered image of the world.
+3. Polymorphism added for players. An abstract class is created for player and 2 new classes - one for computer and one for human player have been added
+4. Number of turns is now handled in the model and corresponding changes have been made in the constructor of the world and in the worldBuilder class.
+5. Removed unused methods from all classes.
+6. Refactored the code to reuse existing methods thereby minimizing code duplication.
+7. Random turn for computer is now handled in the model. Random class has been added to the model and removed from controller.
 
 
 ### Assumptions
@@ -353,33 +370,36 @@ In the modified design,
 7. All the players should be added in the beginning of the game.
 8. Player can choose to start off a new game with a new configuration or the default one at any point of time during the game.
 9. Attack on target player by computer player can fail if there are any players in the invisible neighbours of the current room.
-
+10. View of the game shows the current player with a blue player icon. All other players that are added to the world are still visible but are grouped using a multi-player icon.
 
 
 ### Limitations
 
 The project covers all the requirements given in the project description. Although, there can be
-a few limitations -
-1. Room details displays the name of the neighbours and not details of the neighbouring rooms. 
+a few limitations
+1. Room details displays the name of the neighbours and not details of the neighbouring rooms.
 2. Room details does not show the invisible neighbouring rooms.
 3. Player details can be obtained only for the current player.
 4. If an input from a series of inputs is invalid, the user will have to select the turn and enter all values all over again.
 5. When the pet moves automatically using DFS,
    a. If it starts from a room that does not have any neighbours, the DFS is stuck on that room only and the pet does not move to any other room.
    b. If a room has 0 neighbours and the DFS does not start from that room, then the pet will never reach that room unless the player specifically chooses to move the pet to the room.
-
+6. To view the number of other players in current/neighbouring rooms, user will have to use the lookAround command as currently a multi-player icon is used to show existence and not the count of players.
 
 
 ### Citations
 
 1. Effective Java
    - https://learning.oreilly.com/library/view/effective-java/9780134686097/
-2. Head First Design Patterns 
+2. Head First Design Patterns
    - https://learning.oreilly.com/library/view/head-first-design/9781492077992/
-3. Canvas Module 03 - Models & the MVC Pattern 
+3. Canvas Module 03 - Models & the MVC Pattern
    - https://northeastern.instructure.com/courses/108354/pages/module-3-models-and-the-mvc-pattern?module_item_id=6907177
 4. Canvas Module 04 - MVC Controllers
    - https://northeastern.instructure.com/courses/108354/pages/module-4-mvc-controllers?module_item_id=6907187
-
-
-
+5. Canvas Module 10 - MVC Views & GUIs
+   - https://northeastern.instructure.com/courses/108354/pages/module-10-mvc-views-and-guis?module_item_id=6907248
+6. Visual Guide to Swing Components
+   - https://web.mit.edu/6.005/www/sp14/psets/ps4/java-6-tutorial/components.html
+7. Visual Guide to Layout Managers in Java
+   - https://docs.oracle.com/javase/tutorial/uiswing/layout/visual.html
