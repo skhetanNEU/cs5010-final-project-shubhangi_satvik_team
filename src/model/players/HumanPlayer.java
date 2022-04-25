@@ -17,9 +17,10 @@ public class HumanPlayer extends AbstractPlayer {
    *                    there is no limit.
    * @param currentRoom Room where the player should be added.
    * @throws IllegalArgumentException when the player name or weapon limit is invalid or the
-   * current room is null.
+   *                                   current room is null.
    */
-  public HumanPlayer(String playerName, int weaponLimit, RoomInterface currentRoom) throws IllegalArgumentException {
+  public HumanPlayer(String playerName, int weaponLimit, RoomInterface currentRoom)
+          throws IllegalArgumentException {
     super(playerName, weaponLimit, currentRoom);
   }
 

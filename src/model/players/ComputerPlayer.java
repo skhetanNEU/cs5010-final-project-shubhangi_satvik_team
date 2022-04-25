@@ -23,7 +23,7 @@ public class ComputerPlayer extends AbstractPlayer {
    * @param currentRoom Room where the player should be added.
    * @param random Random generator option to randomly generate options for computer player.
    * @throws IllegalArgumentException when the player name or weapon limit is invalid or the
-   * current room or the random is null.
+   *                                  current room or the random is null.
    */
   public ComputerPlayer(String playerName, int weaponLimit, RoomInterface currentRoom,
                         RandomGenerator random) throws IllegalArgumentException {

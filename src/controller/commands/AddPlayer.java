@@ -20,7 +20,7 @@ public class AddPlayer extends AbstractCommands {
    *                          is -1, then there is no limit.
    * @param isComputerPlayer If the player is a computer player or not.
    * @throws IllegalArgumentException When any of the player name, room name, maximum number of
-   * weapons and isComputerPlayer is invalid.
+   *                                  weapons and isComputerPlayer is invalid.
    */
   public AddPlayer(String playerName, String roomName, int maxNumberOfWeapons,
                    boolean isComputerPlayer) throws IllegalArgumentException {

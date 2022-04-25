@@ -225,8 +225,9 @@ public class WorldImpl implements WorldInterface {
    * @param targetPlayerName represents the name of the pet
    * @throws IllegalArgumentException when the target name or health is invalid.
    */
-  
-  private void initializeTargetPlayer(String targetPlayerName, int targetPlayerHealth) throws IllegalArgumentException {
+
+  private void initializeTargetPlayer(String targetPlayerName, int targetPlayerHealth)
+          throws IllegalArgumentException {
     if (targetPlayerHealth <= 0) {
       throw new IllegalArgumentException("Target player health cannot be non-positive.");
     } else if (targetPlayerName == null || "".equals(targetPlayerName)) {
@@ -234,7 +235,7 @@ public class WorldImpl implements WorldInterface {
     } else if (this.rooms.size() == 0) {
       throw new IllegalArgumentException("Number of rooms cannot be non-positive.");
     }
-    
+
     this.targetPlayer = new TargetPlayerImpl(
             targetPlayerName, targetPlayerHealth, this.rooms.get(0)
     );
@@ -367,8 +368,9 @@ public class WorldImpl implements WorldInterface {
    * @param playerName name of the player
    * @throws IllegalArgumentException when the player with same name already exists.
    */
-  
-  private void checkIfPlayerAlreadyExistsWithSameName(String playerName) throws IllegalArgumentException {
+
+  private void checkIfPlayerAlreadyExistsWithSameName(String playerName)
+          throws IllegalArgumentException {
     if (playerName == null || "".equals(playerName)) {
       throw new IllegalArgumentException("Player name cannot be null/empty.");
     }
@@ -381,7 +383,7 @@ public class WorldImpl implements WorldInterface {
   }
 
   /**
-   * Draw the world
+   * Draw the initial world with rooms only.
    */
   private void drawWorld() {
     Graphics g = worldView.getGraphics();
@@ -478,6 +480,7 @@ public class WorldImpl implements WorldInterface {
 
   /**
    * Get the view coordinates of the room.
+   *
    * @param room Room whose coordinates are required.
    * @return List of integer representing the coordinates of the room.
    * @throws IllegalArgumentException When the room is null.
@@ -498,6 +501,7 @@ public class WorldImpl implements WorldInterface {
 
   /**
    * Get the room where the click has been made.
+   *
    * @param r Row coordinate of the click
    * @param c Column coordinate of the click
    * @return String representing the room name where the click was made
@@ -522,6 +526,7 @@ public class WorldImpl implements WorldInterface {
 
   /**
    * Move the player to the specified room.
+   *
    * @param roomName Name of the room where the player should be moved to.
    * @return Stirng representing the result of the move.
    * @throws IllegalArgumentException When the room name is invalid.
@@ -690,7 +695,9 @@ public class WorldImpl implements WorldInterface {
       for (PlayerInterface p : this.players) {
         if (p != currentTurn) {
           RoomInterface playerRoom = getRoomByRoomName(p.getPlayerRoomName());
-          if (!roomsWithPlayers.contains(playerRoom.getRoomName()) && !playerRoom.isPetInRoom()) {
+          if (!roomsWithPlayers.contains(playerRoom.getRoomName())
+                  && (playerRoom.getRoomName().equals(currentTurn.getPlayerRoomName())
+                  || !playerRoom.isPetInRoom())) {
             List<Integer> playerRoomCoordinates = getRoomViewCoordinates(playerRoom);
             g.drawImage(scaledOther,
                     playerRoomCoordinates.get(2) + 5,
@@ -762,7 +769,8 @@ public class WorldImpl implements WorldInterface {
 
   @Override
   public void addPlayerToGame(String playerName, int weaponLimit,
-                              boolean isComputerPlayer, String startingRoomName) throws IllegalArgumentException {
+                              boolean isComputerPlayer, String startingRoomName)
+          throws IllegalArgumentException {
     if (playerName == null || "".equals(playerName)) {
       throw new IllegalArgumentException("Player name cannot be null/empty.");
     } else if (weaponLimit <= 0 && weaponLimit != -1) {

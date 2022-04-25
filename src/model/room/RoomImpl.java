@@ -31,7 +31,7 @@ public class RoomImpl implements RoomInterface {
    * @param roomName        represents the name of the room
    * @param roomCoordinates represents the coordinates of the room
    * @throws IllegalArgumentException when the room id is negative or room name is invalid or
-   * room coordinates is invalid.
+   *                                  room coordinates is invalid.
    */
   public RoomImpl(int roomId, String roomName, List<Integer> roomCoordinates)
           throws IllegalArgumentException {
@@ -134,7 +134,8 @@ public class RoomImpl implements RoomInterface {
   }
 
   @Override
-  public RoomInterface getNeighboringRoom(String neighboringRoomName) throws IllegalArgumentException {
+  public RoomInterface getNeighboringRoom(String neighboringRoomName)
+          throws IllegalArgumentException {
     if (neighboringRoomName == null || "".equals(neighboringRoomName)) {
       throw new IllegalArgumentException("Desired room name cannot be null/empty.");
     }
@@ -217,7 +218,8 @@ public class RoomImpl implements RoomInterface {
   }
 
   @Override
-  public void addWeaponToRoom(int weaponId, String weaponName, int weaponDamageValue) throws IllegalArgumentException {
+  public void addWeaponToRoom(int weaponId, String weaponName, int weaponDamageValue)
+          throws IllegalArgumentException {
     if (weaponName == null || "".equals(weaponName)) {
       throw new IllegalArgumentException("Weapon name cannot be empty.");
     } else if (weaponId < 0) {

@@ -35,14 +35,16 @@ public class Controller implements FeatureInterface {
   /**
    * Constructor for the controller class that sets up the game along with the view and
    * required model setting.
-   * @param preGameView Pre game view showing the welcome screen.
+   *
+   * @param preGameView            Pre game view showing the welcome screen.
    * @param worldConfigurationPath Path of the world configuration file
-   * @param maxNumberOfTurns Maximum number of turns to be played in the game
+   * @param maxNumberOfTurns       Maximum number of turns to be played in the game
    * @throws IllegalArgumentException when the pregameView is null or configuration path is
-   * invalid or maximum number of turns is less than or equal to 0.
+   *                                  invalid or maximum number of turns is less than or equal to 0.
    */
   public Controller(DefaultGameViewInterface preGameView,
-                    String worldConfigurationPath, int maxNumberOfTurns) throws IllegalArgumentException{
+                    String worldConfigurationPath, int maxNumberOfTurns)
+          throws IllegalArgumentException {
     if (preGameView == null) {
       throw new IllegalArgumentException("Pre Game View cannot be null");
     }
@@ -63,19 +65,21 @@ public class Controller implements FeatureInterface {
 
   /**
    * Constructor for the controller class that sets up the game along with the view and model.
-   * @param preGameView Pre game view showing the welcome screen.
-   * @param gameView Main game view showing the gameplay screen.
-   * @param model Model of the game.
+   *
+   * @param preGameView            Pre game view showing the welcome screen.
+   * @param gameView               Main game view showing the gameplay screen.
+   * @param model                  Model of the game.
    * @param worldConfigurationPath Path of the world configuration file
-   * @param maxNumberOfTurns Maximum number of turns to be played in the game
+   * @param maxNumberOfTurns       Maximum number of turns to be played in the game
    * @throws IllegalArgumentException when the preGameView or gameView or the model is null or
-   * the configuration file path is invalid or maximum number of turns is less than or equal to
-   * zero.
+   *                                  the configuration file path is invalid or maximum number of
+   *                                  turns is less than or equal to zero.
    */
   public Controller(DefaultGameViewInterface preGameView,
                     MainGameViewInterface gameView,
                     WorldInterface model,
-                    String worldConfigurationPath, int maxNumberOfTurns) throws IllegalArgumentException {
+                    String worldConfigurationPath, int maxNumberOfTurns)
+          throws IllegalArgumentException {
     if (preGameView == null) {
       throw new IllegalArgumentException("Pre Game View cannot be null.");
     } else if (gameView == null) {

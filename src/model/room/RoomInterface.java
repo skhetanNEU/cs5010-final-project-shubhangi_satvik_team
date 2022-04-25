@@ -97,7 +97,7 @@ public interface RoomInterface extends Comparable<RoomInterface> {
    * @param weaponDamageValue represents the damage value of the weapon
    * @param weaponName        represents the name of the weapon
    * @throws IllegalArgumentException when the weapon id or damage value is negative or weapon
-   * name is invalid.
+   *                                  name is invalid.
    */
   void addWeaponToRoom(int weaponId, String weaponName, int weaponDamageValue);
 

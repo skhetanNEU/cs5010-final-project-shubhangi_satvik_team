@@ -15,7 +15,7 @@ public class Driver {
    * @param args One argument that represents the world specification file name and other
    *             representing the maximum number of turns in the game.
    * @throws IllegalArgumentException when the length of arguments passed to the driver is not
-   * equal to 2.
+   *                                  equal to 2.
    */
   public static void main(String[] args) throws IllegalArgumentException {
 

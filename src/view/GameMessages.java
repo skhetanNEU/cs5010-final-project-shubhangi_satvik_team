@@ -42,7 +42,7 @@ public class GameMessages extends JPanel {
   }
 
   /**
-   * Initialize the game messages
+   * Initialize the game messages.
    * @throws IllegalArgumentException when it is unable to read the image file.
    */
   private void initialize() throws IllegalArgumentException {
